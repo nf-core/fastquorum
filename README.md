@@ -44,7 +44,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
    2. For non-Duplex-Sequencing data:
       1. Call molecular consensus reads ([`fgbio CallMolecularConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallMolecularConsensusReads.html))
 6. Align ([`bwa mem`](https://github.com/lh3/bwa))
-7. Filter consensus reads ([`fgbio FilterConsensusReads](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
+7. Filter consensus reads ([`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
 8. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Quick Start
