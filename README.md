@@ -19,7 +19,9 @@
 
 <!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 
-**nf-core/fgcons** is a bioinformatics best-practice analysis pipeline for fgbio Best Practices FASTQ to Consensus Pipeline.
+**nf-core/fgcons** is a bioinformatics best-practice analysis pipeline to produce consensus reads using unique molecular indexes/barcodes (UMIs).
+The pipeline implements the [fgbio Best Practices FASTQ to Consensus Pipeline][fgbio-best-practices-link].
+fgcons can produce consensus reads from single or multi UMI reads, and even [Duplex Sequencing][duplex-seq-link] reads.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
@@ -32,7 +34,18 @@ On release, automated continuous integration tests run the pipeline on a full-si
 <!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
-2. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+2. Fastq to BAM, extracting UMIs ([`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html))
+3. Align ([`bwa mem`](https://github.com/lh3/bwa)), reformat ([`fgbio ZipperBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/ZipperBam.html)), and template-coordinate sort ([`samtools sort`](http://www.htslib.org/doc/samtools.html))
+4. Group reads by UMI ([`fgbio GroupReadsByUmi`](http://fulcrumgenomics.github.io/fgbio/tools/latest/GroupReadsByUmi.html))
+5. Call consensus reads
+   1. For [Duplex-Sequencing][duplex-seq-link] data
+      1. Call duplex consensus reads ([`fgbio CallDuplexConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallDuplexConsensusReads.html))
+      2. Collect duplex sequencing specific metrics ([`fgbio CollectDuplexSeqMetrics`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CollectDuplexSeqMetrics.html))
+   2. For non-Duplex-Sequencing data:
+      1. Call molecular consensus reads ([`fgbio CallMolecularConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallMolecularConsensusReads.html))
+6. Align ([`bwa mem`](https://github.com/lh3/bwa))
+7. Filter consensus reads ([`fgbio FilterConsensusReads](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
+8. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
 ## Quick Start
 
@@ -64,6 +77,11 @@ On release, automated continuous integration tests run the pipeline on a full-si
 ## Documentation
 
 The nf-core/fgcons pipeline comes with documentation about the pipeline [usage](https://nf-co.re/fgcons/usage), [parameters](https://nf-co.re/fgcons/parameters) and [output](https://nf-co.re/fgcons/output).
+m
+See also:
+
+1. The [fgbio Best Practise FASTQ -> Consensus Pipeline][fgbio-best-practices-link]
+2. [Read structures](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) as required in the input sample sheet.
 
 ## Credits
 
@@ -71,7 +89,15 @@ nf-core/fgcons was originally written by Nils Homer.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
-<!-- TODO nf-core: If applicable, make list of people who have also contributed -->
+- [Nils Homer](https://github.com/nh13)
+
+# Acknowledgements
+
+<p align="left">
+<a href="https://fulcrumgenomics.com">
+<img width="500" height="100" src="docs/images/Fulcrum.svg" alt="Fulcrum Genomics"/>
+</a>
+</p>
 
 ## Contributions and Support
 
@@ -95,3 +121,6 @@ You can cite the `nf-core` publication as follows:
 > Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.
 >
 > _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).
+
+[fgbio-best-practices-link]: https://github.com/fulcrumgenomics/fgbio/blob/main/docs/best-practice-consensus-pipeline.md
+[duplex-seq-link]: https://en.wikipedia.org/wiki/Duplex_sequencing

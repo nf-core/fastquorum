@@ -42,6 +42,80 @@
                 }
             }
         },
+        "main_options": {
+            "title": "Main options",
+            "type": "object",
+            "description": "Most common options used for the pipeline",
+            "default": "",
+            "properties": {
+                "duplex_seq": {
+                    "type": "boolean",
+                    "fa_icon": "fas fa-dna",
+                    "description": "Enable when the input is duplex sequenecing.",
+                    "help_text": "With this parameter flags in various tools are set for duplex sequencing data."
+                }
+            }
+        },
+        "grouping": {
+            "title": "Read grouping options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Options for when grouping reads by UMI",
+            "properties": {
+                "groupreadsbyumi_strategy": {
+                    "type": "string",
+                    "description": "Grouping strategy",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "Grouping strategy for fgbio's GroupReadsByUmi."
+                },
+                "groupreadsbyumi_edits": {
+                    "type": "string",
+                    "description": "Maximum number of edits",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "Maximum number of allowable edits for fgbio's GroupReadsByUmi (options: Identity, Edit, Adjacency, Paired)."
+                }
+            }
+        },
+        "consensus_calling": {
+            "title": "Consensus reads options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Options for when creating consensus reads",
+            "properties": {
+                "call_min_reads": {
+                    "type": "string",
+                    "description": "Minimum reads to call a consensus",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "The minimum reads to call a consensus for fgbio's CallMolecularConsensusReads/CallDuplexConsensusReads."
+                },
+                "call_min_baseq": {
+                    "type": "integer",
+                    "description": "Minimum input base quality",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "The minimum input base quality to use when calling a consensus for fgbio's CallMolecularConsensusReads/CallDuplexConsensusReads."
+                }
+            }
+        },
+        "consensus_filtering": {
+            "title": "Consensus filtering options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Options for when filtering consensus reads",
+            "properties": {
+                "filter_min_baseq": {
+                    "type": "integer",
+                    "description": "Minimum consensus base quality",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "The minimum consensus base quality to keep when calling a consensus for fgbio's FilterConsensusReads."
+                },
+                "filter_max_base_error_rate": {
+                    "type": "number",
+                    "description": "The maximum error rate for a single consensus base",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "The maximum error rate for a single consensus base when filtering a consensus for fgbio's FilterConsensusReads."
+                }
+            }
+        },
         "reference_genome_options": {
             "title": "Reference genome options",
             "type": "object",
@@ -252,6 +326,18 @@
     "allOf": [
         {
             "$ref": "#/definitions/input_output_options"
+        },
+        {
+            "$ref": "#/definitions/main_options"
+        },
+        {
+            "$ref": "#/definitions/grouping"
+        },
+        {
+            "$ref": "#/definitions/consensus_calling"
+        },
+        {
+            "$ref": "#/definitions/consensus_filtering"
         },
         {
             "$ref": "#/definitions/reference_genome_options"

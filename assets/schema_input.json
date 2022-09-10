@@ -29,8 +29,13 @@
                         "maxLength": 0
                     }
                 ]
+            },
+            "read_structure": {
+                "type": "string",
+                "pattern": "^.*$",
+                "errorMessage": "Read structure must be provided; For format, see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures"
             }
         },
-        "required": ["sample", "fastq_1"]
+        "required": ["sample", "fastq_1", "fastq_2", "read_structure"]
     }
 }

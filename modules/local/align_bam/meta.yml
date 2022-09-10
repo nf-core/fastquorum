@@ -1,0 +1,80 @@
+name: fgbio_fastqtobam
+description: |
+  Generates an unmapped BAM (or SAM or CRAM) file from fastq files.
+keywords:
+  - fgbio
+  - samtools
+  - zipperbams
+  - mem
+  - bwa
+  - alignment
+  - map
+  - fastq
+  - bam
+  - sam
+  -
+tools:
+  - bwa:
+      description: |
+        BWA is a software package for mapping DNA sequences against
+        a large reference genome, such as the human genome.
+      homepage: http://bio-bwa.sourceforge.net/
+      documentation: http://www.htslib.org/doc/samtools.html
+      arxiv: arXiv:1303.3997
+      licence: ["GPL-3.0-or-later"]
+  - fgbio:
+      description: A set of tools for working with genomic and high throughput sequencing data, including UMIs
+      homepage: http://fulcrumgenomics.github.io/fgbio/
+      documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
+      tool_dev_url: https://github.com/fulcrumgenomics/fgbio
+      doi: ""
+      licence: ["MIT"]
+  - samtools:
+      description: |
+        SAMtools is a set of utilities for interacting with and post-processing
+        short DNA sequence read alignments in the SAM, BAM and CRAM formats, written by Heng Li.
+        These files are generated as output by short read aligners like BWA.
+      homepage: http://www.htslib.org/
+      documentation: hhttp://www.htslib.org/doc/samtools.html
+      doi: 10.1093/bioinformatics/btp352
+      licence: ["MIT"]
+input:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - unmapped_bam:
+      type: file
+      description: the unmapped BAM/SAM/CRAM file.
+      pattern: "*.{bam,cram,sam}"
+  - fasta:
+      type: file
+      description: FASTA reference file
+      pattern: "*.{fasta,fa}"
+  - index:
+      type: file
+      description: BWA genome index files
+      pattern: "Directory containing BWA index *.{amb,ann,bwt,pac,sa}"
+  - sort:
+      type: bool
+      description: True to sort the output in template-coordinate order, otherwise don't sort
+      pattern: "{true,false}"
+
+output:
+  - meta:
+      type: map
+      description: |
+        Groovy Map containing sample information
+        e.g. [ id:'test', single_end:false ]
+  - version:
+      type: file
+      description: File containing software version
+      pattern: "*.{version.yml}"
+  - bam:
+      type: file
+      description: Mapped bam (unsorted)
+      pattern: "*.{bam}"
+
+authors:
+  - "@nh13"
