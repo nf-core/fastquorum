@@ -33,13 +33,13 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FGCONS } from './workflows/fastquorum'
+include { FASTQUORUM } from './workflows/fastquorum'
 
 //
 // WORKFLOW: Run main nf-core/fastquorum analysis pipeline
 //
-workflow NFCORE_FGCONS {
-    FGCONS ()
+workflow NFCORE_FASTQUORUM {
+    FASTQUORUM ()
 }
 
 /*
@@ -53,7 +53,7 @@ workflow NFCORE_FGCONS {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    NFCORE_FGCONS ()
+    NFCORE_FASTQUORUM ()
 }
 
 /*
