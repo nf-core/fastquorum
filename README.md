@@ -1,17 +1,17 @@
-# ![nf-core/fgcons](docs/images/nf-core-fgcons_logo_light.png#gh-light-mode-only) ![nf-core/fgcons](docs/images/nf-core-fgcons_logo_dark.png#gh-dark-mode-only)
+# ![nf-core/fastquorum](docs/images/nf-core-fastquorum_logo_light.png#gh-light-mode-only) ![nf-core/fastquorum](docs/images/nf-core-fastquorum_logo_dark.png#gh-dark-mode-only)
 
-[![GitHub Actions CI Status](https://github.com/nf-core/fgcons/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/fgcons/actions?query=workflow%3A%22nf-core+CI%22)
-[![GitHub Actions Linting Status](https://github.com/nf-core/fgcons/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/fgcons/actions?query=workflow%3A%22nf-core+linting%22)
-[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?logo=Amazon%20AWS)](https://nf-co.re/fgcons/results)
+[![GitHub Actions CI Status](https://github.com/nf-core/fastquorum/workflows/nf-core%20CI/badge.svg)](https://github.com/nf-core/fastquorum/actions?query=workflow%3A%22nf-core+CI%22)
+[![GitHub Actions Linting Status](https://github.com/nf-core/fastquorum/workflows/nf-core%20linting/badge.svg)](https://github.com/nf-core/fastquorum/actions?query=workflow%3A%22nf-core+linting%22)
+[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?logo=Amazon%20AWS)](https://nf-co.re/fastquorum/results)
 [![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.XXXXXXX-1073c8)](https://doi.org/10.5281/zenodo.XXXXXXX)
 
 [![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A521.10.3-23aa62.svg)](https://www.nextflow.io/)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg)](https://sylabs.io/docs/)
-[![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/fgcons)
+[![Launch on Nextflow Tower](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Nextflow%20Tower-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/fastquorum)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23fgcons-4A154B?logo=slack)](https://nfcore.slack.com/channels/fgcons)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23fastquorum-4A154B?logo=slack)](https://nfcore.slack.com/channels/fastquorum)
 [![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?logo=twitter)](https://twitter.com/nf_core)
 [![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?logo=youtube)](https://www.youtube.com/c/nf-core)
 
@@ -19,15 +19,15 @@
 
 <!-- TODO nf-core: Write a 1-2 sentence summary of what data the pipeline is for and what it does -->
 
-**nf-core/fgcons** is a bioinformatics best-practice analysis pipeline to produce consensus reads using unique molecular indexes/barcodes (UMIs).
+**nf-core/fastquorum** is a bioinformatics best-practice analysis pipeline to produce consensus reads using unique molecular indexes/barcodes (UMIs).
 The pipeline implements the [fgbio Best Practices FASTQ to Consensus Pipeline][fgbio-best-practices-link].
-fgcons can produce consensus reads from single or multi UMI reads, and even [Duplex Sequencing][duplex-seq-link] reads.
+fastquorum can produce consensus reads from single or multi UMI reads, and even [Duplex Sequencing][duplex-seq-link] reads.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
 <!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
 
-On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/fgcons/results).
+On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/fastquorum/results).
 
 ## Pipeline summary
 
@@ -56,7 +56,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 3. Download the pipeline and test it on a minimal dataset with a single command:
 
    ```console
-   nextflow run nf-core/fgcons -profile test,YOURPROFILE --outdir <OUTDIR>
+   nextflow run nf-core/fastquorum -profile test,YOURPROFILE --outdir <OUTDIR>
    ```
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
@@ -71,12 +71,12 @@ On release, automated continuous integration tests run the pipeline on a full-si
    <!-- TODO nf-core: Update the example "typical command" below used to run the pipeline -->
 
    ```console
-   nextflow run nf-core/fgcons --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run nf-core/fastquorum --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Documentation
 
-The nf-core/fgcons pipeline comes with documentation about the pipeline [usage](https://nf-co.re/fgcons/usage), [parameters](https://nf-co.re/fgcons/parameters) and [output](https://nf-co.re/fgcons/output).
+The nf-core/fastquorum pipeline comes with documentation about the pipeline [usage](https://nf-co.re/fastquorum/usage), [parameters](https://nf-co.re/fastquorum/parameters) and [output](https://nf-co.re/fastquorum/output).
 m
 See also:
 
@@ -85,7 +85,7 @@ See also:
 
 ## Credits
 
-nf-core/fgcons was originally written by Nils Homer.
+nf-core/fastquorum was originally written by Nils Homer.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -103,12 +103,12 @@ We thank the following people for their extensive assistance in the development 
 
 If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
-For further information or help, don't hesitate to get in touch on the [Slack `#fgcons` channel](https://nfcore.slack.com/channels/fgcons) (you can join with [this invite](https://nf-co.re/join/slack)).
+For further information or help, don't hesitate to get in touch on the [Slack `#fastquorum` channel](https://nfcore.slack.com/channels/fastquorum) (you can join with [this invite](https://nf-co.re/join/slack)).
 
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  nf-core/fgcons for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use  nf-core/fastquorum for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 <!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
