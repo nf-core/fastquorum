@@ -2,7 +2,7 @@ process FGBIO_FILTERCONSENSUSREADS {
     tag "$meta.id"
     label 'process_low'
 
-    conda (params.enable_conda ? "bioconda::fgbio=2.0.2" : null)
+    conda (params.enable_conda ? "bioconda::fgbio=2.0.2 bioconda::samtools=1.16.1" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/fgbio:2.0.2--hdfd78af_0' :
         'quay.io/biocontainers/fgbio:2.0.2--hdfd78af_0' }"
