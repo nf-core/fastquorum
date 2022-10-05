@@ -69,7 +69,7 @@
                     "help_text": "Grouping strategy for fgbio's GroupReadsByUmi."
                 },
                 "groupreadsbyumi_edits": {
-                    "type": "string",
+                    "type": "integer",
                     "description": "Maximum number of edits",
                     "fa_icon": "fas fa-book",
                     "help_text": "Maximum number of allowable edits for fgbio's GroupReadsByUmi (options: Identity, Edit, Adjacency, Paired)."
