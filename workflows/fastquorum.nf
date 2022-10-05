@@ -31,21 +31,23 @@ ch_ref_index_dir = ch_ref_fasta.map { it -> it.parent }
 
 // Set various consensus calling and filtering parameters if not given
 if (params.duplex_seq) {
-  if (!params.groupreadsbyumi_strategy) { params.groupreadsbyumi_strategy = 'Paired' }
+  if (!params.groupreadsbyumi_strategy) { groupreadsbyumi_strategy = 'Paired' }
   else if (params.groupreadsbyumi_strategy != 'Paired') {
     log.error "config groupreadsbyumi_strategy must be 'Paired' for duplex-sequencing data"
     exit 1
   }
-  if (!params.call_min_reads) { params.call_min_reads = '1 1 0' }
-  if (!params.filter_min_reads) { params.filter_min_reads = '3 1 1' }
+  if (!params.call_min_reads) { call_min_reads = '1 1 0' } else { call_min_reads = params.call_min_reads }
+  if (!params.filter_min_reads) { filter_min_reads = '3 1 1' } else { filter_min_reads = params.filter_min_reads }
 } else {
-  if (!params.groupreadsbyumi_strategy) { params.groupreadsbyumi_strategy = 'Adjacency' }
-  else if (params.groupreadsbyumi_strategy == 'Paired') {
+  if (!params.groupreadsbyumi_strategy) { groupreadsbyumi_strategy = 'Adjacency' }
+  else if (groupreadsbyumi_strategy == 'Paired') {
     log.error "config groupreadsbyumi_strategy cannot be 'Paired' for non-duplex-sequencing data"
     exit 1
+  } else {
+	  groupreadsbyumi_strategy = params.groupreadsbyumi_strategy
   }
-  if (!params.call_min_reads) { params.call_min_reads = '1' }
-  if (!params.filter_min_reads) { params.filter_min_reads = '3' }
+  if (!params.call_min_reads) { call_min_reads = '1' } else { call_min_reads = params.call_min_reads }
+  if (!params.filter_min_reads) { filter_min_reads = '3' } else { filter_min_reads = params.filter_min_reads }
 }
 
 /*
@@ -136,14 +138,14 @@ workflow FASTQUORUM {
     //
     // MODULE: Run fgbio GroupReadsByUmi
     //
-    GROUPREADSBYUMI(ALIGN_RAW_BAM.out.bam, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
+    GROUPREADSBYUMI(ALIGN_RAW_BAM.out.bam, groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
 
     // TODO: duplex_seq can be inferred from the read structure, but that's out of scope for now
     if (params.duplex_seq) {
         //
         // MODULE: Run fgbio CallDuplexConsensusReads
         //
-        CALLDDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
+        CALLDDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, call_min_reads, params.call_min_baseq)
 
         //
         // MODULE: Run fgbio CollecDuplexSeqMetrics
@@ -156,7 +158,7 @@ workflow FASTQUORUM {
         //
         // MODULE: Run fgbio CallMolecularConsensusReads
         //
-        CALLMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
+        CALLMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, call_min_reads, params.call_min_baseq)
 
         // Add the consensus BAM to the channel for downstream processing
         CALLMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
@@ -170,7 +172,7 @@ workflow FASTQUORUM {
     //
     // MODULE: Run fgbio FilterConsensusReads
     //
-    FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_ref_fasta, params.filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
+    FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_ref_fasta, filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
 
     //
     // MODULE: MultiQC
