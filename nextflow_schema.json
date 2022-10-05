@@ -108,6 +108,12 @@
             "fa_icon": "fas fa-dna",
             "description": "Options for when filtering consensus reads",
             "properties": {
+                "filter_min_reads": {
+                    "type": "string",
+                    "description": "Minimum reads to keep a consensus",
+                    "fa_icon": "fas fa-book",
+                    "help_text": "The minimum reads to keep a consensus for fgbio's FilterConsensusReads."
+                },
                 "filter_min_baseq": {
                     "type": "integer",
                     "description": "Minimum consensus base quality",
