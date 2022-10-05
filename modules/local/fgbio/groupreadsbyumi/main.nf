@@ -36,10 +36,10 @@ process FGBIO_GROUPREADSBYUMI {
         GroupReadsByUmi \\
         --strategy $strategy \\
         --edits $edits \\
-        $args \\
         --input $mapped_bam \\
         --output ${prefix}.grouped.bam \\
-        --family-size-histogram ${prefix}.grouped-family-sizes.txt
+        --family-size-histogram ${prefix}.grouped-family-sizes.txt \\
+        $args
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
