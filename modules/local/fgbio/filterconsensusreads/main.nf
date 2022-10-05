@@ -1,6 +1,6 @@
 process FGBIO_FILTERCONSENSUSREADS {
     tag "$meta.id"
-    label 'process_low'
+    label 'process_medium_mem'
 
     conda (params.enable_conda ? "bioconda::fgbio=2.0.2 bioconda::samtools=1.16.1" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
