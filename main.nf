@@ -1,11 +1,11 @@
 #!/usr/bin/env nextflow
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    nf-core/fgcons
+    nf-core/fastquorum
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    Github : https://github.com/nf-core/fgcons
-    Website: https://nf-co.re/fgcons
-    Slack  : https://nfcore.slack.com/channels/fgcons
+    Github : https://github.com/nf-core/fastquorum
+    Website: https://nf-co.re/fastquorum
+    Slack  : https://nfcore.slack.com/channels/fastquorum
 ----------------------------------------------------------------------------------------
 */
 
@@ -33,10 +33,10 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { FGCONS } from './workflows/fgcons'
+include { FGCONS } from './workflows/fastquorum'
 
 //
-// WORKFLOW: Run main nf-core/fgcons analysis pipeline
+// WORKFLOW: Run main nf-core/fastquorum analysis pipeline
 //
 workflow NFCORE_FGCONS {
     FGCONS ()

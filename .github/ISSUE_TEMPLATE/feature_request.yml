@@ -1,5 +1,5 @@
 name: Feature request
-description: Suggest an idea for the nf-core/fgcons pipeline
+description: Suggest an idea for the nf-core/fastquorum pipeline
 labels: enhancement
 body:
   - type: textarea

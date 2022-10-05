@@ -1,4 +1,4 @@
-# nf-core/fgcons: Output
+# nf-core/fastquorum: Output
 
 ## Introduction
 

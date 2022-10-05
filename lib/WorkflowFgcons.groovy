@@ -1,5 +1,5 @@
 //
-// This file holds several functions specific to the workflow/fgcons.nf in the nf-core/fgcons pipeline
+// This file holds several functions specific to the workflow/fastquorum.nf in the nf-core/fastquorum pipeline
 //
 
 class WorkflowFgcons {

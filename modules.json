@@ -1,6 +1,6 @@
 {
-    "name": "nf-core/fgcons",
-    "homePage": "https://github.com/nf-core/fgcons",
+    "name": "nf-core/fastquorum",
+    "homePage": "https://github.com/nf-core/fastquorum",
     "repos": {
         "nf-core/modules": {
             "custom/dumpsoftwareversions": {
