@@ -35,7 +35,10 @@ def create_fastq_channel(LinkedHashMap row) {
     if (!file(row.fastq_2).exists()) {
         exit 1, "ERROR: Please check input samplesheet -> Read 2 FastQ file does not exist!\n${row.fastq_2}"
     }
-    if (file(row.fastq_umi).exists()){
+    if (row.fastq_umi){
+        if (!file(row.fastq_umi).exists()) {
+            exit 1, "ERROR: Please check input samplesheet -> UMI FastQ file is specified in samplesheet does not exist!\n${row.fastq_2}"
+        }
         fastq_list = [ file(row.fastq_1), file(row.fastq_2), file(row.fastq_umi) ]
     } else {
         fastq_list = [ file(row.fastq_1), file(row.fastq_2) ]
