@@ -52,7 +52,7 @@ process ALIGN_BAM {
 
     """
     # The real path to the FASTA
-    FASTA=`find -L ./ -name "*.amb" | sed 's/.amb//'`
+    FASTA=`find -L ./ -name "*.amb" | sed -r 's/(.64)?.amb//'`
 
     samtools fastq ${samtools_fastq_args} ${unmapped_bam} \\
         | bwa mem ${bwa_args} -t $task.cpus -p -K 150000000 -Y \$FASTA - \\

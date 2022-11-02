@@ -1,3 +1,4 @@
-sample,fastq_1,fastq_2,read_structure
+sample,fastq_1,fastq_2,read_structure,fastq_umi
 SAMPLE_DUPLEX_SEQ,/path/to/fastq/files/AEG588A1_S1_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S1_L002_R2_001.fastq.gz,10M1S+T 10M1S+T
 SAMPLE_SINGLE_UMI,/path/to/fastq/files/AEG588A1_S2_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S2_L002_R2_001.fastq.gz,12M+T +T
+SAMPLE_UMI_FASTQ,/path/to/fastq/files/AEG588A1_S2_L002_R1_001.fastq.gz,/path/to/fastq/files/AEG588A1_S2_L002_R3_001.fastq.gz,+T +T +M,/path/to/fastq/files/AEG588A1_S2_L002_R2_001.fastq.gz
