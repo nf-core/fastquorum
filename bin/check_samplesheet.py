@@ -73,7 +73,9 @@ class RowChecker:
         self._validate_first(row)
         self._validate_second(row)
         self._validate_pair(row)
-        self._seen.add((row[self._sample_col], row[self._first_col], row[self._second_col]))
+        self._seen.add(
+            (row[self._sample_col], row[self._first_col], row[self._second_col])
+        )
         self.modified.append(row)
 
     def _validate_sample(self, row):
@@ -95,14 +97,14 @@ class RowChecker:
     def _validate_pair(self, row):
         """Assert that read pairs have the same file extension. Report pair status."""
         assert (
-            Path(row[self._first_col]).suffixes[-2:] == Path(row[self._second_col]).suffixes[-2:]
+            Path(row[self._first_col]).suffixes[-2:]
+            == Path(row[self._second_col]).suffixes[-2:]
         ), "FASTQ pairs must have the same file extensions."
 
     def _validate_read_structure(self, row):
         """Assert that the second FASTQ entry has the right format if it exists."""
-        assert len(row[self._read_structure_col].split(' ')) == 2, (
-            "Two read structures must be provided."
-        )
+        n_structures = len(row[self._read_structure_col].split(" "))
+        assert 2 <= n_structures <= 3, "Two read structures must be provided."
 
     def _validate_fastq_format(self, filename):
         """Assert that a given filename has one of the expected FASTQ extensions."""
@@ -119,7 +121,9 @@ class RowChecker:
         FASTQ file combination exists.
 
         """
-        assert len(self._seen) == len(self.modified), "The pair of sample name and FASTQ must be unique."
+        assert len(self._seen) == len(
+            self.modified
+        ), "The pair of sample name and FASTQ must be unique."
         if len({pair[0] for pair in self._seen}) < len(self._seen):
             counts = Counter(pair[0] for pair in self._seen)
             seen = Counter()
@@ -192,7 +196,9 @@ def check_samplesheet(file_in, file_out):
         reader = csv.DictReader(in_handle, dialect=sniff_format(in_handle))
         # Validate the existence of the expected header columns.
         if not required_columns.issubset(reader.fieldnames):
-            logger.critical(f"The sample sheet **must** contain the column headers: {', '.join(required_columns)}.")
+            logger.critical(
+                f"The sample sheet **must** contain the column headers: {', '.join(required_columns)}."
+            )
             sys.exit(1)
         # Validate each row.
         checker = RowChecker()
