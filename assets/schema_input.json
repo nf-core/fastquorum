@@ -1,7 +1,7 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/fgcons/master/assets/schema_input.json",
-    "title": "nf-core/fgcons pipeline - params.input schema",
+    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/master/assets/schema_input.json",
+    "title": "nf-core/fastquorum pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
     "items": {
