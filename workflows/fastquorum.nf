@@ -40,7 +40,7 @@ if (params.duplex_seq) {
   if (!params.filter_min_reads) { filter_min_reads = '3 1 1' } else { filter_min_reads = params.filter_min_reads }
 } else {
   if (!params.groupreadsbyumi_strategy) { groupreadsbyumi_strategy = 'Adjacency' }
-  else if (groupreadsbyumi_strategy == 'Paired') {
+  else if (params.groupreadsbyumi_strategy == 'Paired') {
     log.error "config groupreadsbyumi_strategy cannot be 'Paired' for non-duplex-sequencing data"
     exit 1
   } else {
