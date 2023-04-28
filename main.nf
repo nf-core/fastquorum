@@ -4,7 +4,6 @@
     nf-core/fastquorum
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     Github : https://github.com/nf-core/fastquorum
-
     Website: https://nf-co.re/fastquorum
     Slack  : https://nfcore.slack.com/channels/fastquorum
 ----------------------------------------------------------------------------------------
