@@ -4,9 +4,8 @@
   |\\ | |__  __ /  ` /  \\ |__) |__         }  {
   | \\| |       \\__, \\__/ |  \\ |___     \\`-._,-`-,
                                         `._,._,'
-  nf-core/fastquorum v${version}
+  nf-core/fastquorum ${version}
 ----------------------------------------------------
-
 Run Name: $runName
 
 <% if (success){
