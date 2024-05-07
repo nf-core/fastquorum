@@ -2,14 +2,17 @@ process ALIGN_BAM {
     tag "$meta.id"
     label 'process_high'
 
-    conda (params.enable_conda ? "bioconda::fgbio=2.0.2 bioconda::bwa=0.7.17 bioconda::samtools=1.16.1" : null)
+    conda "bioconda::fgbio=2.0.2 bioconda::bwa=0.7.17 bioconda::samtools=1.16.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/mulled-v2-69f5207f538e4de9ef3bae6f9a95c5af56a88ab8:82d3ec41f9f1227f7183d344be46f73365efa704-0' :
         'quay.io/biocontainers/mulled-v2-69f5207f538e4de9ef3bae6f9a95c5af56a88ab8:82d3ec41f9f1227f7183d344be46f73365efa704-0' }"
 
     input:
     tuple val(meta), path(unmapped_bam)
-    path index_dir
+    tuple val(meta2), path(fasta)
+    tuple val(meta3), path(fasta_fai)
+    tuple val(meta4), path(dict)
+    tuple val(meta5), path(bwa_dir)
     val sort
 
     output:
@@ -51,17 +54,18 @@ process ALIGN_BAM {
     }
 
     """
-    # The real path to the FASTA
-    FASTA=`find -L ./ -name "*.amb" | sed 's/.amb//'`
+    # The real path to the BWA index prefix`
+    BWA_INDEX_PREFIX=`find -L ./ -name "*.amb" | sed 's/.amb//'`
+
 
     samtools fastq ${samtools_fastq_args} ${unmapped_bam} \\
-        | bwa mem ${bwa_args} -t $task.cpus -p -K 150000000 -Y \$FASTA - \\
+        | bwa mem ${bwa_args} -t $task.cpus -p -K 150000000 -Y \$BWA_INDEX_PREFIX - \\
         | fgbio -Xmx${fgbio_mem_gb}g \\
             --compression ${fgbio_zipper_bams_compression} \\
             --async-io=true \\
             ZipperBams \\
             --unmapped ${unmapped_bam} \\
-            --ref \$FASTA \\
+            --ref ${fasta} \\
             --output ${fgbio_zipper_bams_output} \\
             --tags-to-reverse Consensus \\
             --tags-to-revcomp Consensus \\
