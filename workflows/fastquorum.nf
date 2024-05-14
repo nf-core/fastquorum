@@ -8,7 +8,7 @@ include { paramsSummaryMap                                                 } fro
 include { paramsSummaryMultiqc                                             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { softwareVersionsToYAML                                           } from '../subworkflows/nf-core/utils_nfcore_pipeline'
 include { methodsDescriptionText                                           } from '../subworkflows/local/utils_nfcore_fastquorum_pipeline'
-
+include { CAT_FASTQ                                                        } from '../modules/nf-core/cat/fastq/main'
 include { ALIGN_BAM                         as ALIGN_RAW_BAM               } from '../modules/local/align_bam/main'
 include { ALIGN_BAM                         as ALIGN_CONSENSUS_BAM         } from '../modules/local/align_bam/main'
 include { FASTQC                                                           } from '../modules/nf-core/fastqc/main'
@@ -37,23 +37,37 @@ workflow FASTQUORUM {
 
     main:
 
-    // To gather all QC reports for MultiQC
-    ch_versions = Channel.empty()
-    ch_multiqc_files = Channel.empty()
+    ch_samplesheet
+        .groupTuple()
+        .branch {
+            meta, fastqs ->
+                single  : fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
+        }
+        .set { ch_fastq }
+    //
+    // MODULE: Concatenate FastQ files from same sample if required
+    //
+    CAT_FASTQ (
+        ch_fastq.multiple
+    )
+    .reads
+    .mix(ch_fastq.single)
+    .set { ch_cat_fastq }
 
     //
     // MODULE: Run FastQC
     //
     FASTQC(
-        ch_samplesheet
+        ch_cat_fastq
     )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
 
     //
     // MODULE: Run fgbio FastqToBam
     //
-    FASTQTOBAM(ch_samplesheet)
+    FASTQTOBAM(ch_cat_fastq)
 
     //
     // MODULE: Align with bwa mem

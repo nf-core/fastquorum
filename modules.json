@@ -10,6 +10,11 @@
                         "git_sha": "6278bf9afd4a4b2d00fa6052250e73da3d91546f",
                         "installed_by": ["modules"]
                     },
+                    "cat/fastq": {
+                        "branch": "master",
+                        "git_sha": "4fc983ad0b30e6e32696fa7d980c76c7bfe1c03e",
+                        "installed_by": ["modules"]
+                    },
                     "fastqc": {
                         "branch": "master",
                         "git_sha": "285a50500f9e02578d90b3ce6382ea3c30216acd",
