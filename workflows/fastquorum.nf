@@ -41,26 +41,27 @@ workflow FASTQUORUM {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+    // TODO: This won't work for single-ends!
     ch_samplesheet
-        .groupTuple()
         .branch {
             meta, fastqs ->
-                single  : fastqs.size() == 1
-                    return [ meta, fastqs.flatten() ]
-                multiple: fastqs.size() > 1
-                    return [ meta, fastqs.flatten() ]
+                single  : fastqs.size() == 2
+                    return [ meta, fastqs ]
+                multiple: fastqs.size() > 2
+                    return [ meta, fastqs ]
         }
-        .set {ch_fastqs}
+        .set {ch_fastq}
 
     //
     // MODULE: Concatenate FastQ files from same sample if required
     //
     CAT_FASTQ (
-        ch_fastqs.multiple
+        ch_fastq.multiple.view()
     )
     .reads
     .mix(ch_fastq.single)
     .set { ch_cat_fastq }
+
     ch_versions = ch_versions.mix(CAT_FASTQ.out.versions.first().ifEmpty(null))
     //
     // MODULE: Run FastQC
@@ -151,10 +152,16 @@ workflow FASTQUORUM {
         ch_multiqc_logo.toList()
     )
 
+
     emit:
     multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
     versions       = ch_versions                 // channel: [ path(versions.yml) ]
+
+
+
 }
+
+
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
