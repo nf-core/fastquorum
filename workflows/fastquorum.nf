@@ -4,21 +4,23 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap                                                 } from 'plugin/nf-validation'
-include { paramsSummaryMultiqc                                             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML                                           } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText                                           } from '../subworkflows/local/utils_nfcore_fastquorum_pipeline'
+include { paramsSummaryMap                                                                   } from 'plugin/nf-validation'
+include { paramsSummaryMultiqc                                                               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML                                                             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText                                                             } from '../subworkflows/local/utils_nfcore_fastquorum_pipeline'
 
-include { ALIGN_BAM                         as ALIGN_RAW_BAM               } from '../modules/local/align_bam/main'
-include { ALIGN_BAM                         as ALIGN_CONSENSUS_BAM         } from '../modules/local/align_bam/main'
-include { FASTQC                                                           } from '../modules/nf-core/fastqc/main'
-include { FGBIO_FASTQTOBAM                  as FASTQTOBAM                  } from '../modules/local/fgbio/fastqtobam/main'
-include { FGBIO_GROUPREADSBYUMI             as GROUPREADSBYUMI             } from '../modules/local/fgbio/groupreadsbyumi/main'
-include { FGBIO_CALLMOLECULARCONSENSUSREADS as CALLMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callmolecularconsensusreads/main'
-include { FGBIO_CALLDDUPLEXCONSENSUSREADS   as CALLDDUPLEXCONSENSUSREADS   } from '../modules/local/fgbio/callduplexconsensusreads/main'
-include { FGBIO_FILTERCONSENSUSREADS        as FILTERCONSENSUSREADS        } from '../modules/local/fgbio/filterconsensusreads/main'
-include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS     } from '../modules/local/fgbio/collectduplexseqmetrics/main'
-include { MULTIQC                                                          } from '../modules/nf-core/multiqc/main'
+include { ALIGN_BAM                         as ALIGN_RAW_BAM                                 } from '../modules/local/align_bam/main'
+include { ALIGN_BAM                         as ALIGN_CONSENSUS_BAM                           } from '../modules/local/align_bam/main'
+include { FASTQC                                                                             } from '../modules/nf-core/fastqc/main'
+include { FGBIO_FASTQTOBAM                  as FASTQTOBAM                                    } from '../modules/local/fgbio/fastqtobam/main'
+include { FGBIO_GROUPREADSBYUMI             as GROUPREADSBYUMI                               } from '../modules/local/fgbio/groupreadsbyumi/main'
+include { FGBIO_CALLMOLECULARCONSENSUSREADS as CALLMOLECULARCONSENSUSREADS                   } from '../modules/local/fgbio/callmolecularconsensusreads/main'
+include { FGBIO_CALLDDUPLEXCONSENSUSREADS   as CALLDDUPLEXCONSENSUSREADS                     } from '../modules/local/fgbio/callduplexconsensusreads/main'
+include { FGBIO_FILTERCONSENSUSREADS        as FILTERCONSENSUSREADS                          } from '../modules/local/fgbio/filterconsensusreads/main'
+include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS                       } from '../modules/local/fgbio/collectduplexseqmetrics/main'
+include { FGBIO_CALLANDFILTERMOLECULARCONSENSUSREADS as CALLANDFILTERMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callandfiltermolecularconsensusreads/main'
+include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS    as CALLANDFILTERDUPLEXCONSENSUSREADS    } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
+include { MULTIQC                                                                            } from '../modules/nf-core/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,49 +60,74 @@ workflow FASTQUORUM {
     //
     // MODULE: Align with bwa mem
     //
-    grouped_sort = true
-    ALIGN_RAW_BAM(FASTQTOBAM.out.bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, grouped_sort)
+    ALIGN_RAW_BAM(FASTQTOBAM.out.bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "template-coordinate")
 
     //
     // MODULE: Run fgbio GroupReadsByUmi
     //
     GROUPREADSBYUMI(ALIGN_RAW_BAM.out.bam, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
     ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map{it[1]}.collect())
-
-
-    // TODO: duplex_seq can be inferred from the read structure, but that's out of scope for now
+        
     if (params.duplex_seq) {
-        //
-        // MODULE: Run fgbio CallDuplexConsensusReads
-        //
-        CALLDDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
-
         //
         // MODULE: Run fgbio CollecDuplexSeqMetrics
         //
         COLLECTDUPLEXSEQMETRICS(GROUPREADSBYUMI.out.bam)
-
-        // Add the consensus BAM to the channel for downstream processing
-        CALLDDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
-    } else {
-        //
-        // MODULE: Run fgbio CallMolecularConsensusReads
-        //
-        CALLMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
-
-        // Add the consensus BAM to the channel for downstream processing
-        CALLMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
     }
 
-    //
-    // MODULE: Align with bwa mem
-    //
-    ALIGN_CONSENSUS_BAM(ch_consensus_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, false)
+    // TODO: duplex_seq can be inferred from the read structure, but that's out of scope for now
+    if (params.mode == 'rd') {
+        if (params.duplex_seq) {
+            //
+            // MODULE: Run fgbio CallDuplexConsensusReads
+            //
+            CALLDDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
 
-    //
-    // MODULE: Run fgbio FilterConsensusReads
-    //
-    FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_fasta, params.filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
+            // Add the consensus BAM to the channel for downstream processing
+            CALLDDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
+        } else {
+            //
+            // MODULE: Run fgbio CallMolecularConsensusReads
+            //
+            CALLMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
+
+            // Add the consensus BAM to the channel for downstream processing
+            CALLMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
+        }
+
+        //
+        // MODULE: Align with bwa mem
+        //
+        ALIGN_CONSENSUS_BAM(ch_consensus_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "none")
+
+        //
+        // MODULE: Run fgbio FilterConsensusReads
+        //
+        FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_fasta, params.filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
+    } else {
+        if (params.duplex_seq) {
+            //
+            // MODULE: Run fgbio CallDuplexConsensusReads and fgbio FilterConsensusReads
+            //
+            CALLANDFILTERDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
+            
+            // Add the consensus BAM to the channel for downstream processing
+            CALLANDFILTERDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
+        } else {
+            //
+            // MODULE: Run fgbio CallMolecularConsensusReads and fgbio FilterConsensusReads
+            //
+            CALLANDFILTERMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
+            
+            // Add the consensus BAM to the channel for downstream processing
+            CALLANDFILTERMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
+        }
+
+        //
+        // MODULE: Align with bwa mem
+        //
+        ALIGN_CONSENSUS_BAM(ch_consensus_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "coordinate")
+    }
 
     //
     // Collate and save software versions
