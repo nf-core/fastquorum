@@ -13,7 +13,7 @@ process ALIGN_BAM {
     tuple val(meta3), path(fasta_fai)
     tuple val(meta4), path(dict)
     tuple val(meta5), path(bwa_dir)
-    val sort
+    val sort_type
 
     output:
     tuple val(meta), path("*.mapped.bam"), emit: bam
@@ -29,6 +29,7 @@ process ALIGN_BAM {
     def fgbio_args = task.ext.fgbio_args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
     def fgbio_mem_gb = 4
+    def extra_command = ""
 
     if (!task.memory) {
         log.info '[fgbio ZipperBams] Available memory not known - defaulting to 4GB. Specify process memory requirements to change this.'
@@ -39,18 +40,23 @@ process ALIGN_BAM {
             fgbio_mem_gb = task.memory.giga - 1
         }
     }
-    if (sort) {
+
+    if (sort_type == "none") {
+        fgbio_zipper_bams_output = prefix + ".mapped.bam"
+        fgbio_zipper_bams_compression = 1
+    } else {
         fgbio_zipper_bams_output = "/dev/stdout"
         fgbio_zipper_bams_compression = 0 // do not compress if samtools is consuming it
         extra_command = " | samtools sort "
         extra_command += samtools_sort_args
-        extra_command += " --template-coordinate"
+        if (sort_type == "template-coordinate") {
+            extra_command += " --template-coordinate"
+        } else if (sort_type != "coordinate") {
+            log.info '[samtools sort] Unknown sort - defaulting to coordainte.'
+        }
         extra_command += " --threads "+ task.cpus
         extra_command += " -o " + prefix + ".mapped.bam"
-    } else {
-        fgbio_zipper_bams_output = prefix + ".mapped.bam"
-        fgbio_zipper_bams_compression = 1
-        extra_command = ""
+        extra_command += " -"
     }
 
     """
