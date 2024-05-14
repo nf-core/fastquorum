@@ -103,9 +103,13 @@ workflow PIPELINE_INITIALISATION {
         .map {
             validateInputSamplesheet(it)
         }
-        .map {
+        .groupTuple()
+        .branch {
             meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+                single  : fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
         }
         .set { ch_samplesheet }
 
