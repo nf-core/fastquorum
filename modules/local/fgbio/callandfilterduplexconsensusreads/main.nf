@@ -9,7 +9,7 @@ process FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS {
 
     input:
     tuple val(meta), path(grouped_bam)
-    tuple val(meta2), path(fasta) 
+    tuple val(meta2), path(fasta)
     tuple val(meta3), path(fasta_fai)
     val(min_reads)
     val(min_baseq)
