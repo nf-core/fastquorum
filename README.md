@@ -46,9 +46,9 @@ On release, automated continuous integration tests run the pipeline on a full-si
 7. Filter consensus reads ([`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
 8. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
-<p align="center">
-    <img title="Fastquorum Workflow" src="docs/images/fastquorum_subway.png" width=60%>
-</p>
+| Tools | Description |
+| ----- | ----------- |
+| <p align="center"><img title="Fastquorum Workflow (Tools)" src="docs/images/fastquorum_subway.png" width=100%></p> | <p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p> |
 
 ## Usage
 
