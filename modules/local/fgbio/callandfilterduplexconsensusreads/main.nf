@@ -30,8 +30,11 @@ process FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS {
         log.info '[fgbio FilterConsensusReads] Available memory not known - defaulting to 8GB. Specify process memory requirements to change this.'
     } else {
         mem_gb = task.memory.giga
-        call_mem_gb = mem_gb - filter_mem_gb
-        assert (call_mem_gb >= 4) : "FGBIO_CALLMOLECULARCONSENSUSREADS must have at least 12GB of memory"
+        if (mem_gb - filter_mem_gb < 4) {
+            log.info 'FGBIO_CALLMOLECULARCONSENSUSREADS may not have enough memory'
+        } else {
+            call_mem_gb = mem_gb - filter_mem_gb
+        }
     }
 
     """
