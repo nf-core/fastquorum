@@ -49,13 +49,13 @@
             "description": "Most common options used for the pipeline",
             "default": "",
             "properties": {
-				"mode": {
-					"type": "string",
-					"default": "rd",
-					"fa_icon": "fas fas-dna",
-					"description": "The pipeline mode to use, either 'rd' for R&D or 'ht' for High-Throughput",
-					"enum": ["rd", "ht"]
-				},
+                "mode": {
+                    "type": "string",
+                    "default": "rd",
+                    "fa_icon": "fas fas-dna",
+                    "description": "The pipeline mode to use, either 'rd' for R&D or 'ht' for High-Throughput",
+                    "enum": ["rd", "ht"]
+                },
                 "duplex_seq": {
                     "type": "boolean",
                     "fa_icon": "fas fa-dna",

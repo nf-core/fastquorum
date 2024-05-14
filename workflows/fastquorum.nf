@@ -67,7 +67,7 @@ workflow FASTQUORUM {
     //
     GROUPREADSBYUMI(ALIGN_RAW_BAM.out.bam, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
     ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map{it[1]}.collect())
-        
+
     if (params.duplex_seq) {
         //
         // MODULE: Run fgbio CollecDuplexSeqMetrics
@@ -110,7 +110,7 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallDuplexConsensusReads and fgbio FilterConsensusReads
             //
             CALLANDFILTERDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
-            
+
             // Add the consensus BAM to the channel for downstream processing
             CALLANDFILTERDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
         } else {
@@ -118,7 +118,7 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallMolecularConsensusReads and fgbio FilterConsensusReads
             //
             CALLANDFILTERMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
-            
+
             // Add the consensus BAM to the channel for downstream processing
             CALLANDFILTERMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
         }
