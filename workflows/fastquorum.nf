@@ -41,11 +41,22 @@ workflow FASTQUORUM {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+    ch_samplesheet
+        .groupTuple()
+        .branch {
+            meta, fastqs ->
+                single  : fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
+        }
+        .set {ch_fastqs}
+
     //
     // MODULE: Concatenate FastQ files from same sample if required
     //
     CAT_FASTQ (
-        ch_samplesheet.multiple
+        ch_fastqs.multiple
     )
     .reads
     .mix(ch_fastq.single)
