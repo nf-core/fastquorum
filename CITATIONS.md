@@ -20,7 +20,7 @@
 
 - [FGBio](https://github.com/fulcrumgenomics/fgbio)
 
-  > doi: 10.5281/zenodo.10456900
+  > Homer N, Fennell T, et al. (2024). fulcrumgenomics/fgbio: Release 2.2.1 (2.2.1). Zenodo. https://doi.org/10.5281/zenodo.10456901
 
 - [MultiQC](https://pubmed.ncbi.nlm.nih.gov/27312411/)
 

@@ -4,9 +4,9 @@
 
 > _Documentation of pipeline parameters is generated automatically from the pipeline schema and can no longer be found in markdown files._
 
-## Introduction
+## Pipeline parameters
 
-<!-- TODO nf-core: Add documentation about anything specific to running your pipeline. For general topics, please point to (and add to) the main nf-core website. -->
+Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration except for parameters; see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
 
 ## Samplesheet input
 
@@ -21,43 +21,129 @@ You will need to create a samplesheet with information about the samples you wou
 The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz
-CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz
+sample,fastq_1,fastq_2,read_structure
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5M2S+T 5M2S+T
 ```
+
+The `read_structure` must be the same for all FASTQs from the same sample.
 
 ### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 3 columns to match those defined in the table below.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 4 columns to match those defined in the table below.
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
-CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz
-CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz
-TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,
-TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,
-TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,
+sample,fastq_1,fastq_2,read_structure
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP2,AEG588A2_S2_L002_R1_001.fastq.gz,AEG588A2_S2_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP3,AEG588A3_S3_L002_R1_001.fastq.gz,AEG588A3_S3_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+TREATMENT_REP1,AEG588A4_S4_L003_R1_001.fastq.gz,12M+T +T
+TREATMENT_REP2,AEG588A5_S5_L003_R1_001.fastq.gz,12M+T +T
+TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,12M+T +T
+TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 ```
 
-| Column    | Description                                                                                                                                                                            |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`  | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1` | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
-| `fastq_2` | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| Column           | Description                                                                                                                                                                            |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)               |
+
+[read-structure-link]: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
 
 An [example samplesheet](../assets/samplesheet.csv) has been provided with the pipeline.
+
+### Main Options
+
+Two modes of running this pipeline are supported:
+
+1. Research and Development (R&D): use `--mode rd` or `params.mode=rd`. This mode is desirable to be able to branch off from the pipeline and test e.g. multiple consensus calling or filtering parameters
+2. High Throughput (HT): use `--mode ht` or `params.mode=ht`. This mode is intended for high throughput production environments where performance and throughput take precedence over flexibility
+
+For [Duplex-Sequencing][duplex-seq-link], use `--duplex_seq true` or `params.duplex_seq=true`, indicating that reads from the same source molecule may observe either strand.
+Otherwise, the pipeline will assume that reads from the same source molecule are from the same strand.
+Practically speaking, the former will utilize the [`fgbio CallDuplexConsensusReads`][fgbio-call-duplex-link] tool, while the latter will utilize the [`fgbio CallMolecularConsensusReads`][fgbio-call-mol-link] tool.
+
+[fgbio-call-duplex-link]: https://fulcrumgenomics.github.io/fgbio/tools/latest/CallDuplexConsensusReads.html
+[fgbio-call-mol-link]: https://fulcrumgenomics.github.io/fgbio/tools/latest/CallMolecularConsensusReads.html
+[duplex-seq-link]: https://en.wikipedia.org/wiki/Duplex_sequencing
+
+### Grouping Options
+
+These options pertain to the [`fgbio GroupReadsByUmi`](https://fulcrumgenomics.github.io/fgbio/tools/latest/GroupReadsByUmi.html) tool and are prefixed by `groupreadsbyumi_`.
+
+The `--groupreadsbyumi_strategy` option overrides the tool's `--strategy` option.
+By default, the `--strategy paired` is used when `--duplex_seq true`, otherwise `--strategy adjacency`.
+
+:::warning The strategy used must match the library preparation (i.e. `Paired` for duplex-sequencing, otherwise one of `Identity`, `Edit`, or `Adjacency`).
+
+The `groupreadsbyumi_edits` option overrides the tool's `--edits` option.
+This provides the maximum number of allowable edits.
+
+### Consensus Calling Options
+
+These options pertain to the [`fgbio CallMolecularConsensusReads`][fgbio-call-mol-link] and [`CallDuplexConsensusReads`][fgbio-call-duplex-link] tools and are prefixed by `call_`.
+The former are from reads from the same strand of the original source molecule, whereas the latter have reads that originate from either strand of the original source molecule.
+
+The `--call_min_reads` option provides the minimum reads to call a consensus, while the `--call_min_baseq` option provides the minimum input base quality to use when calling a consensus.
+These two options are typically used for the High Throughput mode, matching the same value used in [Consensus Filtering](#consensus-filtering-options).
+
+### Consensus Filtering Options
+
+These options pertain to the [`fgbio FilterConsensusReads`](https://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html) tool and are prefixed by `filter_`.
+
+The `--filter_min_reads` option provides the minimum reads to call a consensus, while the option `--filter_min_baseq` provides the minimum input base quality to use when calling a consensus.
+These two options are typically used for the High Throughput mode, matching the same value used in [Consensus Calling](#consensus-calling-options).
+The `--filter_min_reads` option can accept up to three values for [duplex consensus reads][duplex-seq-link].
+See the tools documentation for how to use this option.
+
+The `--filter_max_base_error_rate` option sets the maximum error rate for a single consensus base when filtering a consensus.
+
+### Reference Genome Options
+
+Please refer to the [nf-core website](https://nf-co.re/usage/reference_genomes) for general usage docs and guidelines regarding reference genomes.
+
+### Explicit reference file specification (recommended)
+
+The minimum reference genome requirements for this pipeline are a FASTA, all other files required to run the pipeline can be generated from these files.
+For example, the latest reference FASTA for human can be derived from Ensembl like:
+
+```
+latest_release=$(curl -s 'http://rest.ensembl.org/info/software?content-type=application/json' | grep -o '"release":[0-9]*' | cut -d: -f2)
+wget -L ftp://ftp.ensembl.org/pub/release-${latest_release}/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
+gunzip Homo_sapiens.GRCh38.dna_sm.primary_assembly.fa.gz
+```
+
+This FASTA can then be specified to the workflow with the `--fasta` parameter.
+
+#### Indices
+
+By default, BWA indices are generated dynamically by the workflow.
+Since indexing is an expensive process in time and resources you should ensure that it is only done once, by retaining the indices generated from each batch of reference files:
+
+- the `--save_reference` parameter will save your indices in your results directory
+
+Once you have the indices from a workflow run you should save them somewhere central and reuse them in subsequent runs using custom config files or command line parameters:
+
+- the `--fasta` parameter specifies the path the genome FASTA
+- the `--dict` parameter specifies the path the genome sequence dictionary (see `samtools dict`)
+- the `--fasta_fai` parameter specifies the path the genome FASTA index (see `samtools faidx`)
+- the `--bwa` parameter specifies the path to the directory containing the BWA index
+
+### iGenomes (not recommended)
+
+If the `--genome` parameter is provided (e.g. `--genome GRCh38`) then the FASTA file will be automatically obtained from AWS-iGenomes unless these have already been downloaded locally in the path specified by `--igenomes_base`.
 
 ## Running the pipeline
 
 The typical command for running the pipeline is as follows:
 
 ```bash
-nextflow run nf-core/fastquorum --input ./samplesheet.csv --outdir ./results --genome GRCh37 -profile docker
+nextflow run nf-core/fastquorum --input ./samplesheet.csv --outdir ./results --genome GRCh38 -profile docker
 ```
 
 This will launch the pipeline with the `docker` configuration profile. See below for more information about profiles.
@@ -90,7 +176,7 @@ with `params.yaml` containing:
 ```yaml
 input: './samplesheet.csv'
 outdir: './results/'
-genome: 'GRCh37'
+genome: 'GRCh38'
 <...>
 ```
 
