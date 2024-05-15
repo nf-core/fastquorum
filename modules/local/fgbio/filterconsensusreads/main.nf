@@ -2,14 +2,14 @@ process FGBIO_FILTERCONSENSUSREADS {
     tag "$meta.id"
     label 'process_medium_mem'
 
-    conda (params.enable_conda ? "bioconda::fgbio=2.0.2 bioconda::samtools=1.16.1" : null)
+    conda "bioconda::fgbio=2.0.2 bioconda::samtools=1.16.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/fgbio:2.0.2--hdfd78af_0' :
-        'quay.io/biocontainers/fgbio:2.0.2--hdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/mulled-v2-69f5207f538e4de9ef3bae6f9a95c5af56a88ab8:82d3ec41f9f1227f7183d344be46f73365efa704-0' :
+        'quay.io/biocontainers/mulled-v2-69f5207f538e4de9ef3bae6f9a95c5af56a88ab8:82d3ec41f9f1227f7183d344be46f73365efa704-0' }"
 
     input:
-    tuple val(meta), path(grouped_bam)
-    path fasta
+    tuple val(meta), path(consensus_bam)
+    tuple val(genome), path(fasta)
     val(min_reads)
     val(min_baseq)
     val(max_base_error_rate)
@@ -35,7 +35,7 @@ process FGBIO_FILTERCONSENSUSREADS {
         --tmp-dir=. \\
         --compression=0 \\
         FilterConsensusReads \\
-        --input $grouped_bam \\
+        --input $consensus_bam \\
         --output /dev/stdout \\
         --ref ${fasta} \\
         --min-reads ${min_reads} \\

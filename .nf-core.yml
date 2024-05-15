@@ -1,1 +1,14 @@
 repository_type: pipeline
+nf_core_version: "2.14.1"
+lint:
+  actions_ci: False
+  files_exist:
+    - .github/workflows/awsfulltest.yml
+    - .github/workflows/awstest.yml
+    - conf/modules/modules.config
+  files_unchanged:
+    - .gitignore
+    - .github/PULL_REQUEST_TEMPLATE.md
+    - assets/nf-core-fastquorum_logo_light.png
+    - docs/images/Fulcrum.svg
+  template_strings: False
