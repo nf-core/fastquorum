@@ -41,14 +41,13 @@ workflow FASTQUORUM {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
-    // TODO: This won't work for single-ends!
     ch_samplesheet
         .branch {
             meta, fastqs ->
-                single  : fastqs.size() == 2
-                    return [ meta, fastqs ]
-                multiple: fastqs.size() > 2
-                    return [ meta, fastqs ]
+                single  : fastqs.size() == 1
+                    return [ meta, fastqs.flatten() ]
+                multiple: fastqs.size() > 1
+                    return [ meta, fastqs.flatten() ]
         }
         .set {ch_fastq}
 
@@ -56,7 +55,7 @@ workflow FASTQUORUM {
     // MODULE: Concatenate FastQ files from same sample if required
     //
     CAT_FASTQ (
-        ch_fastq.multiple.view()
+        ch_fastq.multiple
     )
     .reads
     .mix(ch_fastq.single)

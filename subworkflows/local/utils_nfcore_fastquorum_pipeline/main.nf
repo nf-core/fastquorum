@@ -103,10 +103,6 @@ workflow PIPELINE_INITIALISATION {
         .map {
             validateInputSamplesheet(it)
         }
-        .map {
-            meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
-        }
         .set { ch_samplesheet }
 
     emit:
