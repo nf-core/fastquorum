@@ -92,12 +92,17 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromSamplesheet("input")
         .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
+            meta, fastq_1, fastq_2, fastq_3 ->
+                if (fastq_3) {
+                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2, fastq_3 ] ]
+                } else if (fastq_2) {
                     return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
+                } else {
+                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
                 }
+        }
+        .map {
+            validateReadStructure(it)
         }
         .groupTuple()
         .map {
@@ -108,6 +113,8 @@ workflow PIPELINE_INITIALISATION {
                 return [ meta, fastqs.flatten() ]
         }
         .set { ch_samplesheet }
+
+    ch_samplesheet.view()
 
     emit:
     samplesheet = ch_samplesheet
@@ -163,6 +170,21 @@ def validateInputParameters() {
     genomeExistsError()
 }
 
+def validateReadStructure(input) {
+    def id           = input[0]
+    def meta         = input[1]
+    def fastqs       = input[2]
+
+    def num_fastqs     = fastqs.size()
+    def num_structures = meta.read_structure.tokenize(" ").size()
+
+    if (num_fastqs != num_structures) {
+        error("Please check input samplesheet -> Number of fastq files (${num_fastqs}) does not match the number of read structures (${num_structures}): ${id}, '${meta.read_structure}'")
+    }
+    return [ id, meta, fastqs ]
+}
+
+
 //
 // Validate channels from input samplesheet
 //
@@ -177,6 +199,7 @@ def validateInputSamplesheet(input) {
 
     return [ metas[0], fastqs ]
 }
+
 //
 // Get attribute from genome config file e.g. fasta
 //
