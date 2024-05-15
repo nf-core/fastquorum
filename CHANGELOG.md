@@ -9,6 +9,7 @@ Initial release of nf-core/fastquorum, created with the [nf-core](https://nf-co.
 
 ### `Added`
 
+- [PR #36](https://github.com/nf-core/fastquorum/pull/36) - Added significant documentation, along with `publishDir` module config
 - [PR #33](https://github.com/nf-core/fastquorum/pull/33) - Add high-throughout mode (via `--mode ht`), with R&D mode via `--mode rd` being the default.
 - [PR #30](https://github.com/nf-core/fastquorum/pull/30) - Update to nf-core template v2.14.1
 - [PR #30](https://github.com/nf-core/fastquorum/pull/30) - Add tests using [nf-core/test-datasets PR #1200](https://github.com/nf-core/test-datasets/pull/1200)

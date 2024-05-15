@@ -24,13 +24,11 @@
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!
 
-<!-- TODO nf-core: Add full-sized test dataset and amend the paragraph below if applicable -->
-
 On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/fastquorum/results).
 
-<!-- TODO nf-core: Include a figure that guides the user through the major workflow steps. Many nf-core
-     workflows use the "tube map" design for that. See https://nf-co.re/docs/contributing/design_guidelines#examples for examples.   -->
-<!-- TODO nf-core: Fill in short bullet-pointed list of the default steps in the pipeline -->
+| Tools                                                                                                              | Description                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| <p align="center"><img title="Fastquorum Workflow (Tools)" src="docs/images/fastquorum_subway.png" width=100%></p> | <p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p> |
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Fastq to BAM, extracting UMIs ([`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html))
@@ -44,42 +42,64 @@ On release, automated continuous integration tests run the pipeline on a full-si
       1. Call molecular consensus reads ([`fgbio CallMolecularConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallMolecularConsensusReads.html))
 6. Align ([`bwa mem`](https://github.com/lh3/bwa))
 7. Filter consensus reads ([`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
-8. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
+8. Present QC ([`MultiQC`](http://multiqc.info/))
 
-| Tools                                                                                                              | Description                                                                                                                   |
-| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center"><img title="Fastquorum Workflow (Tools)" src="docs/images/fastquorum_subway.png" width=100%></p> | <p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p> |
+## Verified Vendors, Kits, and Assays
+
+> [!WARNING]
+> The following Vendors, Kits, and Assays are provided for informational purposes only.
+> _No warranty for the accuracy or completeness of the information or parameters is implied._
+
+| Verified | Assay                                                     | Company                     | Strand | Randomness | UMI Location     | Read Structure  | URL                                                                                                                                                                                 |
+| -------- | --------------------------------------------------------- | --------------------------- | ------ | ---------- | ---------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| No       | SureSelect XT HS                                          | Agilent Technologies        | Single | Random     |                  |                 | [link](https://www.agilent.com/en/product/next-generation-sequencing/ngs-library-prep-target-enrichment-reagents/dna-seq-reagents/sureselectxt-hs-reagent-kits-4252208)             |
+| No       | SureSelect XT HS2 (MBC)                                   | Agilent Technologies        | Dual   | Random     |                  |                 | [link](https://www.agilent.com/en/product/next-generation-sequencing/ngs-library-prep-target-enrichment-reagents/dna-seq-reagents/sureselect-xt-hs2-dna-reagent-kit-4252207)        |
+| No       | TruSight Oncology (TSO)                                   | Illumina                    | Dual   | Nonrandom  |                  |                 | [link](https://www.illumina.com/products/by-type/clinical-research-products/trusight-oncology-umi.html)                                                                             |
+| No       | xGen dual index UMI Adapters                              | Integrated DNA Technologies | Single | Random     | index1 (i7)      |                 | [link](https://www.idtdna.com/pages/products/next-generation-sequencing/workflow/xgen-ngs-library-preparation/ngs-adapters-indexing-primers/adapters-indexing-primers-for-illumina) |
+| No       | xGen Prism (xGen cfDNA & FFPE DNA Library Prep MC v2 Kit) | Integrated DNA Technologies | Dual   | Nonrandom  |                  |                 | [link](https://www.idtdna.com/pages/products/next-generation-sequencing/workflow/xgen-ngs-library-preparation/dna-library-preparation/cfdna-ffpe-prep-kit)                          |
+| No       | NEBNext                                                   | New England Biosciences     | Single | Random     | index1 (i7)      |                 | [link](https://www.neb.com/en-us/products/e7874nebnext-multiplex-oligos-for-illumina-unique-dual-index-umi-adaptors-dna-set-2)                                                      |
+| No       | AML MRD                                                   | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/aml-assay/)                                                                                                                                        |
+| No       | Mutagenesis                                               | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/mutagenesis-assay/)                                                                                                                                |
+| No       | UMI Adapter System                                        | Twist Biosciences           | Dual   | Random     | Inline (R1 & R2) | `5M2S+T 5M2S+T` | [link](https://www.twistbioscience.com/products/ngs/library-preparation/twist-umi-adapter-system)                                                                                   |
+
+Column Definitions:
+
+- Assay: the name of the assay or kit
+- Company: the name of the company or vendor providing the assay or kit
+- Strand: Dual if both strands of a double-stranded source molecule are sequences (e.g. Duplex Sequencing), Single otherwise
+- Randomness: if the unique molecular identifiers (UMIs) are fully random (degenerate) or are synthesized from a fixed set
+- UMI Location: the location of UMIs within the reads.
+- Read Structure: the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)
+- URL: link(s) to vendor documentation or further information
+
+To become "Verified" by `nf-core/fastquorum`, please open an issue and provide the maintainers with an example dataset that can be shared publicly.
+The dataset or a subset will be added to [nf-core/test-datasets](https://github.com/nf-core/test-datasets/tree/fastquorum).
+Please reach out to maintainers if additional support is needed to prepare or select such data.
 
 ## Usage
 
 > [!NOTE]
 > If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
-<!-- TODO nf-core: Describe the minimum required steps to execute the pipeline, e.g. how to prepare samplesheets.
-     Explain what rows and columns represent. For instance (please edit as appropriate):
-
 First, prepare a samplesheet with your input data that looks as follows:
 
 `samplesheet.csv`:
 
 ```csv
-sample,fastq_1,fastq_2
-CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz
+sample,fastq_1,fastq_2,read_structure
+CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
 ```
 
 Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-
--->
+The `sample` column provides a unique identifier for the given sample, while the [`read_structure`](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).
 
 Now, you can run the pipeline using:
-
-<!-- TODO nf-core: update the following command to include all required parameters for a minimal example -->
 
 ```bash
 nextflow run nf-core/fastquorum \
    -profile <docker/singularity/.../institute> \
    --input samplesheet.csv \
-   --genome GRCh37 \
+   --genome GRCh38 \
    --outdir <OUTDIR>
 ```
 
@@ -94,6 +114,8 @@ Two modes of running this pipeline are supported:
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/fastquorum/usage) and the [parameter documentation](https://nf-co.re/fastquorum/parameters).
 
+See also:
+
 1. The [fgbio Best Practise FASTQ -> Consensus Pipeline][fgbio-best-practices-link]
 2. [Read structures](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) as required in the input sample sheet.
 
@@ -105,7 +127,7 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/fastquorum was originally written by Nils Homer.
+nf-core/fastquorum was originally written and is primarily maintained by Nils Homer.
 
 We thank the following people for their extensive assistance in the development of this pipeline:
 
@@ -129,10 +151,10 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
+If you use nf-core/fastquorum for your analysis, please cite for this pipeline and [![DOI](https://zenodo.org/badge/53011104.svg)](https://zenodo.org/doi/10.5281/zenodo.10456900) for [`fgbio`](https://github.com/fulcrumgenomics/fgbio).
+
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
 <!-- If you use nf-core/fastquorum for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
-
-<!-- TODO nf-core: Add bibliography of tools and data used in your pipeline -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
