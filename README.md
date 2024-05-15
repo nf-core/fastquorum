@@ -46,6 +46,10 @@ On release, automated continuous integration tests run the pipeline on a full-si
 7. Filter consensus reads ([`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))
 8. Present QC for raw reads ([`MultiQC`](http://multiqc.info/))
 
+| Tools                                                                                                              | Description                                                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
+| <p align="center"><img title="Fastquorum Workflow (Tools)" src="docs/images/fastquorum_subway.png" width=100%></p> | <p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p> |
+
 ## Usage
 
 > [!NOTE]
@@ -82,6 +86,11 @@ nextflow run nf-core/fastquorum \
 > [!WARNING]
 > Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_;
 > see [docs](https://nf-co.re/usage/configuration#custom-configuration-files).
+
+Two modes of running this pipeline are supported:
+
+1. Research and Development (R&D): use `--mode rd` or `params.mode=rd`. This mode is desirable to be able to branch off from the pipeline and test e.g. multiple consensus calling or filtering parameters
+2. High Throughput (HT): use `--mode ht` or `params.mode=ht`. This mode is intended for high throughput production environments where performance and throughput take precedence over flexibility
 
 For more details and further functionality, please refer to the [usage documentation](https://nf-co.re/fastquorum/usage) and the [parameter documentation](https://nf-co.re/fastquorum/parameters).
 

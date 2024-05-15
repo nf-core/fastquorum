@@ -8,7 +8,7 @@ process FGBIO_FILTERCONSENSUSREADS {
         'quay.io/biocontainers/mulled-v2-69f5207f538e4de9ef3bae6f9a95c5af56a88ab8:82d3ec41f9f1227f7183d344be46f73365efa704-0' }"
 
     input:
-    tuple val(meta), path(grouped_bam)
+    tuple val(meta), path(consensus_bam)
     tuple val(genome), path(fasta)
     val(min_reads)
     val(min_baseq)
@@ -35,7 +35,7 @@ process FGBIO_FILTERCONSENSUSREADS {
         --tmp-dir=. \\
         --compression=0 \\
         FilterConsensusReads \\
-        --input $grouped_bam \\
+        --input $consensus_bam \\
         --output /dev/stdout \\
         --ref ${fasta} \\
         --min-reads ${min_reads} \\
