@@ -91,7 +91,8 @@ CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5
 ```
 
 Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
-The `sample` column provides a unique identifier for the given sample, while the [`read_structure`](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).
+The `sample` column provides a unique identifier for the given sample, while the `read_structure` describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).
+(Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.)
 
 Now, you can run the pipeline using:
 
