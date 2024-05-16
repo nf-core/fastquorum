@@ -30,6 +30,29 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5
 The `read_structure` must be the same for all FASTQs from the same sample.
 Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.
 
+### One to Four FASTQs
+
+The pipeline supports samples that can have between one and four FASTQs (per sample).
+
+It is common for the index reads (the reads that contain the sample barcodes for sample demultiplexing) to be omitted, when they do not contain any UMI or other important sequence (beyond the sample barcode).
+In this case, only read one (for single-end), or both read one and read two (for paired-end), are usually provided.
+Additional FASTQs can be provided in the cases where the UMI is present in the index read(s) themselves.
+
+The sample sheet below shows four samples, each with a different number of FASTQs:
+
+1. CONTROL1 is a single-end run, with one FASTQ (R1), and the UMI inline at the start of the read
+2. CONTROL2 is a paired-end run, with two FASTQs (R1 and R2), and UMIs inline at the start of read one (R1) and read two (R2).
+3. CONTROL3 is a single-indexed paired-end run, with three FASTQs, UMIs inline at the start of read one (R1) and read two, and a sample barcode in I1 (typically index1/i7)
+4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containg template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 ((ypically index2/i5)
+
+```csv title="samplesheet.csv"
+sample,fastq_1,fastq_2,read_structure
+CONTROL1,SAMPLE_S1_L001_R1_001.fastq.gz,5M2S+T
+CONTROL2,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL3,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,5M2S+T 5M2S+T 8B
+CONTROL4,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,AEG588A1_S1_L002_I22_001.fastq.gz,+T +T +B +M
+```
+
 ### Full samplesheet
 
 The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first four columns to match those defined in the table below.
@@ -52,6 +75,8 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 | `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 | `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                            |
+| `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                            |
 | `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)               |
 
 [read-structure-link]: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
