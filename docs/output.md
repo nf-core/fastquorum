@@ -29,7 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
    2. [MultiQC](#multiqc) - Present QC
 
 Note: the High Throughput version of the pipeline performs consensus calling and consensus filtering in one step, with the alignment of consensus reads occuring after filtering.
-This significantly speeds up the workflow by eliminating an intermediate file (pre-filtered consensus reads), and reducing the number of consensus reads that need to be aligned (usually a minor speedup)
+This significantly speeds up the workflow by eliminating an intermediate file (pre-filtered consensus reads) and reducing the number of consensus reads that need to be aligned (usually a minor speedup).
 
 [duplex-seq-link]: https://en.wikipedia.org/wiki/Duplex_sequencing
 

@@ -28,10 +28,11 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5
 ```
 
 The `read_structure` must be the same for all FASTQs from the same sample.
+Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.
 
 ### Full samplesheet
 
-The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first 4 columns to match those defined in the table below.
+The pipeline will auto-detect whether a sample is single- or paired-end using the information provided in the samplesheet. The samplesheet can have as many columns as you desire, however, there is a strict requirement for the first four columns to match those defined in the table below.
 
 A final samplesheet file consisting of both single- and paired-end data may look something like the one below. This is for 6 samples, where `TREATMENT_REP3` has been sequenced twice.
 
@@ -61,8 +62,8 @@ An [example samplesheet](../assets/samplesheet.csv) has been provided with the p
 
 Two modes of running this pipeline are supported:
 
-1. Research and Development (R&D): use `--mode rd` or `params.mode=rd`. This mode is desirable to be able to branch off from the pipeline and test e.g. multiple consensus calling or filtering parameters
-2. High Throughput (HT): use `--mode ht` or `params.mode=ht`. This mode is intended for high throughput production environments where performance and throughput take precedence over flexibility
+1. Research and Development (R&D): use `--mode rd` or `params.mode=rd`. This mode is desirable to be able to branch off from the pipeline and test e.g. multiple consensus calling or filtering parameters.
+2. High Throughput (HT): use `--mode ht` or `params.mode=ht`. This mode is intended for high throughput production environments where performance and throughput take precedence over flexibility.
 
 For [Duplex-Sequencing][duplex-seq-link], use `--duplex_seq true` or `params.duplex_seq=true`, indicating that reads from the same source molecule may observe either strand.
 Otherwise, the pipeline will assume that reads from the same source molecule are from the same strand.
@@ -87,16 +88,16 @@ This provides the maximum number of allowable edits.
 ### Consensus Calling Options
 
 These options pertain to the [`fgbio CallMolecularConsensusReads`][fgbio-call-mol-link] and [`CallDuplexConsensusReads`][fgbio-call-duplex-link] tools and are prefixed by `call_`.
-The former are from reads from the same strand of the original source molecule, whereas the latter have reads that originate from either strand of the original source molecule.
+The former tool processes reads from the same strand of the original source molecule, whereas the latter processes reads that originate from either strand of the original source molecule.
 
-The `--call_min_reads` option provides the minimum reads to call a consensus, while the `--call_min_baseq` option provides the minimum input base quality to use when calling a consensus.
+The `--call_min_reads` option provides the minimum read count to call a consensus, while the `--call_min_baseq` option provides the minimum input base quality to use when calling a consensus.
 These two options are typically used for the High Throughput mode, matching the same value used in [Consensus Filtering](#consensus-filtering-options).
 
 ### Consensus Filtering Options
 
 These options pertain to the [`fgbio FilterConsensusReads`](https://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html) tool and are prefixed by `filter_`.
 
-The `--filter_min_reads` option provides the minimum reads to call a consensus, while the option `--filter_min_baseq` provides the minimum input base quality to use when calling a consensus.
+The `--filter_min_reads` option provides the minimum read count to call a consensus, while the option `--filter_min_baseq` provides the minimum input base quality to use when calling a consensus.
 These two options are typically used for the High Throughput mode, matching the same value used in [Consensus Calling](#consensus-calling-options).
 The `--filter_min_reads` option can accept up to three values for [duplex consensus reads][duplex-seq-link].
 See the tools documentation for how to use this option.
@@ -109,7 +110,7 @@ Please refer to the [nf-core website](https://nf-co.re/usage/reference_genomes) 
 
 ### Explicit reference file specification (recommended)
 
-The minimum reference genome requirements for this pipeline are a FASTA, all other files required to run the pipeline can be generated from these files.
+The minimum reference genome requirement for this pipeline is a FASTA. All other files required to run the pipeline can be generated from the input FASTA.
 For example, the latest reference FASTA for human can be derived from Ensembl like:
 
 ```
@@ -129,9 +130,9 @@ Since indexing is an expensive process in time and resources you should ensure t
 
 Once you have the indices from a workflow run you should save them somewhere central and reuse them in subsequent runs using custom config files or command line parameters:
 
-- the `--fasta` parameter specifies the path the genome FASTA
-- the `--dict` parameter specifies the path the genome sequence dictionary (see `samtools dict`)
-- the `--fasta_fai` parameter specifies the path the genome FASTA index (see `samtools faidx`)
+- the `--fasta` parameter specifies the path to the genome FASTA
+- the `--dict` parameter specifies the path to the genome sequence dictionary (see `samtools dict`)
+- the `--fasta_fai` parameter specifies the path to the genome FASTA index (see `samtools faidx`)
 - the `--bwa` parameter specifies the path to the directory containing the BWA index
 
 ### iGenomes (not recommended)
