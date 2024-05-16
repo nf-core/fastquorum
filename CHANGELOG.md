@@ -9,6 +9,10 @@ Initial release of nf-core/fastquorum, created with the [nf-core](https://nf-co.
 
 ### `Added`
 
+- [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Add support for samples to have multiple runs or lanes
+- [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Improved sample sheet validation
+- [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Support one to four FASTQs per sample (e.g. when the UMI is in the index read)
+- [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Report the versions for all tools
 - [PR #36](https://github.com/nf-core/fastquorum/pull/36) - Added significant documentation, along with `publishDir` module config
 - [PR #33](https://github.com/nf-core/fastquorum/pull/33) - Add high-throughout mode (via `--mode ht`), with R&D mode via `--mode rd` being the default.
 - [PR #30](https://github.com/nf-core/fastquorum/pull/30) - Update to nf-core template v2.14.1
