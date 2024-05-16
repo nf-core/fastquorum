@@ -75,9 +75,9 @@ workflow FASTQUORUM {
     //    samples will have their BAMs merged.
     //
     bam_to_merge = ALIGN_RAW_BAM.out.bam
-      .map {
-        meta, bam ->
-            [ groupKey(meta, meta.n_samples), bam ]
+        .map {
+            meta, bam ->
+                [ groupKey(meta, meta.n_samples), bam ]
     }
     .groupTuple()
     .branch { meta, bam ->

@@ -97,9 +97,9 @@ workflow PIPELINE_INITIALISATION {
                 return [ meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4 ] ]
         }
         .map {
-          // Validate a given _row_ in the sample sheet.  Does not compare runs (e.g. lanes) for a given sample across
-          // rows
-          validateInputSamplesheetRow(it)
+            // Validate a given _row_ in the sample sheet.  Does not compare runs (e.g. lanes) for a given sample across
+            // rows
+            validateInputSamplesheetRow(it)
         }
         .groupTuple()  // group by sample identifier
         .map {
