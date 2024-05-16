@@ -20,6 +20,8 @@ include { FGBIO_FILTERCONSENSUSREADS        as FILTERCONSENSUSREADS             
 include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS                       } from '../modules/local/fgbio/collectduplexseqmetrics/main'
 include { FGBIO_CALLANDFILTERMOLECULARCONSENSUSREADS as CALLANDFILTERMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callandfiltermolecularconsensusreads/main'
 include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS    as CALLANDFILTERDUPLEXCONSENSUSREADS    } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
+include { SAMTOOLS_MERGE                    as MERGE_BAM                                     } from '../modules/nf-core/samtools/merge/main'
+
 include { MULTIQC                                                                            } from '../modules/nf-core/multiqc/main'
 
 /*
@@ -43,6 +45,7 @@ workflow FASTQUORUM {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
+    ch_samplesheet.view()
     //
     // MODULE: Run FastQC
     //
@@ -63,9 +66,39 @@ workflow FASTQUORUM {
     ALIGN_RAW_BAM(FASTQTOBAM.out.bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "template-coordinate")
 
     //
+    // Create a channel that:
+    // 1. Groups the aligned BAMs by sample identifier.  We use `groupKey` here since we know how many BAMs each
+    //    sample expects to have.  Typically a sample has more than one BAM if it had multiple runs or lanes.
+    // 2. Splits the samples into those that have more than one BAM, and those that have exactly one BAM.  The former
+    //    samples will have their BAMs merged.
+    //
+    bam_to_merge = ALIGN_RAW_BAM.out.bam
+      .map {
+        meta, bam ->
+            [ groupKey(meta, meta.n_samples), bam ]
+    }
+    .groupTuple()
+    .branch { meta, bam ->
+        // The `n_samples` is added by `validateInputSamplesheet` method in `PIPELINE_INITIALISATION` workflow
+        single:   meta.n_samples <= 1
+            return [ meta, bam[0] ]  // NB: bam is a list (of one BAM) so return just the one BAM
+        multiple: meta.n_samples > 1
+    }
+
+    //
+    // MODULE: Run samtools merge to merge across runs/lanes for the same sample
+    //
+    MERGE_BAM(bam_to_merge.multiple, [ [ id:'null' ], []], [ [ id:'null' ], []])
+
+    //
+    // Create a channel that contains the merged BAMs and those that did not need to be merged.
+    //
+    bam_all = MERGE_BAM.out.bam.mix(bam_to_merge.single)
+
+    //
     // MODULE: Run fgbio GroupReadsByUmi
     //
-    GROUPREADSBYUMI(ALIGN_RAW_BAM.out.bam, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
+    GROUPREADSBYUMI(bam_all, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
     ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map{it[1]}.collect())
 
     if (params.duplex_seq) {

@@ -92,20 +92,25 @@ workflow PIPELINE_INITIALISATION {
     Channel
         .fromSamplesheet("input")
         .map {
-            meta, fastq_1, fastq_2 ->
-                if (!fastq_2) {
-                    return [ meta.id, meta + [ single_end:true ], [ fastq_1 ] ]
-                } else {
-                    return [ meta.id, meta + [ single_end:false ], [ fastq_1, fastq_2 ] ]
-                }
+            // Supports up to four FASTQs.  FASTQs that are not present will be empty lists
+            meta, fastq_1, fastq_2, fastq_3, fastq_4 ->
+                return [ meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4 ] ]
         }
-        .groupTuple()
         .map {
+          // Validate a given _row_ in the sample sheet.  Does not compare runs (e.g. lanes) for a given sample across
+          // rows
+          validateInputSamplesheetRow(it)
+        }
+        .groupTuple()  // group by sample identifier
+        .map {
+            // Validate runs (e.g. lanes) for a given sample.
             validateInputSamplesheet(it)
         }
-        .map {
+        .flatMap {
+            // Convert back to having one item per run (not sample).  This enables us to pre-process each run
+            // independently up through mapping, then merge them prior to grouping by UMI.
             meta, fastqs ->
-                return [ meta, fastqs.flatten() ]
+                fastqs.collect { return [ meta, it ] }
         }
         .set { ch_samplesheet }
 
@@ -163,20 +168,60 @@ def validateInputParameters() {
     genomeExistsError()
 }
 
+// Validates channels from input samplesheet _before_ grouping by the sample identifier
 //
-// Validate channels from input samplesheet
+// Assumes that multiples runs (e.g. lanes) for a given sample have not been grouped together.  Row should be a tuple:
+// 1. The unique sample identifier
+// 2. The metadata for the sample
+// 3. The list of FASTQs to use for the sample
 //
-def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
-
-    // Check that multiple runs of the same sample are of the same datatype i.e. single-end / paired-end
-    def endedness_ok = metas.collect{ it.single_end }.unique().size == 1
-    if (!endedness_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must be of the same datatype i.e. single-end or paired-end: ${metas[0].id}")
+// Validates:
+// 1. The number of FASTQs matches the number of segments in the read structure.  E.g. for paired end reads, there must
+//    be two FASTQs (R1 and R2), and two segments in the read structure (e.g. "12M+T" and "+T").  NB: a read structure
+//    is a space delimited string where each value is a _read segment_.  See:
+//    https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
+def validateInputSamplesheetRow(row) {
+    def (meta, fastqs) = row[1..2]
+    def num_segments = meta.read_structure.tokenize(" ").size()
+    def num_fastqs = fastqs.flatten().size()
+    if (num_segments < num_fastqs) {
+        error("Please check input samplesheet -> Too few read structures (${num_segments}) for ${num_fastqs} FASTQs for ${meta.id}")
+    } else if (num_segments > num_fastqs) {
+        error("Please check input samplesheet -> Too many read structures (${num_segments}) for ${num_fastqs} FASTQs for ${meta.id}")
     }
 
-    return [ metas[0], fastqs ]
+    // NB: the collect here doesn't care which FASTQ list is empty
+    return [ row[0], row[1], row[2].findAll { it -> it.size() > 0 } ]
 }
+
+//
+// Validate channels from input samplesheet _after_ grouping by the sample identifier
+//
+// Assumes that multiple runs (e.g. lanes) for a given sample have been grouped together.  Input should be a tuple:
+// 1. The unique sample identifier
+// 2. The list of run-specific metadata.  NB: all runs must have the same `id` property, matching (1).
+// 3. The list of run-specific FASTQs in the same order as (2).  Each run will have a list of FASTQs (e.g. paired end).
+//
+// Validates:
+// 1. The number of FASTQs is the same across all runs.  E.g. all runs are paired end.
+// 2. The read structure is the same for all runs.
+//
+// Returns:
+// Adds the `n_samples` property to the metadata, and returns a tuple of the metadata and list of list of FASTQs.
+def validateInputSamplesheet(input) {
+    def (metas, fastqs) = input[1..2]
+    def fastqs_per_sample_ok = fastqs.collect { it.size() }.unique().size == 1
+    if (!fastqs_per_sample_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same number of FASTQs: ${metas[0].id}")
+    }
+    def read_structures_ok = metas.collect { it.read_structure }.unique().size == 1
+    if (!read_structures_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same read stucture: ${metas[0].id}")
+    }
+
+    return [ metas[0] + [ n_samples: metas.size() ], fastqs ]
+}
+
 //
 // Get attribute from genome config file e.g. fasta
 //
