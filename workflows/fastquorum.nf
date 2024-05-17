@@ -45,7 +45,6 @@ workflow FASTQUORUM {
     ch_versions = Channel.empty()
     ch_multiqc_files = Channel.empty()
 
-    ch_samplesheet.view()
     //
     // MODULE: Run FastQC
     //
