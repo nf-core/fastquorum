@@ -1,0 +1,32 @@
+nextflow_pipeline {
+
+    name "Test workflow - tiny"
+    script "main.nf"
+    tag "tiny"
+    tag "pipeline"
+
+    test("tiny") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.tiny.csv'
+                fasta  = 'https://github.com/nf-core/test-datasets/raw/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions") },
+                { assert workflow.trace.succeeded().size() == 12 },
+                { assert snapshot(
+                    path("$outputDir/multiqc/multiqc_report.html"),
+                    path("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam"),
+                ).match("tiny") }
+            )
+        }
+
+    }
+
+}
