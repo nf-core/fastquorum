@@ -30,6 +30,11 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5
 The `read_structure` must be the same for all FASTQs from the same sample.
 Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.
 
+
+The number of FASTQs must match the number of _read segments_ in the read structure (a read structure is a space delimited string where each value is a _read segment_; see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures).
+E.g. for paired end reads, there must be two FASTQs (R1 and R2) and two segments in the read structure (e.g. a read structure "12M+T +T" specifies a read segment "12M+T" for R1 and read segment "+T" for R2)
+Additional FASTQs may be provided, for example for index reads (see [One to Four FASTQs](#one-to-four-fastqs) below).
+
 ### One to Four FASTQs
 
 The pipeline supports samples that can have between one and four FASTQs (per sample).
@@ -43,7 +48,7 @@ The sample sheet below shows four samples, each with a different number of FASTQ
 1. CONTROL1 is a single-end run, with one FASTQ (R1), and the UMI inline at the start of the read
 2. CONTROL2 is a paired-end run, with two FASTQs (R1 and R2), and UMIs inline at the start of read one (R1) and read two (R2).
 3. CONTROL3 is a single-indexed paired-end run, with three FASTQs, UMIs inline at the start of read one (R1) and read two, and a sample barcode in I1 (typically index1/i7)
-4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containg template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 ((ypically index2/i5)
+4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containing template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 ((typically index2/i5)
 
 ```csv title="samplesheet.csv"
 sample,fastq_1,fastq_2,read_structure
@@ -71,7 +76,7 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 ```
 
 | Column           | Description                                                                                                                                                                            |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
 | `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
 | `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
@@ -180,7 +185,7 @@ Note that the pipeline will create the following files in your working directory
 work                # Directory containing the nextflow working files
 <OUTDIR>            # Finished results in specified location (defined with --outdir)
 .nextflow_log       # Log file from Nextflow
-# Other nextflow hidden files, eg. history of pipeline runs and old logs.
+# Other nextflow hidden files, E.g. history of pipeline runs and old logs.
 ```
 
 If you wish to repeatedly use the same parameters for multiple runs, rather than specifying each flag in the command, you can specify these in a params file.
@@ -220,7 +225,7 @@ nextflow pull nf-core/fastquorum
 
 It is a good idea to specify a pipeline version when running the pipeline on your data. This ensures that a specific version of the pipeline code and software are used when you run your pipeline. If you keep using the same tag, you'll be running the same version of the pipeline, even if there have been changes to the code since.
 
-First, go to the [nf-core/fastquorum releases page](https://github.com/nf-core/fastquorum/releases) and find the latest pipeline version - numeric only (eg. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - eg. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
+First, go to the [nf-core/fastquorum releases page](https://github.com/nf-core/fastquorum/releases) and find the latest pipeline version - numeric only (E.g. `1.3.1`). Then specify this when running the pipeline with `-r` (one hyphen) - E.g. `-r 1.3.1`. Of course, you can switch to another version by changing the number after the `-r` flag.
 
 This version number will be logged in reports when you run the pipeline, so that you'll know what you used when you look back in the future. For example, at the bottom of the MultiQC reports.
 
@@ -291,7 +296,7 @@ To change the resource requests, please see the [max resources](https://nf-co.re
 
 ### Custom Containers
 
-In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However in some cases the pipeline specified version maybe out of date.
+In some cases you may wish to change which container or conda environment a step of the pipeline uses for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
 To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
 

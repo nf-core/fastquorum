@@ -18,7 +18,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions") },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("fastquorum_mqc_versions") },
                 { assert workflow.trace.succeeded().size() == 12 },
                 { assert snapshot(
                     path("$outputDir/multiqc/multiqc_report.html"),
