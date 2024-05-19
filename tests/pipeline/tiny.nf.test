@@ -5,25 +5,55 @@ nextflow_pipeline {
     tag "tiny"
     tag "pipeline"
 
-    test("tiny") {
+    test("tiny - R&D mode") {
 
         when {
             params {
                 input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.tiny.csv'
                 fasta  = 'https://github.com/nf-core/test-datasets/raw/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
+                mode   = "rd"
             }
         }
 
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("fastquorum_mqc_versions") },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions").match("tiny_rd_software_versions") },
                 { assert workflow.trace.succeeded().size() == 12 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
                 { assert snapshot(
-                    path("$outputDir/multiqc/multiqc_report.html"),
-                    path("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam"),
-                ).match("tiny") }
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),
+                ).match("tiny_rd") }
+            )
+        }
+
+    }
+
+        test("tiny - high throughput mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.tiny.csv'
+                fasta  = 'https://github.com/nf-core/test-datasets/raw/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "ht"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions").match("tiny_ht_software_versions") },
+                { assert workflow.trace.succeeded().size() == 11 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),
+                ).match("tiny_ht") }
             )
         }
 
