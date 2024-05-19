@@ -1,13 +1,34 @@
 {
-    "tiny": {
+    "software_versions": {
         "content": [
-            "multiqc_report.html:md5,574f040421ea75cc94cc816a35524668",
-            "SRR6109255.cons.filtered.bam:md5,1a0db71b4564966f817caadf8a3656ae"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0dev}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-05-17T11:34:03.778601"
+        "timestamp": "2024-05-19T19:19:49.809058"
+    },
+    "tiny_rd": {
+        "content": [
+            "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
+            "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-19T15:17:33.741796"
+    },
+    "tiny_ht": {
+        "content": [
+            "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
+            "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-19T15:23:47.679402"
     }
 }
