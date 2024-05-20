@@ -32,7 +32,7 @@ nextflow_pipeline {
 
     }
 
-        test("tiny - high throughput mode") {
+	test("tiny - high throughput mode") {
 
         when {
             params {
