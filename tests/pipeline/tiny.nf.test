@@ -19,7 +19,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions").match("tiny_rd_software_versions") },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("tiny_rd_software_versions") },
                 { assert workflow.trace.succeeded().size() == 12 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
@@ -46,7 +46,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
-                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("software_versions").match("tiny_ht_software_versions") },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("tiny_ht_software_versions") },
                 { assert workflow.trace.succeeded().size() == 11 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
