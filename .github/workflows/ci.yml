@@ -46,6 +46,10 @@ jobs:
         NXF_VER: ${{ fromJson(needs.define_nxf_versions.outputs.matrix) }}
         profile:
           - "docker"
+        tags:
+          - "tiny"
+          - "multi_fastq"
+          - "multi_lanes"
     steps:
       - name: Check out pipeline code
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
@@ -66,7 +70,7 @@ jobs:
 
       # Run nf-test
       - name: Run nf-test
-        run: nf-test test tests/pipeline/ --verbose --tap=test.tap --profile=test,${{ matrix.profile }} --junitxml=test.xml
+        run: nf-test test tests/pipeline/ --verbose --tap=test.tap --tag=${{ matrix.tags }} --profile=test,${{ matrix.profile }} --junitxml=test.xml
 
       - uses: pcolby/tap-summary@v1
         with:
