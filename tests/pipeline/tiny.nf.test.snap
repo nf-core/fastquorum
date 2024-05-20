@@ -1,5 +1,5 @@
 {
-    "software_versions": {
+    "tiny_rd_software_versions": {
         "content": [
             "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0dev}}"
         ],
@@ -7,7 +7,17 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-05-19T19:19:49.809058"
+        "timestamp": "2024-05-19T23:42:19.123294"
+    },
+    "tiny_ht_software_versions": {
+        "content": [
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0dev}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-19T23:48:57.097175"
     },
     "tiny_rd": {
         "content": [
@@ -18,7 +28,7 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-05-19T15:17:33.741796"
+        "timestamp": "2024-05-19T23:42:19.171887"
     },
     "tiny_ht": {
         "content": [
@@ -29,6 +39,6 @@
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
         },
-        "timestamp": "2024-05-19T15:23:47.679402"
+        "timestamp": "2024-05-19T23:48:57.112733"
     }
 }
