@@ -66,7 +66,12 @@ jobs:
 
       # Run nf-test
       - name: Run nf-test
-        run: nf-test test tests/pipeline/ --profile=test,${{ matrix.profile }} --junitxml=test.xml
+        run: nf-test test tests/pipeline/ --verbose --tap=test.tap --profile=test,${{ matrix.profile }} --junitxml=test.xml
+
+      - uses: pcolby/tap-summary@v1
+        with:
+          path: >-
+            test.tap
 
       # If the test fails, output the software_versions.yml using the 'batcat' utility
       - name: Output log on failure
