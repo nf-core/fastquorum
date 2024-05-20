@@ -1,0 +1,74 @@
+nextflow_pipeline {
+
+    name "Test workflow - Multiple Lanes"
+    script "main.nf"
+    tag "multi_lanes"
+    tag "pipeline"
+
+    test("Multiple Lanes - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_lanes.csv'
+                fasta  = 'https://github.com/nf-core/test-datasets/raw/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_lanes_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 12 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_lane/SRR6109255_one_lane.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_lanes/SRR6109255_two_lanes.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_lanes/SRR6109255_three_lanes.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_one_lane/SRR6109255_one_lane.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_one_lane/SRR6109255_one_lane.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_lanes/SRR6109255_two_lanes.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_two_lanes/SRR6109255_two_lanes.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_three_lanes/SRR6109255_three_lanes.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_three_lanes/SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt"),
+                ).match("multi_lanes_rd") }
+            )
+        }
+
+    }
+
+	test("Multiple Lanes - high throughput mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_lanes.csv'
+                fasta  = 'https://github.com/nf-core/test-datasets/raw/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "ht"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_lanes_ht_software_versions") },
+                { assert workflow.trace.succeeded().size() == 11 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_lane/SRR6109255_one_lane.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_lanes/SRR6109255_two_lanes.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_lanes/SRR6109255_three_lanes.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_one_lane/SRR6109255_one_lane.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_one_lane/SRR6109255_one_lane.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_lanes/SRR6109255_two_lanes.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_two_lanes/SRR6109255_two_lanes.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_three_lanes/SRR6109255_three_lanes.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_three_lanes/SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt"),
+                ).match("multi_lanes_ht") }
+            )
+        }
+
+    }
+
+}
