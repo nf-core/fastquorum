@@ -12,7 +12,7 @@ Initial release of nf-core/fastquorum, created with the [nf-core](https://nf-co.
 Special thanks to the following for their contributions to the release:
 
 - [Nils Homer](https://github.com/nh13)
-- [Simon Pearce](https://github.com/SPearce)
+- [Simon Pearce](https://github.com/SPPearce)
 - [Brent Pedersen](https://github.com/brentp)
 - [Adam Talbot](https://github.com/adamrtalbot)
 
