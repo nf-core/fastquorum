@@ -7,7 +7,7 @@
                 "nf-core": {
                     "bwa/index": {
                         "branch": "master",
-                        "git_sha": "6278bf9afd4a4b2d00fa6052250e73da3d91546f",
+                        "git_sha": "086fa66260595e123b0ea47a6512539b72a9afa3",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {

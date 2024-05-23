@@ -26,7 +26,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
    1. [fgbio FilterConsensusReads](#fgbio-filterconsensusreads) - Filter consensus reads
 5. [Quality Control and Metrics](#quality-control-and-metrics)
    1. [fgbio CollectDuplexSeqMetrics]() - QC for [Duplex-Sequencing][duplex-seq-link] data
-   2. [MultiQC](#multiqc) - Present QC
+   2. [MultiQC](#multiqc) - Present raw read QC
 
 Note: the High Throughput version of the pipeline performs consensus calling and consensus filtering in one step, with the alignment of consensus reads occuring after filtering.
 This significantly speeds up the workflow by eliminating an intermediate file (pre-filtered consensus reads) and reducing the number of consensus reads that need to be aligned (usually a minor speedup).
@@ -137,7 +137,6 @@ Two kinds of filtering are performed:
 
 1. Masking/filtering of individual bases in reads
 2. Filtering out of reads (i.e. not writing them to the output file)
-3.
 
 See [`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html) for more details.
 
@@ -164,6 +163,8 @@ Aligns the consensus reads to the genome.
   - the mapped BAM produced by:
     - aligning with [`bwa mem`](https://github.com/lh3/bwa)
     - reformatted by [`fgbio ZipperBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/ZipperBam.html) (to transfer any [SAM tags](https://samtools.github.io/hts-specs/SAMtags.pdf) from the unmapped BAM to the mapped BAM, since this is not carried forward by BWA)
+- '\*.mapped.bam.bai`
+  - the mapped BAM index (high-throughput mode only)
 
 </details>
 

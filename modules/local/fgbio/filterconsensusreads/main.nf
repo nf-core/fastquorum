@@ -16,6 +16,7 @@ process FGBIO_FILTERCONSENSUSREADS {
 
     output:
     tuple val(meta), path("*.cons.filtered.bam")       , emit: bam
+    tuple val(meta), path("*.cons.filtered.bam.bai")       , emit: bai
     path "versions.yml"                                , emit: versions
 
     script:

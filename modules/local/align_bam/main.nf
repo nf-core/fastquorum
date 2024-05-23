@@ -17,6 +17,7 @@ process ALIGN_BAM {
 
     output:
     tuple val(meta), path("*.mapped.bam"), emit: bam
+    tuple val(meta), path("*.mapped.bam.bai"), emit: bai, optional: true
     path "versions.yml"                  , emit: versions
 
     when:
@@ -51,11 +52,14 @@ process ALIGN_BAM {
         extra_command += samtools_sort_args
         if (sort_type == "template-coordinate") {
             extra_command += " --template-coordinate"
-        } else if (sort_type != "coordinate") {
-            log.info '[samtools sort] Unknown sort - defaulting to coordainte.'
+        } else {
+            if (sort_type != "coordinate") {
+                log.info '[samtools sort] Unknown sort - defaulting to coordinate.'
+            }
+            extra_command += " --write-index"
         }
         extra_command += " --threads "+ task.cpus
-        extra_command += " -o " + prefix + ".mapped.bam"
+        extra_command += " -o " + prefix + ".mapped.bam##idx##" + prefix + ".mapped.bam.bai"
         extra_command += " -"
     }
 
