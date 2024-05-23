@@ -106,7 +106,7 @@ workflow FASTQUORUM {
 
     if (params.duplex_seq) {
         //
-        // MODULE: Run fgbio CollecDuplexSeqMetrics
+        // MODULE: Run fgbio CollectDuplexSeqMetrics
         //
         COLLECTDUPLEXSEQMETRICS(GROUPREADSBYUMI.out.bam)
         ch_versions = ch_versions.mix(COLLECTDUPLEXSEQMETRICS.out.versions.first())
