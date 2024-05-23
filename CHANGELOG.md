@@ -20,6 +20,7 @@ Thank you to everyone else that has contributed by reporting bugs, enhancements 
 
 ### Enhancements & fixes
 
+- [PR #44](https://github.com/nf-core/fastquorum/pull/38) - Updated bwa index to version 0.7.18
 - [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Add support for samples to have multiple runs or lanes
 - [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Improved sample sheet validation
 - [PR #38](https://github.com/nf-core/fastquorum/pull/38) - Support one to four FASTQs per sample (e.g. when the UMI is in the index read)
