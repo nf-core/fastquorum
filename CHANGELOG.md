@@ -15,6 +15,7 @@ Special thanks to the following for their contributions to the release:
 - [Simon Pearce](https://github.com/SPPearce)
 - [Brent Pedersen](https://github.com/brentp)
 - [Adam Talbot](https://github.com/adamrtalbot)
+- [James A. Fellows Yates](https://github.com/jfy133)
 
 Thank you to everyone else that has contributed by reporting bugs, enhancements or in any other way, shape or form.
 
