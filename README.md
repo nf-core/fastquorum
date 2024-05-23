@@ -152,10 +152,7 @@ For further information or help, don't hesitate to get in touch on the [Slack `#
 
 ## Citations
 
-If you use nf-core/fastquorum for your analysis, please cite for this pipeline and [![DOI](https://zenodo.org/badge/53011104.svg)](https://zenodo.org/doi/10.5281/zenodo.10456900) for [`fgbio`](https://github.com/fulcrumgenomics/fgbio).
-
-<!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use nf-core/fastquorum for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+If you use nf-core/fastquorum for your analysis, please cite [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11267673.svg)](https://doi.org/10.5281/zenodo.11267673) for this pipeline and [![DOI](https://zenodo.org/badge/53011104.svg)](https://zenodo.org/doi/10.5281/zenodo.10456900) for [`fgbio`](https://github.com/fulcrumgenomics/fgbio).
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
