@@ -1,0 +1,44 @@
+{
+    "tiny_rd_software_versions": {
+        "content": [
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T15:35:22.555322"
+    },
+    "tiny_ht_software_versions": {
+        "content": [
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T15:42:18.622029"
+    },
+    "tiny_rd": {
+        "content": [
+            "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
+            "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-19T23:42:19.171887"
+    },
+    "tiny_ht": {
+        "content": [
+            "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
+            "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-19T23:48:57.112733"
+    }
+}

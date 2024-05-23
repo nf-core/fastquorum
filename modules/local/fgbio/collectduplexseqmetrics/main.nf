@@ -2,7 +2,7 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
     tag "$meta.id"
     label 'process_low'
 
-    conda (params.enable_conda ? "bioconda::fgbio=2.0.2" : null)
+    conda "bioconda::fgbio=2.0.2"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         'https://depot.galaxyproject.org/singularity/fgbio:2.0.2--hdfd78af_0' :
         'quay.io/biocontainers/fgbio:2.0.2--hdfd78af_0' }"
@@ -13,6 +13,7 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
 
     output:
     tuple val(meta), path("*duplex_seq_metrics*.txt"), emit: metrics
+    tuple val(meta), path("*duplex_seq_metrics*.pdf"), emit: pdf
     path "versions.yml"                              , emit: versions
 
     script:

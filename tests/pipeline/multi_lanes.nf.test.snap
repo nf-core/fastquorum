@@ -1,0 +1,52 @@
+{
+    "multi_lanes_rd_software_versions": {
+        "content": [
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T15:50:47.281159"
+    },
+    "multi_lanes_ht": {
+        "content": [
+            "SRR6109255_one_lane.grouped-family-sizes.txt:md5,3e0cd02882c86b850145aa1f43d95f69",
+            "SRR6109255_one_lane.duplex_seq_metrics.family_sizes.txt:md5,852fdad2e8d82fd95d3b173baa329d0d",
+            "SRR6109255_two_lanes.grouped-family-sizes.txt:md5,6cd7b37a9b89395104f080fae658854d",
+            "SRR6109255_two_lanes.duplex_seq_metrics.family_sizes.txt:md5,e3b8b55271eab9489775a9a9cfdb5f78",
+            "SRR6109255_three_lanes.grouped-family-sizes.txt:md5,4c720d70e6c0bd8fe38cb3befc608982",
+            "SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt:md5,dc78b321e46046f1ee1e5b3a678b79a2"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T01:42:46.597128"
+    },
+    "multi_lanes_ht_software_versions": {
+        "content": [
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T15:58:15.728901"
+    },
+    "multi_lanes_rd": {
+        "content": [
+            "SRR6109255_one_lane.grouped-family-sizes.txt:md5,3e0cd02882c86b850145aa1f43d95f69",
+            "SRR6109255_one_lane.duplex_seq_metrics.family_sizes.txt:md5,852fdad2e8d82fd95d3b173baa329d0d",
+            "SRR6109255_two_lanes.grouped-family-sizes.txt:md5,6cd7b37a9b89395104f080fae658854d",
+            "SRR6109255_two_lanes.duplex_seq_metrics.family_sizes.txt:md5,e3b8b55271eab9489775a9a9cfdb5f78",
+            "SRR6109255_three_lanes.grouped-family-sizes.txt:md5,4c720d70e6c0bd8fe38cb3befc608982",
+            "SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt:md5,dc78b321e46046f1ee1e5b3a678b79a2"
+        ],
+        "meta": {
+            "nf-test": "0.8.4",
+            "nextflow": "23.10.1"
+        },
+        "timestamp": "2024-05-20T01:34:44.993842"
+    }
+}

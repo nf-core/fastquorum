@@ -1,0 +1,74 @@
+nextflow_pipeline {
+
+    name "Test workflow - Multiple FASTQs"
+    script "main.nf"
+    tag "multi_fastq"
+    tag "pipeline"
+
+    test("Multiple FASTQs - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_fastq.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_fastq_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 28 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_fastqs/SRR6109255_two_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_fastqs/SRR6109255_three_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_four_fastqs/SRR6109255_four_fastqs.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_fastqs/SRR6109255_two_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_three_fastqs/SRR6109255_three_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_three_fastqs/SRR6109255_three_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_four_fastqs/SRR6109255_four_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_four_fastqs/SRR6109255_four_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                ).match("multi_fastq_rd") }
+            )
+        }
+
+    }
+
+    test("Multiple FASTQs - high throughput mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_fastq.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "ht"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_fastq_ht_software_versions") },
+                { assert workflow.trace.succeeded().size() == 25 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_fastqs/SRR6109255_two_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_fastqs/SRR6109255_three_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_four_fastqs/SRR6109255_four_fastqs.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_fastqs/SRR6109255_two_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_three_fastqs/SRR6109255_three_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_three_fastqs/SRR6109255_three_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_four_fastqs/SRR6109255_four_fastqs.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255_four_fastqs/SRR6109255_four_fastqs.duplex_seq_metrics.family_sizes.txt"),
+                ).match("multi_fastq_ht") }
+            )
+        }
+
+    }
+
+}

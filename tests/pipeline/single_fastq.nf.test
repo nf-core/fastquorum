@@ -1,0 +1,62 @@
+nextflow_pipeline {
+
+    name "Test workflow - Single FASTQ"
+    script "main.nf"
+    tag "single_fastq"
+    tag "pipeline"
+
+    test("Single FASTQ - R&D mode") {
+
+        when {
+            params {
+                input      = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.single_fastq.csv'
+                fasta      = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir     = "$outputDir"
+                mode       = "rd"
+                duplex_seq = false
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("single_fastq_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 11 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_fastq/SRR6109255_one_fastq.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_one_fastq/SRR6109255_one_fastq.grouped-family-sizes.txt"),
+                ).match("single_fastq_rd") }
+            )
+        }
+
+    }
+
+    test("Single FASTQ - high throughput mode") {
+
+        when {
+            params {
+                input      = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.single_fastq.csv'
+                fasta      = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir     = "$outputDir"
+                mode       = "ht"
+                duplex_seq = false
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("single_fastq_ht_software_versions") },
+                { assert workflow.trace.succeeded().size() == 10 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_fastq/SRR6109255_one_fastq.cons.filtered.bam").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255_one_fastq/SRR6109255_one_fastq.grouped-family-sizes.txt"),
+                ).match("single_fastq_ht") }
+            )
+        }
+
+    }
+
+}
