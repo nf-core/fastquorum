@@ -21,6 +21,7 @@ include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS          
 include { FGBIO_CALLANDFILTERMOLECULARCONSENSUSREADS as CALLANDFILTERMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callandfiltermolecularconsensusreads/main'
 include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS    as CALLANDFILTERDUPLEXCONSENSUSREADS    } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
 include { SAMTOOLS_MERGE                    as MERGE_BAM                                     } from '../modules/nf-core/samtools/merge/main'
+include { FGBIO_SORTBAM                     as SORTBAM                                       } from '../modules/nf-core/fgbio/sortbam/main'
 
 include { MULTIQC                                                                            } from '../modules/nf-core/multiqc/main'
 
@@ -93,9 +94,16 @@ workflow FASTQUORUM {
     ch_versions = ch_versions.mix(MERGE_BAM.out.versions.first())
 
     //
+    // MODULE: Run fgbio SortBam to re-sort into TemplateCoordinate.  This can be removed when samtools is released
+    // with the following bugfix: https://github.com/samtools/samtools/pull/2062
+    //
+    SORTBAM(MERGE_BAM.out.bam)
+    ch_versions = ch_versions.mix(SORTBAM.out.versions.first())
+
+    //
     // Create a channel that contains the merged BAMs and those that did not need to be merged.
     //
-    bam_all = MERGE_BAM.out.bam.mix(bam_to_merge.single)
+    bam_all = SORTBAM.out.bam.mix(bam_to_merge.single)
 
     //
     // MODULE: Run fgbio GroupReadsByUmi

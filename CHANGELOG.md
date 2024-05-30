@@ -11,6 +11,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #58](https://github.com/nf-core/fastquorum/pull/58) - Prepare genome steps now run only if the corresponding parameters are not passed.
 - [PR #60](https://github.com/nf-core/fastquorum/pull/60) - Enable automatic escalation of memory for FilterConsensusReads.
 
+### Enhancements & fixes
+
+- [PR #54](https://github.com/nf-core/fastquorum/pull/54) - Temporary fix to merging BAMs across lanes in template-coordinate order. Using `fgbio SortBam` after `samtools merge`. Related to [samtools#2062](https://github.com/samtools/samtools/pull/2062).
+
 ## [[1.0.0]](https://github.com/nf-core/fastquorum/releases/tag/1.0.0)] -- 2024-05-20
 
 Initial release of nf-core/fastquorum, created with the [nf-core](https://nf-co.re/) template.
