@@ -3,7 +3,11 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unpublished Version / DEV]
+## Unreleased
+
+### Enhancements & fixes
+
+- [PR #51](https://github.com/nf-core/fastquorum/pull/51) - Fixes a bug where alignment and filtering where swapped in the phase 2 high-throughput diagrams (@jfy133).
 
 ## [[1.0.0]](https://github.com/nf-core/fastquorum/releases/tag/1.0.0)] -- 2024-05-20
 
