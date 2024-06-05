@@ -1,7 +1,7 @@
 {
     "multi_lanes_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.1dev}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
@@ -26,7 +26,7 @@
     },
     "multi_lanes_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.0}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.19.2}, Workflow={nf-core/fastquorum=v1.0.1dev}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
