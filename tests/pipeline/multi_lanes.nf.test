@@ -20,7 +20,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_lanes_rd_software_versions") },
-                { assert workflow.trace.succeeded().size() == 39 },
+                { assert workflow.trace.succeeded().size() == 41 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_lane/SRR6109255_one_lane.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_lanes/SRR6109255_two_lanes.cons.filtered.bam").exists() },
@@ -53,7 +53,7 @@ nextflow_pipeline {
             assertAll(
                 { assert workflow.success },
                 { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("multi_lanes_ht_software_versions") },
-                { assert workflow.trace.succeeded().size() == 36 },
+                { assert workflow.trace.succeeded().size() == 38 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_one_lane/SRR6109255_one_lane.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_lanes/SRR6109255_two_lanes.cons.filtered.bam").exists() },
