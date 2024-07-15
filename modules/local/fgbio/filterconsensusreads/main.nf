@@ -1,6 +1,7 @@
 process FGBIO_FILTERCONSENSUSREADS {
     tag "$meta.id"
     label 'process_low'
+    label 'error_retry'
 
     conda "bioconda::fgbio=2.0.2 bioconda::samtools=1.16.1"
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
