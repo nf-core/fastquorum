@@ -91,7 +91,7 @@
             "description": "Options for when creating consensus reads",
             "properties": {
                 "call_min_reads": {
-                    "type": "string",
+                    "type": ["integer", "string"],
                     "description": "Minimum reads to call a consensus",
                     "fa_icon": "fas fa-book",
                     "help_text": "The minimum reads to call a consensus for fgbio's CallMolecularConsensusReads/CallDuplexConsensusReads."
@@ -111,7 +111,7 @@
             "description": "Options for when filtering consensus reads",
             "properties": {
                 "filter_min_reads": {
-                    "type": "string",
+                    "type": ["integer", "string"],
                     "description": "Minimum reads to keep a consensus",
                     "fa_icon": "fas fa-book",
                     "help_text": "The minimum reads to keep a consensus for fgbio's FilterConsensusReads."
@@ -123,7 +123,7 @@
                     "help_text": "The minimum consensus base quality to keep when calling a consensus for fgbio's FilterConsensusReads."
                 },
                 "filter_max_base_error_rate": {
-                    "type": "number",
+                    "type": ["number", "string"],
                     "description": "The maximum error rate for a single consensus base",
                     "fa_icon": "fas fa-book",
                     "help_text": "The maximum error rate for a single consensus base when filtering a consensus for fgbio's FilterConsensusReads."
