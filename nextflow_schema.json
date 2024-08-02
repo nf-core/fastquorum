@@ -155,6 +155,7 @@
                 "dict": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "exists": true,
                     "description": "Path to FASTA dictionary file.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference. Combine with `--save_reference` to save for future runs.",
                     "hidden": true
@@ -162,12 +163,14 @@
                 "fasta_fai": {
                     "type": "string",
                     "fa_icon": "fas fa-file",
+                    "exists": true,
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference. Combine with `--save_reference` to save for future runs.",
                     "description": "Path to FASTA reference index."
                 },
                 "bwa": {
                     "type": "string",
                     "fa_icon": "fas fa-copy",
+                    "exists": true,
                     "description": "Path to BWA mem indices.",
                     "help_text": "If you use AWS iGenomes, this has already been set for you appropriately.\n\nIf you wish to recompute indices available on igenomes, set `--bwa false`.\n\n> **NB** If none provided, will be generated automatically from the FASTA reference. Combine with `--save_reference` to save for future runs.",
                     "hidden": true
