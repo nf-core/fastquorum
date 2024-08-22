@@ -7,37 +7,37 @@
                 "nf-core": {
                     "bwa/index": {
                         "branch": "master",
-                        "git_sha": "086fa66260595e123b0ea47a6512539b72a9afa3",
+                        "git_sha": "e0ff65e1fb313677de09f5f477ae3da30ce19b7b",
                         "installed_by": ["modules"]
                     },
                     "fastqc": {
                         "branch": "master",
-                        "git_sha": "285a50500f9e02578d90b3ce6382ea3c30216acd",
+                        "git_sha": "b49b8992e5271ce427f3a7cdb29628fc58400eb5",
                         "installed_by": ["modules"]
                     },
                     "fgbio/sortbam": {
                         "branch": "master",
-                        "git_sha": "3f5420aa22e00bd030a2556dfdffc9e164ec0ec5",
+                        "git_sha": "2fc7438d5dd0a4305fd68afcb8a36acd70234614",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
                         "branch": "master",
-                        "git_sha": "b7ebe95761cd389603f9cc0e0dc384c0f663815a",
+                        "git_sha": "fe9614c5d1d9820dae56a5e30a07ba336db45835",
                         "installed_by": ["modules"]
                     },
                     "samtools/dict": {
                         "branch": "master",
-                        "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
+                        "git_sha": "3c8fd07ea8d86daaed24fddfa76cd8ba2cd37c9b",
                         "installed_by": ["modules"]
                     },
                     "samtools/faidx": {
                         "branch": "master",
-                        "git_sha": "f153f1f10e1083c49935565844cccb7453021682",
+                        "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
                         "installed_by": ["modules"]
                     },
                     "samtools/merge": {
                         "branch": "master",
-                        "git_sha": "f4596fe0bdc096cf53ec4497e83defdb3a94ff62",
+                        "git_sha": "04fbbc7c43cebc0b95d5b126f6d9fe4effa33519",
                         "installed_by": ["modules"]
                     }
                 }
