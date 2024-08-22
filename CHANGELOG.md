@@ -5,6 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-08-??
 
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Nils Homer](https://github.com/nh13)
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
+
 ### Enhancements & fixes
 
 - [PR #51](https://github.com/nf-core/fastquorum/pull/51) - Fixes a bug where alignment and filtering where swapped in the phase 2 high-throughput diagrams (@jfy133).
