@@ -11,23 +11,23 @@
     },
     "single_fastq_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERMOLECULARCONSENSUSREADS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=1.0.1}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERMOLECULARCONSENSUSREADS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0.1}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-05-20T16:28:01.840894"
+        "timestamp": "2024-08-23T11:56:22.904524"
     },
     "single_fastq_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLMOLECULARCONSENSUSREADS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=1.0.1}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLMOLECULARCONSENSUSREADS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, Workflow={nf-core/fastquorum=v1.0.1}}"
         ],
         "meta": {
             "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-05-20T16:21:29.23891"
+        "timestamp": "2024-08-23T11:54:37.217511"
     },
     "single_fastq_ht": {
         "content": [
