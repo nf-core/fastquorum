@@ -25,9 +25,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 On release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/fastquorum/results).
 
-| Tools                                                                                                              | Description                                                                                                                   |
-| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |
-| <p align="center"><img title="Fastquorum Workflow (Tools)" src="docs/images/fastquorum_subway.png" width=100%></p> | <p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p> |
+<p align="center"><img title="Fastquorum Workflow (Description)" src="docs/images/fastquorum_subway.desc.png" width=100%></p>
 
 1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))
 2. Fastq to BAM, extracting UMIs ([`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html))

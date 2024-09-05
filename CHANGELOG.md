@@ -20,6 +20,7 @@ Special thanks to the following for their contributions to the release:
 - [PR #60](https://github.com/nf-core/fastquorum/pull/60) - Enable automatic escalation of memory for FilterConsensusReads.
 - [PR #67](https://github.com/nf-core/fastquorum/pull/67) - Fix setting the parameters from igenomes.
 - [PR #68](https://github.com/nf-core/fastquorum/pull/68) - Temporary fix to merging BAMs across lanes in template-coordinate order. Using `fgbio SortBam` after `samtools merge`. Related to [samtools#2062](https://github.com/samtools/samtools/pull/2062).
+- [PR #72](https://github.com/nf-core/fastquorum/pull/72) - Fix image in README
 
 ## [[1.0.0]](https://github.com/nf-core/fastquorum/releases/tag/1.0.0) -- 2024-05-20
 
