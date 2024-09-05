@@ -42,4 +42,19 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
         fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
     END_VERSIONS
     """
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.duplex_seq_metrics.duplex_family_sizes.txt
+    touch ${prefix}.duplex_seq_metrics.duplex_umi_counts.txt
+    touch ${prefix}.duplex_seq_metrics.duplex_yield_metrics.txt
+    touch ${prefix}.duplex_seq_metrics.family_sizes.txt
+    touch ${prefix}.duplex_seq_metrics.umi_counts.txt
+    touch ${prefix}.duplex_seq_metrics.duplex_qc.pdf
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
+    END_VERSIONS
+    """
 }
