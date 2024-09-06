@@ -16,7 +16,7 @@ process FGBIO_FILTERCONSENSUSREADS {
 
     output:
     tuple val(meta), path("*.cons.filtered.bam")       , emit: bam
-    tuple val(meta), path("*.cons.filtered.bam.bai")       , emit: bai
+    tuple val(meta), path("*.cons.filtered.bam.bai")   , emit: bai
     path "versions.yml"                                , emit: versions
 
     script:
@@ -48,6 +48,18 @@ process FGBIO_FILTERCONSENSUSREADS {
         -o ${prefix}.cons.filtered.bam##idx##${prefix}.cons.filtered.bam.bai \\
         --write-index \\
         $samtools_args;
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
+    END_VERSIONS
+    """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.cons.filtered.bam
+    touch ${prefix}.cons.filtered.bam.bai
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
