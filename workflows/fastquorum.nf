@@ -21,6 +21,7 @@ include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS          
 include { FGBIO_CALLANDFILTERMOLECULARCONSENSUSREADS as CALLANDFILTERMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callandfiltermolecularconsensusreads/main'
 include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS    as CALLANDFILTERDUPLEXCONSENSUSREADS    } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
 include { SAMTOOLS_MERGE                    as MERGE_BAM                                     } from '../modules/nf-core/samtools/merge/main'
+include { FGBIO_SORTBAM                     as SORTBAM                                       } from '../modules/nf-core/fgbio/sortbam/main'
 
 include { MULTIQC                                                                            } from '../modules/nf-core/multiqc/main'
 
@@ -93,9 +94,16 @@ workflow FASTQUORUM {
     ch_versions = ch_versions.mix(MERGE_BAM.out.versions.first())
 
     //
+    // MODULE: Run fgbio SortBam to re-sort into TemplateCoordinate.  This can be removed when samtools is released
+    // with the following bugfix: https://github.com/samtools/samtools/pull/2062
+    //
+    SORTBAM(MERGE_BAM.out.bam)
+    ch_versions = ch_versions.mix(SORTBAM.out.versions.first())
+
+    //
     // Create a channel that contains the merged BAMs and those that did not need to be merged.
     //
-    bam_all = MERGE_BAM.out.bam.mix(bam_to_merge.single)
+    bam_all = SORTBAM.out.bam.mix(bam_to_merge.single)
 
     //
     // MODULE: Run fgbio GroupReadsByUmi
@@ -186,6 +194,9 @@ workflow FASTQUORUM {
     ch_multiqc_config                     = Channel.fromPath("$projectDir/assets/multiqc_config.yml", checkIfExists: true)
     ch_multiqc_custom_config              = params.multiqc_config ? Channel.fromPath(params.multiqc_config, checkIfExists: true) : Channel.empty()
     ch_multiqc_logo                       = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+    ch_multiqc_logo                       = params.multiqc_logo ? Channel.fromPath(params.multiqc_logo, checkIfExists: true) : Channel.empty()
+    ch_replace_names                      = params.multiqc_replace_names ? Channel.fromPath(params.multiqc_replace_names, checkIfExists: true): Channel.empty()
+    ch_sample_names                       = params.multiqc_sample_names ? Channel.fromPath(params.multiqc_sample_names, checkIfExists: true): Channel.empty()
     summary_params                        = paramsSummaryMap(workflow, parameters_schema: "nextflow_schema.json")
     ch_workflow_summary                   = Channel.value(paramsSummaryMultiqc(summary_params))
     ch_multiqc_custom_methods_description = params.multiqc_methods_description ? file(params.multiqc_methods_description, checkIfExists: true) : file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
@@ -198,7 +209,9 @@ workflow FASTQUORUM {
         ch_multiqc_files.collect(),
         ch_multiqc_config.toList(),
         ch_multiqc_custom_config.toList(),
-        ch_multiqc_logo.toList()
+        ch_multiqc_logo.toList(),
+        ch_replace_names.toList(),
+        ch_sample_names.toList()
     )
 
     emit:

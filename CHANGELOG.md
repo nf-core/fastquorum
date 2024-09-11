@@ -3,7 +3,26 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [[1.0.0]](https://github.com/nf-core/fastquorum/releases/tag/1.0.0)] -- 2024-05-20
+## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-09-10
+
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Nils Homer](https://github.com/nh13)
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
+
+### Enhancements & fixes
+
+- [PR #51](https://github.com/nf-core/fastquorum/pull/51) - Fixes a bug where alignment and filtering where swapped in the phase 2 high-throughput diagrams (@jfy133).
+- [PR #58](https://github.com/nf-core/fastquorum/pull/58) - Prepare genome steps now run only if the corresponding parameters are not passed.
+- [PR #60](https://github.com/nf-core/fastquorum/pull/60) - Enable automatic escalation of memory for FilterConsensusReads.
+- [PR #67](https://github.com/nf-core/fastquorum/pull/67) - Fix setting the parameters from igenomes.
+- [PR #68](https://github.com/nf-core/fastquorum/pull/68) - Temporary fix to merging BAMs across lanes in template-coordinate order. Using `fgbio SortBam` after `samtools merge`. Related to [samtools#2062](https://github.com/samtools/samtools/pull/2062).
+- [PR #71](https://github.com/nf-core/fastquorum/pull/71) - Add stubs to all local modules.
+
+## [[1.0.0]](https://github.com/nf-core/fastquorum/releases/tag/1.0.0) -- 2024-05-20
 
 Initial release of nf-core/fastquorum, created with the [nf-core](https://nf-co.re/) template.
 

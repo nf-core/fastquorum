@@ -13,6 +13,18 @@ nextflow.enable.dsl = 2
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    GENOME PARAMETER VALUES
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_fastquorum_pipeline'
+
+params.fasta     = getGenomeAttribute('fasta')
+params.fasta_fai = getGenomeAttribute('fasta_fai')
+params.dict      = getGenomeAttribute('dict')
+params.bwa       = getGenomeAttribute('bwa')
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     IMPORT FUNCTIONS / MODULES / SUBWORKFLOWS / WORKFLOWS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -20,20 +32,7 @@ nextflow.enable.dsl = 2
 include { FASTQUORUM              } from './workflows/fastquorum'
 include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_fastquorum_pipeline'
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_fastquorum_pipeline'
-include { getGenomeAttribute      } from './subworkflows/local/utils_nfcore_fastquorum_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
-
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-params.fasta     = getGenomeAttribute('fasta')
-params.fasta_fai = getGenomeAttribute('fasta_fai')
-params.dict      = getGenomeAttribute('dict')
-params.bwa       = getGenomeAttribute('bwa')
 
 // Initialize fasta file with meta map:
 fasta = params.fasta ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect() : Channel.empty()

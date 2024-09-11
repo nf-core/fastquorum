@@ -47,4 +47,15 @@ process FGBIO_FASTQTOBAM {
         fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
     END_VERSIONS
     """
+
+    stub:
+    def prefix = task.ext.prefix ?: "${meta.id}"
+    """
+    touch ${prefix}.unmapped.bam
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
+    END_VERSIONS
+    """
 }
