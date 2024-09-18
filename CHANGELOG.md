@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
-.
+- [PR #78](https://github.com/nf-core/fastquorum/pull/78) - Publish the bam index file when using the `ht` mode
 
 ## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-09-10
 
