@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
-.
+- [PR #79](https://github.com/nf-core/fastquorum/pull/79) - Publish aligned consensus bai file
 
 ## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-09-10
 
