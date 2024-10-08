@@ -6,10 +6,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-07-10T12:41:34.562023"
+        "timestamp": "2024-10-02T17:51:46.317523"
     },
     "multiqc_stub": {
         "content": [
@@ -21,10 +21,10 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-07-10T11:27:11.933869532"
+        "timestamp": "2024-10-02T17:52:20.680978"
     },
     "multiqc_versions_config": {
         "content": [
@@ -33,9 +33,9 @@
             ]
         ],
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "24.04.2"
+            "nf-test": "0.9.0",
+            "nextflow": "24.04.4"
         },
-        "timestamp": "2024-07-10T11:26:56.709849369"
+        "timestamp": "2024-10-02T17:52:09.185842"
     }
 }
