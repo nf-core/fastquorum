@@ -11,7 +11,7 @@ lint:
     - assets/nf-core-fastquorum_logo_light.png
     - docs/images/Fulcrum.svg
   template_strings: false
-nf_core_version: 3.0.0
+nf_core_version: 3.0.1
 org_path: null
 repository_type: pipeline
 template:
