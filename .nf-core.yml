@@ -1,7 +1,6 @@
-repository_type: pipeline
-nf_core_version: "2.14.1"
+bump_version: null
 lint:
-  actions_ci: False
+  actions_ci: false
   files_exist:
     - .github/workflows/awsfulltest.yml
     - .github/workflows/awstest.yml
@@ -11,4 +10,18 @@ lint:
     - .github/PULL_REQUEST_TEMPLATE.md
     - assets/nf-core-fastquorum_logo_light.png
     - docs/images/Fulcrum.svg
-  template_strings: False
+  template_strings: false
+nf_core_version: 3.0.2
+org_path: null
+repository_type: pipeline
+template:
+  author: Nils Homer
+  description: fgbio Best Practices FASTQ to Consensus Pipeline
+  force: false
+  is_nfcore: true
+  name: fastquorum
+  org: nf-core
+  outdir: .
+  skip_features: null
+  version: 1.0.2dev
+update: null

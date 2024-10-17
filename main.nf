@@ -9,8 +9,6 @@
 ----------------------------------------------------------------------------------------
 */
 
-nextflow.enable.dsl = 2
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     GENOME PARAMETER VALUES
@@ -97,10 +95,8 @@ workflow NFCORE_FASTQUORUM {
         fasta,
         fasta_fai
     )
-
     emit:
     multiqc_report = FASTQUORUM.out.multiqc_report // channel: /path/to/multiqc_report.html
-
 }
 
 /*
@@ -112,13 +108,11 @@ workflow NFCORE_FASTQUORUM {
 workflow {
 
     main:
-
     //
     // SUBWORKFLOW: Run initialisation tasks
     //
     PIPELINE_INITIALISATION (
         params.version,
-        params.help,
         params.validate_params,
         params.monochrome_logs,
         args,
@@ -132,7 +126,6 @@ workflow {
     NFCORE_FASTQUORUM (
         PIPELINE_INITIALISATION.out.samplesheet
     )
-
     //
     // SUBWORKFLOW: Run completion tasks
     //
