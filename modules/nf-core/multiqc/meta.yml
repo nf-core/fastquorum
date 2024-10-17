@@ -18,7 +18,7 @@ input:
   - - multiqc_files:
         type: file
         description: |
-          List of reports / files recognied by MultiQC, for example the html and zip output of FastQC
+          List of reports / files recognised by MultiQC, for example the html and zip output of FastQC
   - - multiqc_config:
         type: file
         description: Optional config yml for MultiQC

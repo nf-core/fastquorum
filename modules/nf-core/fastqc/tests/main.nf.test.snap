@@ -156,14 +156,14 @@
     "sarscov2 paired-end [fastq]": {
         "content": [
             [
-                
+                "versions.yml:md5,e1cc25ca8af856014824abd842e93978"
             ]
         ],
         "meta": {
             "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nextflow": "24.04.3"
         },
-        "timestamp": "2024-08-23T11:21:58.323262"
+        "timestamp": "2024-07-22T11:01:31.188871"
     },
     "sarscov2 paired-end [fastq] - stub": {
         "content": [
@@ -274,14 +274,14 @@
     "sarscov2 single-end [fastq]": {
         "content": [
             [
-                
+                "versions.yml:md5,e1cc25ca8af856014824abd842e93978"
             ]
         ],
         "meta": {
             "nf-test": "0.9.0",
-            "nextflow": "24.04.4"
+            "nextflow": "24.04.3"
         },
-        "timestamp": "2024-08-23T11:21:51.69768"
+        "timestamp": "2024-07-22T11:01:19.095607"
     },
     "sarscov2 interleaved [fastq] - stub": {
         "content": [
