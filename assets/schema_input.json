@@ -31,14 +31,14 @@
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
                 "errorMessage": "FastQ file for reads 3 (e.g. index1/i7) cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "fastq_4": {
                 "type": "string",
                 "format": "file-path",
                 "exists": true,
-                "pattern": "^\\S+\\.f(ast)?q\\.gz$",
+                "pattern": "^\\S+\\.f(ast)?q(\\.gz)?$",
                 "errorMessage": "FastQ file for reads 4 (e.g. index2/i5) cannot contain spaces and must have extension '.fq.gz' or '.fastq.gz'"
             },
             "read_structure": {
