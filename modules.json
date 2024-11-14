@@ -17,7 +17,7 @@
                     },
                     "fgbio/sortbam": {
                         "branch": "master",
-                        "git_sha": "666652151335353eef2fcd58880bcef5bc2928e1",
+                        "git_sha": "bc6d86f063cd2e15015a339769c9ed18e5185a74",
                         "installed_by": ["modules"]
                     },
                     "multiqc": {
