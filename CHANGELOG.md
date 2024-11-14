@@ -13,17 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   | bwa | 0.7.17 | 0.7.18 |
   | fgbio | 2.0.2 | 2.4.0 |
   | samtools | 1.16.1 | 1.21 |
+
+  | Module         | Previous SHA | New SHA |
+  | -------------- | ------------ | ------- |
+  | bwa/index      | e0ff65e      | 6666521 |
+  | fastqc         | b49b899      | 6666521 |
+  | fgbio/sortbam  | 2fc7438      | bc6d86f |
+  | multiqc        | fe9614c      | cf17ca4 |
+  | samtools/dict  | 3c8fd07      | b13f07b |
+  | samtools/faidx | 04fbbc7      | b13f07b |
+  | samtools/merge | 04fbbc7      | b13f07b |
+
 - [PR #87](https://github.com/nf-core/fastquorum/pull/87) - Raise minimum version to 24.04.2
-- [PR #84](https://github.com/nf-core/fastquorum/pull/84) - Update to nf-core/tools template version 3.0.2 and update nf-core modules
-  | Module | Previous SHA | New SHA |
-  | -------- | ---------------- | ----------- |
-  | bwa/index | e0ff65e | 6666521 |
-  | fastqc | b49b899 | 6666521 |
-  | fgbio/sortbam | 2fc7438 | bc6d86f |
-  | multiqc | fe9614c | cf17ca4 |
-  | samtools/dict | 3c8fd07 | b13f07b |
-  | samtools/faidx | 04fbbc7 | b13f07b |
-  | samtools/merge | 04fbbc7 | b13f07b |
+- [PR #84](https://github.com/nf-core/fastquorum/pull/84) - Update to nf-core/tools template version 3.0.2
 - [PR #79](https://github.com/nf-core/fastquorum/pull/79) and [PR #80](https://github.com/nf-core/fastquorum/pull/90) - Publish aligned consensus bai file
 
 ### Credits
