@@ -1,13 +1,13 @@
 {
     "multi_lanes_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, FILTERCONSENSUSREADS={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.21}, SORTBAM={fgbio=2.2.1}, Workflow={nf-core/fastquorum=v1.0.2}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, FILTERCONSENSUSREADS={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, MERGE_BAM={samtools=1.21}, SORTBAM={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.0.2}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-10-31T14:39:27.884022"
+        "timestamp": "2024-11-13T16:23:06.347717"
     },
     "multi_lanes_ht": {
         "content": [
@@ -26,13 +26,13 @@
     },
     "multi_lanes_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, ALIGN_RAW_BAM={bwa=0.7.17-r1188, fgbio=2.0.2, samtools=1.16.1}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.0.2}, COLLECTDUPLEXSEQMETRICS={fgbio=2.0.2}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.0.2}, GROUPREADSBYUMI={fgbio=2.0.2}, MERGE_BAM={samtools=1.21}, SORTBAM={fgbio=2.2.1}, Workflow={nf-core/fastquorum=v1.0.2}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, MERGE_BAM={samtools=1.21}, SORTBAM={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.0.2}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
             "nextflow": "24.04.4"
         },
-        "timestamp": "2024-10-31T14:42:58.125095"
+        "timestamp": "2024-11-13T16:26:31.69708"
     },
     "multi_lanes_rd": {
         "content": [
