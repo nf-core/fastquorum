@@ -1,0 +1,16 @@
+Changes in module 'nf-core/fastqc'
+'modules/nf-core/fastqc/main.nf' is unchanged
+Changes in 'fastqc/environment.yml':
+--- modules/nf-core/fastqc/environment.yml
++++ modules/nf-core/fastqc/environment.yml
+@@ -1,3 +1,4 @@
++name: fastqc
+ channels:
+   - conda-forge
+   - bioconda
+
+'modules/nf-core/fastqc/meta.yml' is unchanged
+'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
+'modules/nf-core/fastqc/tests/tags.yml' is unchanged
+'modules/nf-core/fastqc/tests/main.nf.test.snap' is unchanged
+************************************************************
