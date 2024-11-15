@@ -1,0 +1,17 @@
+Changes in module 'nf-core/samtools/dict'
+Changes in 'samtools/dict/environment.yml':
+--- modules/nf-core/samtools/dict/environment.yml
++++ modules/nf-core/samtools/dict/environment.yml
+@@ -1,5 +1,4 @@
+----
+-# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/environment-schema.json
++name: samtools_dict
+ channels:
+   - conda-forge
+   - bioconda
+
+'modules/nf-core/samtools/dict/main.nf' is unchanged
+'modules/nf-core/samtools/dict/meta.yml' is unchanged
+'modules/nf-core/samtools/dict/tests/main.nf.test' is unchanged
+'modules/nf-core/samtools/dict/tests/main.nf.test.snap' is unchanged
+************************************************************
