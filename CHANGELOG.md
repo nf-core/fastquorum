@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
+- [PR #93](https://github.com/nf-core/fastquorum/pull/93) - Allow non-gzipped input fastq files
 - [PR #90](https://github.com/nf-core/fastquorum/pull/90) - Update dependency versions in fastquorum environments
   | Dependency | Previous Version | New Version |
   | ---------- | ---------------- | ----------- |
