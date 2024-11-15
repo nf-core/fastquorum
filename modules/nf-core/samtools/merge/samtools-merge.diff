@@ -3,7 +3,6 @@ Changes in 'samtools/merge/environment.yml':
 --- modules/nf-core/samtools/merge/environment.yml
 +++ modules/nf-core/samtools/merge/environment.yml
 @@ -1,5 +1,4 @@
-----
 -# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/environment-schema.json
 +name: samtools_merge
  channels:
