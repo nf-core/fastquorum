@@ -77,10 +77,10 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 | Column           | Description                                                                                                                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
-| `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
-| `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
-| `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
+| `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                                             |
+| `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                            |
+| `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to be gzipped and have the extension ".fastq.gz" or ".fq.gz".                                            |
 | `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)               |
 
 [read-structure-link]: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
