@@ -66,7 +66,8 @@ jobs:
           --container-system 'singularity' \
           --container-library "quay.io" -l "docker.io" -l "community.wave.seqera.io" \
           --container-cache-utilisation 'amend' \
-          --download-configuration 'yes'
+          --download-configuration 'yes' \
+          --parallel-downloads 1
 
       - name: Inspect download
         run: tree ./${{ env.REPOTITLE_LOWERCASE }}
