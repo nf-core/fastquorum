@@ -3,6 +3,40 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [[1.1.0]](https://github.com/nf-core/fastquorum/releases/tag/1.1.0) -- 2024-12-02
+
+### Enhancements & fixes
+
+- [PR #98](https://github.com/nf-core/fastquorum/pull/98) - Update nf-core modules/subworkflows to most recent versions
+- [PR #93](https://github.com/nf-core/fastquorum/pull/93) - Allow non-gzipped input fastq files
+- [PR #90](https://github.com/nf-core/fastquorum/pull/90) - Update dependency versions in fastquorum environments
+  | Dependency | Previous Version | New Version |
+  | ---------- | ---------------- | ----------- |
+  | bwa | 0.7.17 | 0.7.18 |
+  | fgbio | 2.0.2 | 2.4.0 |
+  | samtools | 1.16.1 | 1.21 |
+
+  | Module         | Previous SHA | New SHA |
+  | -------------- | ------------ | ------- |
+  | bwa/index      | e0ff65e      | 6666521 |
+  | fastqc         | b49b899      | 6666521 |
+  | fgbio/sortbam  | 2fc7438      | bc6d86f |
+  | multiqc        | fe9614c      | cf17ca4 |
+  | samtools/dict  | 3c8fd07      | b13f07b |
+  | samtools/faidx | 04fbbc7      | b13f07b |
+  | samtools/merge | 04fbbc7      | b13f07b |
+
+- [PR #87](https://github.com/nf-core/fastquorum/pull/87) - Raise minimum Nextflow version to 24.04.2
+- [PR #84](https://github.com/nf-core/fastquorum/pull/84) - Update to nf-core/tools template version 3.0.2
+- [PR #79](https://github.com/nf-core/fastquorum/pull/79) and [PR #80](https://github.com/nf-core/fastquorum/pull/80) - Publish aligned consensus bai file
+
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
+
 ## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-09-10
 
 ### Credits

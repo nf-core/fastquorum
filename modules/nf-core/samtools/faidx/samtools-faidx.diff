@@ -1,0 +1,19 @@
+Changes in module 'nf-core/samtools/faidx'
+Changes in 'samtools/faidx/environment.yml':
+--- modules/nf-core/samtools/faidx/environment.yml
++++ modules/nf-core/samtools/faidx/environment.yml
+@@ -1,5 +1,4 @@
+-# yaml-language-server: $schema=https://raw.githubusercontent.com/nf-core/modules/master/modules/environment-schema.json
++name: samtools_faidx
+ channels:
+   - conda-forge
+   - bioconda
+
+'modules/nf-core/samtools/faidx/main.nf' is unchanged
+'modules/nf-core/samtools/faidx/meta.yml' is unchanged
+'modules/nf-core/samtools/faidx/tests/main.nf.test' is unchanged
+'modules/nf-core/samtools/faidx/tests/nextflow.config' is unchanged
+'modules/nf-core/samtools/faidx/tests/nextflow2.config' is unchanged
+'modules/nf-core/samtools/faidx/tests/tags.yml' is unchanged
+'modules/nf-core/samtools/faidx/tests/main.nf.test.snap' is unchanged
+************************************************************
