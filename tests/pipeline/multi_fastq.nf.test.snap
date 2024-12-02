@@ -16,7 +16,7 @@
     },
     "multi_fastq_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.0.2}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.1.0}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
@@ -26,7 +26,7 @@
     },
     "multi_fastq_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, FILTERCONSENSUSREADS={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.0.2}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.4.0}, COLLECTDUPLEXSEQMETRICS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, FILTERCONSENSUSREADS={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.1.0}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
