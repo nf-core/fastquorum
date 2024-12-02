@@ -1,5 +1,4 @@
 Changes in module 'nf-core/fastqc'
-'modules/nf-core/fastqc/main.nf' is unchanged
 Changes in 'fastqc/environment.yml':
 --- modules/nf-core/fastqc/environment.yml
 +++ modules/nf-core/fastqc/environment.yml
@@ -10,7 +9,8 @@ Changes in 'fastqc/environment.yml':
    - bioconda
 
 'modules/nf-core/fastqc/meta.yml' is unchanged
-'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
-'modules/nf-core/fastqc/tests/tags.yml' is unchanged
+'modules/nf-core/fastqc/main.nf' is unchanged
 'modules/nf-core/fastqc/tests/main.nf.test.snap' is unchanged
+'modules/nf-core/fastqc/tests/tags.yml' is unchanged
+'modules/nf-core/fastqc/tests/main.nf.test' is unchanged
 ************************************************************
