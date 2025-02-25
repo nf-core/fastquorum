@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+- [PR #108](https://github.com/nf-core/fastquorum/pull/108) - Update to nf-core/tools template version 3.2.0
 - [PR #104](https://github.com/nf-core/fastquorum/pull/104) - Update to nf-core/tools template version 3.1.1
 
 ### Enhancements & fixes
