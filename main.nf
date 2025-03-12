@@ -47,9 +47,6 @@ workflow NFCORE_FASTQUORUM {
     samplesheet // channel: samplesheet read in from --input
 
     main:
-
-    versions = Channel.empty()
-
     // Initialize fasta file with meta map:
     fasta = params.fasta ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect() : Channel.empty()
 
