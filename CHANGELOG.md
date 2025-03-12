@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [PR #108](https://github.com/nf-core/fastquorum/pull/108) - Update to nf-core/tools template version 3.2.0
 - [PR #104](https://github.com/nf-core/fastquorum/pull/104) - Update to nf-core/tools template version 3.1.1
+- [PR #110](https://github.com/nf-core/fastquorum/pull/68)  - Remove the temporary use of fgbio/sortbam which was implemented in [PR #68](https://github.com/nf-core/fastquorum/pull/68) to work around a bug in `samtools merge` [samtools#2062](https://github.com/samtools/samtools/pull/2062), as this is now fixed in `samtools v1.21`.
 
 ### Enhancements & fixes
 
