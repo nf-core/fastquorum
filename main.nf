@@ -32,29 +32,6 @@ include { PIPELINE_INITIALISATION } from './subworkflows/local/utils_nfcore_fast
 include { PIPELINE_COMPLETION     } from './subworkflows/local/utils_nfcore_fastquorum_pipeline'
 include { PREPARE_GENOME          } from './subworkflows/local/prepare_genome'
 
-// Initialize fasta file with meta map:
-fasta = params.fasta ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect() : Channel.empty()
-
-// Set various consensus calling and filtering parameters if not given
-if (params.duplex_seq) {
-    if (params.groupreadsbyumi_strategy == '') { params.replace("groupreadsbyumi_strategy", 'Paired') }
-    else if (params.groupreadsbyumi_strategy != 'Paired') {
-        log.error "config groupreadsbyumi_strategy must be 'Paired' for duplex-sequencing data"
-        exit 1
-    }
-    if (params.call_min_reads == '') { params.replace("call_min_reads", '1 1 0') }
-    if (!params.filter_min_reads) { params.replace("filter_min_reads",  '3 1 1') }
-} else {
-    if (params.groupreadsbyumi_strategy == '') { params.replace("groupreadsbyumi_strategy", 'Adjacency') }
-    else if (params.groupreadsbyumi_strategy == 'Paired') {
-        log.error "config groupreadsbyumi_strategy cannot be 'Paired' for non-duplex-sequencing data"
-        exit 1
-    }
-    if (params.call_min_reads == '') { params.replace("call_min_reads", '1') }
-    if (params.filter_min_reads == '') { params.replace("filter_min_reads", '3') }
-}
-
-
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     NAMED WORKFLOWS FOR PIPELINE
@@ -70,8 +47,27 @@ workflow NFCORE_FASTQUORUM {
     samplesheet // channel: samplesheet read in from --input
 
     main:
+    // Initialize fasta file with meta map:
+    fasta = params.fasta ? Channel.fromPath(params.fasta).map{ it -> [ [id:it.baseName], it ] }.collect() : Channel.empty()
 
-    versions = Channel.empty()
+    // Set various consensus calling and filtering parameters if not given
+    if (params.duplex_seq) {
+        if (params.groupreadsbyumi_strategy == '') { params.replace("groupreadsbyumi_strategy", 'Paired') }
+        else if (params.groupreadsbyumi_strategy != 'Paired') {
+            log.error "config groupreadsbyumi_strategy must be 'Paired' for duplex-sequencing data"
+            exit 1
+        }
+        if (params.call_min_reads == '') { params.replace("call_min_reads", '1 1 0') }
+        if (!params.filter_min_reads) { params.replace("filter_min_reads",  '3 1 1') }
+    } else {
+        if (params.groupreadsbyumi_strategy == '') { params.replace("groupreadsbyumi_strategy", 'Adjacency') }
+        else if (params.groupreadsbyumi_strategy == 'Paired') {
+            log.error "config groupreadsbyumi_strategy cannot be 'Paired' for non-duplex-sequencing data"
+            exit 1
+        }
+        if (params.call_min_reads == '') { params.replace("call_min_reads", '1') }
+        if (params.filter_min_reads == '') { params.replace("filter_min_reads", '3') }
+    }
 
     // WORKFLOW: build indexes if needed
     PREPARE_GENOME(fasta)
