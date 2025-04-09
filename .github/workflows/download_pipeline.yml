@@ -34,7 +34,7 @@ jobs:
       REPO_BRANCH: ${{ steps.get_repo_properties.outputs.REPO_BRANCH }}
     steps:
       - name: Install Nextflow
-        uses: nf-core/setup-nextflow@v1
+        uses: nf-core/setup-nextflow@v2
 
       - name: Disk space cleanup
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
