@@ -3,7 +3,17 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased
+## [[1.2.0]](https://github.com/nf-core/fastquorum/releases/tag/1.2.0) -- TBD
+
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Nils Homer](https://github.com/nh13)
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
+
+### Enhancements & fixes
 
 - [PR #116](https://github.com/nf-core/fastquorum/pull/116) - Format nextflow files using [nextflow format command](https://github.com/nextflow-io/nextflow/pull/5908)
 - [PR #111](https://github.com/nf-core/fastquorum/pull/111) - Remove duplicated `defaultIgnoreParams` and ensure nf-tests run automatically
@@ -12,9 +22,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #108](https://github.com/nf-core/fastquorum/pull/108) - Update to nf-core/tools template version 3.2.0
 - [PR #104](https://github.com/nf-core/fastquorum/pull/104) - Update to nf-core/tools template version 3.1.1
 
-### Enhancements & fixes
-
 ## [[1.1.0]](https://github.com/nf-core/fastquorum/releases/tag/1.1.0) -- 2024-12-02
+
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
 
 ### Enhancements & fixes
 
@@ -40,13 +55,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #87](https://github.com/nf-core/fastquorum/pull/87) - Raise minimum Nextflow version to 24.04.2
 - [PR #84](https://github.com/nf-core/fastquorum/pull/84) - Update to nf-core/tools template version 3.0.2
 - [PR #79](https://github.com/nf-core/fastquorum/pull/79) and [PR #80](https://github.com/nf-core/fastquorum/pull/80) - Publish aligned consensus bai file
-
-### Credits
-
-Special thanks to the following for their contributions to the release:
-
-- [Simon Pearce](https://github.com/SPPearce)
-- [Zach Norgaard](https://github.com/znorgaard)
 
 ## [[1.0.1]](https://github.com/nf-core/fastquorum/releases/tag/1.0.1) -- 2024-09-10
 
