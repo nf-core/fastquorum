@@ -15,6 +15,7 @@ Special thanks to the following for their contributions to the release:
 
 ### Enhancements & fixes
 
+- [PR #119](https://github.com/nf-core/fastquorum/pull/119) - Fix the [download pipeline action](https://github.com/nf-core/fastquorum/actions/workflows/download_pipeline.yml)
 - [PR #116](https://github.com/nf-core/fastquorum/pull/116) - Format nextflow files using [nextflow format command](https://github.com/nextflow-io/nextflow/pull/5908)
 - [PR #111](https://github.com/nf-core/fastquorum/pull/111) - Remove duplicated `defaultIgnoreParams` and ensure nf-tests run automatically
 - [PR #110](https://github.com/nf-core/fastquorum/pull/110) - Remove the temporary use of fgbio/sortbam which was implemented in [PR #68](https://github.com/nf-core/fastquorum/pull/68) to work around a bug in `samtools merge` [samtools#2062](https://github.com/samtools/samtools/pull/2062), as this is now fixed in `samtools v1.21`
