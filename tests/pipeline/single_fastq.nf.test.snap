@@ -11,7 +11,7 @@
     },
     "single_fastq_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLANDFILTERMOLECULARCONSENSUSREADS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.2.0}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLANDFILTERMOLECULARCONSENSUSREADS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.3.0dev}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
@@ -21,7 +21,7 @@
     },
     "single_fastq_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLMOLECULARCONSENSUSREADS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, FILTERCONSENSUSREADS={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.2.0}}"
+            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.4.0, samtools=1.21}, CALLMOLECULARCONSENSUSREADS={fgbio=2.4.0}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.4.0}, FILTERCONSENSUSREADS={fgbio=2.4.0}, GROUPREADSBYUMI={fgbio=2.4.0}, Workflow={nf-core/fastquorum=v1.3.0dev}}"
         ],
         "meta": {
             "nf-test": "0.9.0",
