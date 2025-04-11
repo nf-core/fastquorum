@@ -79,7 +79,7 @@ Please reach out to maintainers if additional support is needed to prepare or se
 ## Usage
 
 > [!NOTE]
-> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow. Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
+> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow.Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.
 
 First, prepare a samplesheet with your input data that looks as follows:
 
@@ -127,11 +127,11 @@ For more details about the output files and reports, please refer to the
 
 ## Credits
 
-nf-core/fastquorum was originally written and is primarily maintained by Nils Homer.
+nf-core/fastquorum was originally written and is primarily maintained by Nils Homer (@nh13) from [Fulcrum Genomics](https://www.fulcrumgenomics.com/) and Zach Norgaard (@znorgaard) from [Fulcrum Genomics](https://www.fulcrumgenomics.com/).
 
-We thank the following people for their extensive assistance in the development of this pipeline:
+We also thank the following people for their extensive assistance in the development of this pipeline:
 
-- [Nils Homer](https://github.com/nh13)
+- [Simon Pearce](https://github.com/SPPearce)
 
 ## Acknowledgements
 

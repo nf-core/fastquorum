@@ -4,26 +4,25 @@
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { paramsSummaryMap                                                                   } from 'plugin/nf-schema'
-include { paramsSummaryMultiqc                                                               } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { softwareVersionsToYAML                                                             } from '../subworkflows/nf-core/utils_nfcore_pipeline'
-include { methodsDescriptionText                                                             } from '../subworkflows/local/utils_nfcore_fastquorum_pipeline'
+include { paramsSummaryMap } from 'plugin/nf-schema'
+include { paramsSummaryMultiqc } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { softwareVersionsToYAML } from '../subworkflows/nf-core/utils_nfcore_pipeline'
+include { methodsDescriptionText } from '../subworkflows/local/utils_nfcore_fastquorum_pipeline'
 
-include { ALIGN_BAM                         as ALIGN_RAW_BAM                                 } from '../modules/local/align_bam/main'
-include { ALIGN_BAM                         as ALIGN_CONSENSUS_BAM                           } from '../modules/local/align_bam/main'
-include { FASTQC                                                                             } from '../modules/nf-core/fastqc/main'
-include { FGBIO_FASTQTOBAM                  as FASTQTOBAM                                    } from '../modules/local/fgbio/fastqtobam/main'
-include { FGBIO_GROUPREADSBYUMI             as GROUPREADSBYUMI                               } from '../modules/local/fgbio/groupreadsbyumi/main'
-include { FGBIO_CALLMOLECULARCONSENSUSREADS as CALLMOLECULARCONSENSUSREADS                   } from '../modules/local/fgbio/callmolecularconsensusreads/main'
-include { FGBIO_CALLDDUPLEXCONSENSUSREADS   as CALLDDUPLEXCONSENSUSREADS                     } from '../modules/local/fgbio/callduplexconsensusreads/main'
-include { FGBIO_FILTERCONSENSUSREADS        as FILTERCONSENSUSREADS                          } from '../modules/local/fgbio/filterconsensusreads/main'
-include { FGBIO_COLLECTDUPLEXSEQMETRICS     as COLLECTDUPLEXSEQMETRICS                       } from '../modules/local/fgbio/collectduplexseqmetrics/main'
+include { ALIGN_BAM as ALIGN_RAW_BAM } from '../modules/local/align_bam/main'
+include { ALIGN_BAM as ALIGN_CONSENSUS_BAM } from '../modules/local/align_bam/main'
+include { FASTQC } from '../modules/nf-core/fastqc/main'
+include { FGBIO_FASTQTOBAM as FASTQTOBAM } from '../modules/local/fgbio/fastqtobam/main'
+include { FGBIO_GROUPREADSBYUMI as GROUPREADSBYUMI } from '../modules/local/fgbio/groupreadsbyumi/main'
+include { FGBIO_CALLMOLECULARCONSENSUSREADS as CALLMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callmolecularconsensusreads/main'
+include { FGBIO_CALLDDUPLEXCONSENSUSREADS as CALLDDUPLEXCONSENSUSREADS } from '../modules/local/fgbio/callduplexconsensusreads/main'
+include { FGBIO_FILTERCONSENSUSREADS as FILTERCONSENSUSREADS } from '../modules/local/fgbio/filterconsensusreads/main'
+include { FGBIO_COLLECTDUPLEXSEQMETRICS as COLLECTDUPLEXSEQMETRICS } from '../modules/local/fgbio/collectduplexseqmetrics/main'
 include { FGBIO_CALLANDFILTERMOLECULARCONSENSUSREADS as CALLANDFILTERMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callandfiltermolecularconsensusreads/main'
-include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS    as CALLANDFILTERDUPLEXCONSENSUSREADS    } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
-include { SAMTOOLS_MERGE                    as MERGE_BAM                                     } from '../modules/nf-core/samtools/merge/main'
-include { FGBIO_SORTBAM                     as SORTBAM                                       } from '../modules/nf-core/fgbio/sortbam/main'
+include { FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS as CALLANDFILTERDUPLEXCONSENSUSREADS } from '../modules/local/fgbio/callandfilterduplexconsensusreads/main'
+include { SAMTOOLS_MERGE as MERGE_BAM } from '../modules/nf-core/samtools/merge/main'
 
-include { MULTIQC                                                                            } from '../modules/nf-core/multiqc/main'
+include { MULTIQC } from '../modules/nf-core/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +32,7 @@ include { MULTIQC                                                               
 
 workflow FASTQUORUM {
     take:
-    params  // NB: must pass params; see https://github.com/nextflow-io/nextflow/issues/4982
+    params // NB: must pass params; see https://github.com/nextflow-io/nextflow/issues/4982
     ch_samplesheet
     ch_bwa
     ch_dict
@@ -52,7 +51,7 @@ workflow FASTQUORUM {
         ch_samplesheet
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect{it[1]})
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect { it[1] })
 
     //
     // MODULE: Run fgbio FastqToBam
@@ -73,18 +72,18 @@ workflow FASTQUORUM {
     // 2. Splits the samples into those that have more than one BAM, and those that have exactly one BAM.  The former
     //    samples will have their BAMs merged.
     //
+    // The `n_samples` is added by `validateInputSamplesheet` method in `PIPELINE_INITIALISATION` workflow
+    // NB: bam is a list (of one BAM) so return just the one BAM
     bam_to_merge = ALIGN_RAW_BAM.out.bam
-        .map {
-            meta, bam ->
-                [ groupKey(meta, meta.n_samples), bam ]
-    }
-    .groupTuple()
-    .branch { meta, bam ->
-        // The `n_samples` is added by `validateInputSamplesheet` method in `PIPELINE_INITIALISATION` workflow
-        single:   meta.n_samples <= 1
-            return [ meta, bam[0] ]  // NB: bam is a list (of one BAM) so return just the one BAM
-        multiple: meta.n_samples > 1
-    }
+        .map { meta, bam ->
+            [groupKey(meta, meta.n_samples), bam]
+        }
+        .groupTuple()
+        .branch { meta, bam ->
+            single: meta.n_samples <= 1
+            return [meta, bam[0]]
+            multiple: meta.n_samples > 1
+        }
 
     //
     // MODULE: Run samtools merge to merge across runs/lanes for the same sample
@@ -93,22 +92,15 @@ workflow FASTQUORUM {
     ch_versions = ch_versions.mix(MERGE_BAM.out.versions.first())
 
     //
-    // MODULE: Run fgbio SortBam to re-sort into TemplateCoordinate.  This can be removed when samtools is released
-    // with the following bugfix: https://github.com/samtools/samtools/pull/2062
-    //
-    SORTBAM(MERGE_BAM.out.bam)
-    ch_versions = ch_versions.mix(SORTBAM.out.versions.first())
-
-    //
     // Create a channel that contains the merged BAMs and those that did not need to be merged.
     //
-    bam_all = SORTBAM.out.bam.mix(bam_to_merge.single)
+    bam_all = MERGE_BAM.out.bam.mix(bam_to_merge.single)
 
     //
     // MODULE: Run fgbio GroupReadsByUmi
     //
     GROUPREADSBYUMI(bam_all, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
-    ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map{it[1]}.collect())
+    ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map { it[1] }.collect())
     ch_versions = ch_versions.mix(GROUPREADSBYUMI.out.versions.first())
 
     if (params.duplex_seq) {
@@ -130,7 +122,8 @@ workflow FASTQUORUM {
 
             // Add the consensus BAM to the channel for downstream processing
             CALLDDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
-        } else {
+        }
+        else {
             //
             // MODULE: Run fgbio CallMolecularConsensusReads
             //
@@ -152,21 +145,23 @@ workflow FASTQUORUM {
         //
         FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_fasta, params.filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
         ch_versions = ch_versions.mix(FILTERCONSENSUSREADS.out.versions.first())
-    } else {
+    }
+    else {
         if (params.duplex_seq) {
             //
             // MODULE: Run fgbio CallDuplexConsensusReads and fgbio FilterConsensusReads
             //
-            CALLANDFILTERDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
+            CALLANDFILTERDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai, params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
             ch_versions = ch_versions.mix(CALLANDFILTERDUPLEXCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
             CALLANDFILTERDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
-        } else {
+        }
+        else {
             //
             // MODULE: Run fgbio CallMolecularConsensusReads and fgbio FilterConsensusReads
             //
-            CALLANDFILTERMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai,  params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
+            CALLANDFILTERMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai, params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
             ch_versions = ch_versions.mix(CALLANDFILTERMOLECULARCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
@@ -186,59 +181,60 @@ workflow FASTQUORUM {
     softwareVersionsToYAML(ch_versions)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
-            name: 'software_versions.yml',
+            name: 'nf_core_' + 'fastquorum_software_' + 'mqc_' + 'versions.yml',
             sort: true,
-            newLine: true
-        ).set { ch_collated_versions }
+            newLine: true,
+        )
+        .set { ch_collated_versions }
 
 
     //
     // MODULE: MultiQC
     //
-    ch_multiqc_config        = Channel.fromPath(
-        "$projectDir/assets/multiqc_config.yml", checkIfExists: true)
-    ch_multiqc_custom_config = params.multiqc_config ?
-        Channel.fromPath(params.multiqc_config, checkIfExists: true) :
-        Channel.empty()
-    ch_multiqc_logo          = params.multiqc_logo ?
-        Channel.fromPath(params.multiqc_logo, checkIfExists: true) :
-        Channel.empty()
+    ch_multiqc_config = Channel.fromPath(
+        "${projectDir}/assets/multiqc_config.yml",
+        checkIfExists: true
+    )
+    ch_multiqc_custom_config = params.multiqc_config
+        ? Channel.fromPath(params.multiqc_config, checkIfExists: true)
+        : Channel.empty()
+    ch_multiqc_logo = params.multiqc_logo
+        ? Channel.fromPath(params.multiqc_logo, checkIfExists: true)
+        : Channel.empty()
 
-    summary_params      = paramsSummaryMap(
-        workflow, parameters_schema: "nextflow_schema.json")
+    summary_params = paramsSummaryMap(
+        workflow,
+        parameters_schema: "nextflow_schema.json"
+    )
     ch_workflow_summary = Channel.value(paramsSummaryMultiqc(summary_params))
     ch_multiqc_files = ch_multiqc_files.mix(
-        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml'))
-    ch_multiqc_custom_methods_description = params.multiqc_methods_description ?
-        file(params.multiqc_methods_description, checkIfExists: true) :
-        file("$projectDir/assets/methods_description_template.yml", checkIfExists: true)
-    ch_methods_description                = Channel.value(
-        methodsDescriptionText(ch_multiqc_custom_methods_description))
+        ch_workflow_summary.collectFile(name: 'workflow_summary_mqc.yaml')
+    )
+    ch_multiqc_custom_methods_description = params.multiqc_methods_description
+        ? file(params.multiqc_methods_description, checkIfExists: true)
+        : file("${projectDir}/assets/methods_description_template.yml", checkIfExists: true)
+    ch_methods_description = Channel.value(
+        methodsDescriptionText(ch_multiqc_custom_methods_description)
+    )
 
     ch_multiqc_files = ch_multiqc_files.mix(ch_collated_versions)
     ch_multiqc_files = ch_multiqc_files.mix(
         ch_methods_description.collectFile(
             name: 'methods_description_mqc.yaml',
-            sort: true
+            sort: true,
         )
     )
 
-    MULTIQC (
+    MULTIQC(
         ch_multiqc_files.collect(),
         ch_multiqc_config.toList(),
         ch_multiqc_custom_config.toList(),
         ch_multiqc_logo.toList(),
         [],
-        []
+        [],
     )
 
-    emit:multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
-    versions       = ch_versions                 // channel: [ path(versions.yml) ]
-
+    emit:
+    multiqc_report = MULTIQC.out.report.toList() // channel: /path/to/multiqc_report.html
+    versions = ch_versions // channel: [ path(versions.yml) ]
 }
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    THE END
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/

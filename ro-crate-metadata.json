@@ -1,0 +1,348 @@
+{
+    "@context": [
+        "https://w3id.org/ro/crate/1.1/context",
+        {
+            "GithubService": "https://w3id.org/ro/terms/test#GithubService",
+            "JenkinsService": "https://w3id.org/ro/terms/test#JenkinsService",
+            "PlanemoEngine": "https://w3id.org/ro/terms/test#PlanemoEngine",
+            "TestDefinition": "https://w3id.org/ro/terms/test#TestDefinition",
+            "TestInstance": "https://w3id.org/ro/terms/test#TestInstance",
+            "TestService": "https://w3id.org/ro/terms/test#TestService",
+            "TestSuite": "https://w3id.org/ro/terms/test#TestSuite",
+            "TravisService": "https://w3id.org/ro/terms/test#TravisService",
+            "definition": "https://w3id.org/ro/terms/test#definition",
+            "engineVersion": "https://w3id.org/ro/terms/test#engineVersion",
+            "instance": "https://w3id.org/ro/terms/test#instance",
+            "resource": "https://w3id.org/ro/terms/test#resource",
+            "runsOn": "https://w3id.org/ro/terms/test#runsOn"
+        }
+    ],
+    "@graph": [
+        {
+            "@id": "./",
+            "@type": "Dataset",
+            "creativeWorkStatus": "InProgress",
+            "datePublished": "2025-02-25T18:55:02+00:00",
+            "description": "<h1>\n  <picture>\n    <source media=\"(prefers-color-scheme: dark)\" srcset=\"docs/images/nf-core-fastquorum_logo_dark.png\">\n    <img alt=\"nf-core/fastquorum\" src=\"docs/images/nf-core-fastquorum_logo_light.png\">\n  </picture>\n</h1>\n\n[![GitHub Actions CI Status](https://github.com/nf-core/fastquorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/fastquorum/actions/workflows/ci.yml)\n[![GitHub Actions Linting Status](https://github.com/nf-core/fastquorum/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/fastquorum/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/fastquorum/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.11267672-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.11267672)\n[![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)\n\n[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)\n[![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)\n[![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)\n[![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)\n[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/fastquorum)\n\n[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23fastquorum-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/fastquorum)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)\n\n## Introduction\n\n**nf-core/fastquorum** is a bioinformatics pipeline that implements the pipeline implements the [fgbio Best Practices FASTQ to Consensus Pipeline][fgbio-best-practices-link] to produce consensus reads using unique molecular indexes/barcodes (UMIs).\n`nf-core/fastquorum` can produce consensus reads from single or multi UMI reads, and even [Duplex Sequencing][duplex-seq-link] reads.\n\nThe pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have been submitted to and installed from [nf-core/modules](https://github.com/nf-core/modules) in order to make them available to all nf-core pipelines, and to everyone within the Nextflow community!\n\nOn release, automated continuous integration tests run the pipeline on a full-sized dataset on the AWS cloud infrastructure. This ensures that the pipeline runs on AWS, has sensible resource allocation defaults set to run on real-world datasets, and permits the persistent storage of results to benchmark between pipeline releases and other analysis sources. The results obtained from the full-sized test can be viewed on the [nf-core website](https://nf-co.re/fastquorum/results).\n\n| Tools                                                                                                              | Description                                                                                                                   |\n| ------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------- |\n| <p align=\"center\"><img title=\"Fastquorum Workflow (Tools)\" src=\"docs/images/fastquorum_subway.png\" width=100%></p> | <p align=\"center\"><img title=\"Fastquorum Workflow (Description)\" src=\"docs/images/fastquorum_subway.desc.png\" width=100%></p> |\n\n1. Read QC ([`FastQC`](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/))\n2. Fastq to BAM, extracting UMIs ([`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html))\n3. Align ([`bwa mem`](https://github.com/lh3/bwa)), reformat ([`fgbio ZipperBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/ZipperBam.html)), and template-coordinate sort ([`samtools sort`](http://www.htslib.org/doc/samtools.html))\n4. Group reads by UMI ([`fgbio GroupReadsByUmi`](http://fulcrumgenomics.github.io/fgbio/tools/latest/GroupReadsByUmi.html))\n5. Call consensus reads\n   1. For [Duplex-Sequencing][duplex-seq-link] data\n      1. Call duplex consensus reads ([`fgbio CallDuplexConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallDuplexConsensusReads.html))\n      2. Collect duplex sequencing specific metrics ([`fgbio CollectDuplexSeqMetrics`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CollectDuplexSeqMetrics.html))\n   2. For non-Duplex-Sequencing data:\n      1. Call molecular consensus reads ([`fgbio CallMolecularConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CallMolecularConsensusReads.html))\n6. Align ([`bwa mem`](https://github.com/lh3/bwa))\n7. Filter consensus reads ([`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html))\n8. Present QC ([`MultiQC`](http://multiqc.info/))\n\n## Verified Vendors, Kits, and Assays\n\n> [!WARNING]\n> The following Vendors, Kits, and Assays are provided for informational purposes only.\n> _No warranty for the accuracy or completeness of the information or parameters is implied._\n\n| Verified | Assay                                                     | Company                     | Strand | Randomness | UMI Location     | Read Structure  | URL                                                                                                                                                                                 |\n| -------- | --------------------------------------------------------- | --------------------------- | ------ | ---------- | ---------------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |\n| No       | SureSelect XT HS                                          | Agilent Technologies        | Single | Random     |                  |                 | [link](https://www.agilent.com/en/product/next-generation-sequencing/ngs-library-prep-target-enrichment-reagents/dna-seq-reagents/sureselectxt-hs-reagent-kits-4252208)             |\n| No       | SureSelect XT HS2 (MBC)                                   | Agilent Technologies        | Dual   | Random     |                  |                 | [link](https://www.agilent.com/en/product/next-generation-sequencing/ngs-library-prep-target-enrichment-reagents/dna-seq-reagents/sureselect-xt-hs2-dna-reagent-kit-4252207)        |\n| No       | TruSight Oncology (TSO)                                   | Illumina                    | Dual   | Nonrandom  |                  |                 | [link](https://www.illumina.com/products/by-type/clinical-research-products/trusight-oncology-umi.html)                                                                             |\n| No       | xGen dual index UMI Adapters                              | Integrated DNA Technologies | Single | Random     | index1 (i7)      |                 | [link](https://www.idtdna.com/pages/products/next-generation-sequencing/workflow/xgen-ngs-library-preparation/ngs-adapters-indexing-primers/adapters-indexing-primers-for-illumina) |\n| No       | xGen Prism (xGen cfDNA & FFPE DNA Library Prep MC v2 Kit) | Integrated DNA Technologies | Dual   | Nonrandom  |                  |                 | [link](https://www.idtdna.com/pages/products/next-generation-sequencing/workflow/xgen-ngs-library-preparation/dna-library-preparation/cfdna-ffpe-prep-kit)                          |\n| No       | NEBNext                                                   | New England Biosciences     | Single | Random     | index1 (i7)      |                 | [link](https://www.neb.com/en-us/products/e7874nebnext-multiplex-oligos-for-illumina-unique-dual-index-umi-adaptors-dna-set-2)                                                      |\n| No       | AML MRD                                                   | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/aml-assay/)                                                                                                                                        |\n| No       | Mutagenesis                                               | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/mutagenesis-assay/)                                                                                                                                |\n| No       | UMI Adapter System                                        | Twist Biosciences           | Dual   | Random     | Inline (R1 & R2) | `5M2S+T 5M2S+T` | [link](https://www.twistbioscience.com/products/ngs/library-preparation/twist-umi-adapter-system)                                                                                   |\n\nColumn Definitions:\n\n- Assay: the name of the assay or kit\n- Company: the name of the company or vendor providing the assay or kit\n- Strand: Dual if both strands of a double-stranded source molecule are sequences (e.g. Duplex Sequencing), Single otherwise\n- Randomness: if the unique molecular identifiers (UMIs) are fully random (degenerate) or are synthesized from a fixed set\n- UMI Location: the location of UMIs within the reads.\n- Read Structure: the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)\n- URL: link(s) to vendor documentation or further information\n\nTo become \"Verified\" by `nf-core/fastquorum`, please open an issue and provide the maintainers with an example dataset that can be shared publicly.\nThe dataset or a subset will be added to [nf-core/test-datasets](https://github.com/nf-core/test-datasets/tree/fastquorum).\nPlease reach out to maintainers if additional support is needed to prepare or select such data.\n\n## Usage\n\n> [!NOTE]\n> If you are new to Nextflow and nf-core, please refer to [this page](https://nf-co.re/docs/usage/installation) on how to set-up Nextflow.Make sure to [test your setup](https://nf-co.re/docs/usage/introduction#how-to-run-a-pipeline) with `-profile test` before running the workflow on actual data.\n\nFirst, prepare a samplesheet with your input data that looks as follows:\n\n`samplesheet.csv`:\n\n```csv\nsample,fastq_1,fastq_2,read_structure\nCONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T\n```\n\nEach row represents a fastq file (single-end) or a pair of fastq files (paired end).\nThe `sample` column provides a unique identifier for the given sample, while the `read_structure` describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).\n(Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.)\n\nNow, you can run the pipeline using:\n\n```bash\nnextflow run nf-core/fastquorum \\\n   -profile <docker/singularity/.../institute> \\\n   --input samplesheet.csv \\\n   --genome GRCh38 \\\n   --outdir <OUTDIR>\n```\n\n> [!WARNING]\n> Please provide pipeline parameters via the CLI or Nextflow `-params-file` option. Custom config files including those provided by the `-c` Nextflow option can be used to provide any configuration _**except for parameters**_; see [docs](https://nf-co.re/docs/usage/getting_started/configuration#custom-configuration-files).\n\nTwo modes of running this pipeline are supported:\n\n1. Research and Development (R&D): use `--mode rd` or `params.mode=rd`. This mode is desirable to be able to branch off from the pipeline and test e.g. multiple consensus calling or filtering parameters\n2. High Throughput (HT): use `--mode ht` or `params.mode=ht`. This mode is intended for high throughput production environments where performance and throughput take precedence over flexibility\n\nFor more details and further functionality, please refer to the [usage documentation](https://nf-co.re/fastquorum/usage) and the [parameter documentation](https://nf-co.re/fastquorum/parameters).\n\nSee also:\n\n1. The [fgbio Best Practice FASTQ -> Consensus Pipeline][fgbio-best-practices-link]\n2. [Read structures](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) as required in the input sample sheet.\n\n## Pipeline output\n\nTo see the results of an example test run with a full size dataset refer to the [results](https://nf-co.re/fastquorum/results) tab on the nf-core website pipeline page.\nFor more details about the output files and reports, please refer to the\n[output documentation](https://nf-co.re/fastquorum/output).\n\n## Credits\n\nnf-core/fastquorum was originally written and is primarily maintained by Nils Homer.\n\nWe thank the following people for their extensive assistance in the development of this pipeline:\n\n- [Nils Homer](https://github.com/nh13)\n\n## Acknowledgements\n\nWe thank [Fulcrum Genomics](https://www.fulcrumgenomics.com/) for their extensive assistance in the development of this pipeline.\n\n<p align=\"left\">\n<a href=\"https://fulcrumgenomics.com\">\n<img width=\"500\" height=\"100\" src=\"docs/images/Fulcrum.svg\" alt=\"Fulcrum Genomics\"/>\n</a>\n</p>\n\n## Contributions and Support\n\nIf you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).\n\nFor further information or help, don't hesitate to get in touch on the [Slack `#fastquorum` channel](https://nfcore.slack.com/channels/fastquorum) (you can join with [this invite](https://nf-co.re/join/slack)).\n\n## Citations\n\nIf you use nf-core/fastquorum for your analysis, please cite [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11267672.svg)](https://doi.org/10.5281/zenodo.11267672) for this pipeline and [![DOI](https://zenodo.org/badge/53011104.svg)](https://zenodo.org/doi/10.5281/zenodo.10456900) for [`fgbio`](https://github.com/fulcrumgenomics/fgbio).\n\nAn extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.\n\nYou can cite the `nf-core` publication as follows:\n\n> **The nf-core framework for community-curated bioinformatics pipelines.**\n>\n> Philip Ewels, Alexander Peltzer, Sven Fillinger, Harshil Patel, Johannes Alneberg, Andreas Wilm, Maxime Ulysse Garcia, Paolo Di Tommaso & Sven Nahnsen.\n>\n> _Nat Biotechnol._ 2020 Feb 13. doi: [10.1038/s41587-020-0439-x](https://dx.doi.org/10.1038/s41587-020-0439-x).\n\n[fgbio-best-practices-link]: https://github.com/fulcrumgenomics/fgbio/blob/main/docs/best-practice-consensus-pipeline.md\n[duplex-seq-link]: https://en.wikipedia.org/wiki/Duplex_sequencing\n",
+            "hasPart": [
+                {
+                    "@id": "main.nf"
+                },
+                {
+                    "@id": "assets/"
+                },
+                {
+                    "@id": "conf/"
+                },
+                {
+                    "@id": "docs/"
+                },
+                {
+                    "@id": "docs/images/"
+                },
+                {
+                    "@id": "modules/"
+                },
+                {
+                    "@id": "modules/local/"
+                },
+                {
+                    "@id": "modules/nf-core/"
+                },
+                {
+                    "@id": "workflows/"
+                },
+                {
+                    "@id": "subworkflows/"
+                },
+                {
+                    "@id": "nextflow.config"
+                },
+                {
+                    "@id": "README.md"
+                },
+                {
+                    "@id": "nextflow_schema.json"
+                },
+                {
+                    "@id": "CHANGELOG.md"
+                },
+                {
+                    "@id": "LICENSE"
+                },
+                {
+                    "@id": "CODE_OF_CONDUCT.md"
+                },
+                {
+                    "@id": "CITATIONS.md"
+                },
+                {
+                    "@id": "modules.json"
+                },
+                {
+                    "@id": "docs/usage.md"
+                },
+                {
+                    "@id": "docs/output.md"
+                },
+                {
+                    "@id": ".nf-core.yml"
+                },
+                {
+                    "@id": ".pre-commit-config.yaml"
+                },
+                {
+                    "@id": ".prettierignore"
+                }
+            ],
+            "isBasedOn": "https://github.com/nf-core/fastquorum",
+            "license": "MIT",
+            "mainEntity": {
+                "@id": "main.nf"
+            },
+            "mentions": [
+                {
+                    "@id": "#2297dc9f-f0e4-4ece-88f3-64301f7d536c"
+                }
+            ],
+            "name": "nf-core/fastquorum"
+        },
+        {
+            "@id": "ro-crate-metadata.json",
+            "@type": "CreativeWork",
+            "about": {
+                "@id": "./"
+            },
+            "conformsTo": [
+                {
+                    "@id": "https://w3id.org/ro/crate/1.1"
+                },
+                {
+                    "@id": "https://w3id.org/workflowhub/workflow-ro-crate/1.0"
+                }
+            ]
+        },
+        {
+            "@id": "main.nf",
+            "@type": [
+                "File",
+                "SoftwareSourceCode",
+                "ComputationalWorkflow"
+            ],
+            "creator": [
+                {
+                    "@id": "https://orcid.org/0009-0007-7860-1155"
+                },
+                {
+                    "@id": "#24893913+SPPearce@users.noreply.github.com"
+                }
+            ],
+            "dateCreated": "",
+            "dateModified": "2025-02-25T10:55:02Z",
+            "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
+            "keywords": [
+                "nf-core",
+                "nextflow",
+                "consensus",
+                "umi",
+                "umis",
+                "unique-molecular-identifier"
+            ],
+            "license": [
+                "MIT"
+            ],
+            "maintainer": [
+                {
+                    "@id": "https://orcid.org/0009-0007-7860-1155"
+                }
+            ],
+            "name": [
+                "nf-core/fastquorum"
+            ],
+            "programmingLanguage": {
+                "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow"
+            },
+            "sdPublisher": {
+                "@id": "https://nf-co.re/"
+            },
+            "url": [
+                "https://github.com/nf-core/fastquorum",
+                "https://nf-co.re/fastquorum/dev/"
+            ],
+            "version": [
+                "1.2.0"
+            ]
+        },
+        {
+            "@id": "https://w3id.org/workflowhub/workflow-ro-crate#nextflow",
+            "@type": "ComputerLanguage",
+            "identifier": {
+                "@id": "https://www.nextflow.io/"
+            },
+            "name": "Nextflow",
+            "url": {
+                "@id": "https://www.nextflow.io/"
+            },
+            "version": "!>=24.04.2"
+        },
+        {
+            "@id": "#2297dc9f-f0e4-4ece-88f3-64301f7d536c",
+            "@type": "TestSuite",
+            "instance": [
+                {
+                    "@id": "#226c71bd-8d47-440e-93a7-775481c31cfb"
+                }
+            ],
+            "mainEntity": {
+                "@id": "main.nf"
+            },
+            "name": "Test suite for nf-core/fastquorum"
+        },
+        {
+            "@id": "#226c71bd-8d47-440e-93a7-775481c31cfb",
+            "@type": "TestInstance",
+            "name": "GitHub Actions workflow for testing nf-core/fastquorum",
+            "resource": "repos/nf-core/fastquorum/actions/workflows/ci.yml",
+            "runsOn": {
+                "@id": "https://w3id.org/ro/terms/test#GithubService"
+            },
+            "url": "https://api.github.com"
+        },
+        {
+            "@id": "https://w3id.org/ro/terms/test#GithubService",
+            "@type": "TestService",
+            "name": "Github Actions",
+            "url": {
+                "@id": "https://github.com"
+            }
+        },
+        {
+            "@id": "assets/",
+            "@type": "Dataset",
+            "description": "Additional files"
+        },
+        {
+            "@id": "conf/",
+            "@type": "Dataset",
+            "description": "Configuration files"
+        },
+        {
+            "@id": "docs/",
+            "@type": "Dataset",
+            "description": "Markdown files for documenting the pipeline"
+        },
+        {
+            "@id": "docs/images/",
+            "@type": "Dataset",
+            "description": "Images for the documentation files"
+        },
+        {
+            "@id": "modules/",
+            "@type": "Dataset",
+            "description": "Modules used by the pipeline"
+        },
+        {
+            "@id": "modules/local/",
+            "@type": "Dataset",
+            "description": "Pipeline-specific modules"
+        },
+        {
+            "@id": "modules/nf-core/",
+            "@type": "Dataset",
+            "description": "nf-core modules"
+        },
+        {
+            "@id": "workflows/",
+            "@type": "Dataset",
+            "description": "Main pipeline workflows to be executed in main.nf"
+        },
+        {
+            "@id": "subworkflows/",
+            "@type": "Dataset",
+            "description": "Smaller subworkflows"
+        },
+        {
+            "@id": "nextflow.config",
+            "@type": "File",
+            "description": "Main Nextflow configuration file"
+        },
+        {
+            "@id": "README.md",
+            "@type": "File",
+            "description": "Basic pipeline usage information"
+        },
+        {
+            "@id": "nextflow_schema.json",
+            "@type": "File",
+            "description": "JSON schema for pipeline parameter specification"
+        },
+        {
+            "@id": "CHANGELOG.md",
+            "@type": "File",
+            "description": "Information on changes made to the pipeline"
+        },
+        {
+            "@id": "LICENSE",
+            "@type": "File",
+            "description": "The license - should be MIT"
+        },
+        {
+            "@id": "CODE_OF_CONDUCT.md",
+            "@type": "File",
+            "description": "The nf-core code of conduct"
+        },
+        {
+            "@id": "CITATIONS.md",
+            "@type": "File",
+            "description": "Citations needed when using the pipeline"
+        },
+        {
+            "@id": "modules.json",
+            "@type": "File",
+            "description": "Version information for modules from nf-core/modules"
+        },
+        {
+            "@id": "docs/usage.md",
+            "@type": "File",
+            "description": "Usage documentation"
+        },
+        {
+            "@id": "docs/output.md",
+            "@type": "File",
+            "description": "Output documentation"
+        },
+        {
+            "@id": ".nf-core.yml",
+            "@type": "File",
+            "description": "nf-core configuration file, configuring template features and linting rules"
+        },
+        {
+            "@id": ".pre-commit-config.yaml",
+            "@type": "File",
+            "description": "Configuration file for pre-commit hooks"
+        },
+        {
+            "@id": ".prettierignore",
+            "@type": "File",
+            "description": "Ignore file for prettier"
+        },
+        {
+            "@id": "https://nf-co.re/",
+            "@type": "Organization",
+            "name": "nf-core",
+            "url": "https://nf-co.re/"
+        },
+        {
+            "@id": "https://orcid.org/0009-0007-7860-1155",
+            "@type": "Person",
+            "email": "nh13@users.noreply.github.com",
+            "name": "Nils Homer"
+        },
+        {
+            "@id": "#24893913+SPPearce@users.noreply.github.com",
+            "@type": "Person",
+            "email": "24893913+SPPearce@users.noreply.github.com",
+            "name": "Simon Pearce"
+        }
+    ]
+}

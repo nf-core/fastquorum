@@ -1,11 +1,11 @@
 process ALIGN_BAM {
-    tag "$meta.id"
+    tag "${meta.id}"
     label 'process_high'
 
     conda "bioconda::fgbio=2.4.0 bioconda::bwa=0.7.18 bioconda::samtools=1.21"
-    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/22/22e054c20192395e0e143df6c36fbed6ce4bd404feba05793aff16819e01fff1/data' :
-        'community.wave.seqera.io/library/fgbio_bwa_samtools:6fad70472c85d4d3' }"
+    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/22/22e054c20192395e0e143df6c36fbed6ce4bd404feba05793aff16819e01fff1/data'
+        : 'community.wave.seqera.io/library/fgbio_bwa_samtools:6fad70472c85d4d3'}"
 
     input:
     tuple val(meta), path(unmapped_bam)
@@ -18,7 +18,7 @@ process ALIGN_BAM {
     output:
     tuple val(meta), path("*.mapped.bam"), emit: bam
     tuple val(meta), path("*.mapped.bam.bai"), emit: bai, optional: true
-    path "versions.yml"                  , emit: versions
+    path "versions.yml", emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -33,11 +33,13 @@ process ALIGN_BAM {
     def extra_command = ""
 
     if (!task.memory) {
-        log.info '[fgbio ZipperBams] Available memory not known - defaulting to 4GB. Specify process memory requirements to change this.'
-    } else if (fgbio_mem_gb > task.memory.giga) {
+        log.info('[fgbio ZipperBams] Available memory not known - defaulting to 4GB. Specify process memory requirements to change this.')
+    }
+    else if (fgbio_mem_gb > task.memory.giga) {
         if (task.memory.giga < 2) {
             fgbio_mem_gb = 1
-        } else {
+        }
+        else {
             fgbio_mem_gb = task.memory.giga - 1
         }
     }
@@ -45,20 +47,23 @@ process ALIGN_BAM {
     if (sort_type == "none") {
         fgbio_zipper_bams_output = prefix + ".mapped.bam"
         fgbio_zipper_bams_compression = 1
-    } else {
+    }
+    else {
         fgbio_zipper_bams_output = "/dev/stdout"
-        fgbio_zipper_bams_compression = 0 // do not compress if samtools is consuming it
+        // do not compress if samtools is consuming it
+        fgbio_zipper_bams_compression = 0
         extra_command = " | samtools sort "
         extra_command += samtools_sort_args
         if (sort_type == "template-coordinate") {
             extra_command += " --template-coordinate"
-        } else {
+        }
+        else {
             if (sort_type != "coordinate") {
-                log.info '[samtools sort] Unknown sort - defaulting to coordinate.'
+                log.info('[samtools sort] Unknown sort - defaulting to coordinate.')
             }
             extra_command += " --write-index"
         }
-        extra_command += " --threads "+ task.cpus
+        extra_command += " --threads " + task.cpus
         extra_command += " -o " + prefix + ".mapped.bam##idx##" + prefix + ".mapped.bam.bai"
         extra_command += " -"
     }
@@ -69,7 +74,7 @@ process ALIGN_BAM {
 
 
     samtools fastq ${samtools_fastq_args} ${unmapped_bam} \\
-        | bwa mem ${bwa_args} -t $task.cpus -p -K 150000000 -Y \$BWA_INDEX_PREFIX - \\
+        | bwa mem ${bwa_args} -t ${task.cpus} -p -K 150000000 -Y \$BWA_INDEX_PREFIX - \\
         | fgbio -Xmx${fgbio_mem_gb}g \\
             --compression ${fgbio_zipper_bams_compression} \\
             --async-io=true \\
@@ -92,10 +97,10 @@ process ALIGN_BAM {
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def index_command = (sort_type != "template-coordinate") ? "touch ${prefix}.mapped.bam.bai" : ""
+    def index_command = sort_type != "template-coordinate" ? "touch ${prefix}.mapped.bam.bai" : ""
     """
     touch ${prefix}.mapped.bam
-    $index_command
+    ${index_command}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -104,5 +109,4 @@ process ALIGN_BAM {
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
-
 }
