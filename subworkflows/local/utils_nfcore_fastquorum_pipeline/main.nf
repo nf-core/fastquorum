@@ -11,6 +11,7 @@
 include { UTILS_NFSCHEMA_PLUGIN } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap } from 'plugin/nf-schema'
 include { samplesheetToList } from 'plugin/nf-schema'
+include { readStructure } from 'plugin/nf-fgbio'
 include { completionEmail } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary } from '../../nf-core/utils_nfcore_pipeline'
 include { imNotification } from '../../nf-core/utils_nfcore_pipeline'
@@ -176,6 +177,27 @@ def validateInputSamplesheetRow(row) {
     }
     else if (num_segments > num_fastqs) {
         error("Please check input samplesheet -> Too many read structures (${num_segments}) for ${num_fastqs} FASTQs for ${meta.id}")
+    }
+
+    // Validate the read structure
+    meta.read_structure.tokenize(" ").each { rs->
+        // If parsing the read structure fails, then a java.lang.reflect.InvocationTargetException will be thrown, with
+        // the cause containing the exception produced by fgbio.
+        try {
+            readStructure(rs)
+        } catch (java.lang.reflect.InvocationTargetException ex) {
+            def message = """
+                |Please check input samplesheet -> Read structure`${rs}` invalid
+                |
+                |   ${ex.getCause().getMessage()}
+                |
+                |   For more information on read structures, visit: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
+                |
+                |   Validate your read structures here: https://fulcrumgenomics.github.io/fgbio/validate-read-structure.html
+                |""".stripMargin()
+            error(message)
+            throw ex
+        }
     }
 
     // NB: the collect here doesn't care which FASTQ list is empty
