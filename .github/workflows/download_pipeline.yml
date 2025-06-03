@@ -12,12 +12,6 @@ on:
         required: true
         default: "dev"
   pull_request:
-    types:
-      - opened
-    branches:
-      - main
-      - master
-  pull_request_target:
     branches:
       - main
       - master
@@ -50,7 +44,7 @@ jobs:
       - name: Disk space cleanup
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be # v1.3.1
 
-      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.13"
           architecture: "x64"
@@ -133,7 +127,7 @@ jobs:
           fi
 
       - name: Upload Nextflow logfile for debugging purposes
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: nextflow_logfile.txt
           path: .nextflow.log*
