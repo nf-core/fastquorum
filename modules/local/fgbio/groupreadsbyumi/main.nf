@@ -15,6 +15,7 @@ process FGBIO_GROUPREADSBYUMI {
     output:
     tuple val(meta), path("*.grouped.bam"), emit: bam
     tuple val(meta), path("*.grouped-family-sizes.txt"), emit: histogram
+    tuple val(meta), path("*.grouped-read-metrics.txt"), emit: read_metrics
     path "versions.yml", emit: versions
 
     script:
@@ -40,6 +41,7 @@ process FGBIO_GROUPREADSBYUMI {
         --input ${mapped_bam} \\
         --output ${prefix}.grouped.bam \\
         --family-size-histogram ${prefix}.grouped-family-sizes.txt \\
+        --grouping-metrics ${prefix}.grouped-read-metrics.txt \\
         ${args}
 
     cat <<-END_VERSIONS > versions.yml
