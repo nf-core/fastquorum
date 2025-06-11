@@ -21,7 +21,7 @@ workflow PREPARE_GENOME {
 
     BWAMEM1_INDEX(fasta)
     // If aligner is bwa-mem
-    SAMTOOLS_FAIDX(fasta, [[id: 'no_fai'], []])
+    SAMTOOLS_FAIDX(fasta, [[id: 'no_fai'], []], false)
     SAMTOOLS_DICT(fasta)
 
     // Gather versions of all tools used
