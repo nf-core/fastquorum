@@ -88,7 +88,7 @@ workflow FASTQUORUM {
     //
     // MODULE: Run samtools merge to merge across runs/lanes for the same sample
     //
-    MERGE_BAM(bam_to_merge.multiple, [[], []], [[], []])
+    MERGE_BAM(bam_to_merge.multiple, [[], []], [[], []], [[], []])
     ch_versions = ch_versions.mix(MERGE_BAM.out.versions.first())
 
     //
