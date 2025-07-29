@@ -10,7 +10,7 @@ Please provide pipeline parameters via the CLI or Nextflow `-params-file` option
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with at least 3 columns, and a header row as shown in the examples below.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -47,14 +47,14 @@ The sample sheet below shows four samples, each with a different number of FASTQ
 1. CONTROL1 is a single-end run, with one FASTQ (R1), and the UMI inline at the start of the read
 2. CONTROL2 is a paired-end run, with two FASTQs (R1 and R2), and UMIs inline at the start of read one (R1) and read two (R2).
 3. CONTROL3 is a single-indexed paired-end run, with three FASTQs, UMIs inline at the start of read one (R1) and read two, and a sample barcode in I1 (typically index1/i7)
-4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containing template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 ((typically index2/i5)
+4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containing template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 (typically index2/i5).
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2,read_structure
-CONTROL1,SAMPLE_S1_L001_R1_001.fastq.gz,5M2S+T
-CONTROL2,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
-CONTROL3,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,5M2S+T 5M2S+T 8B
-CONTROL4,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,AEG588A1_S1_L002_I22_001.fastq.gz,+T +T +B +M
+sample,read_structure,fastq_1,fastq_2,fastq_3,fastq_4
+CONTROL1,5M2S+T,SAMPLE_S1_L001_R1_001.fastq.gz,,,
+CONTROL2,5M2S+T 5M2S+T,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,,
+CONTROL3,5M2S+T 5M2S+T +B,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,
+CONTROL4,+T +T +B +M,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,AEG588A1_S1_L002_I2_001.fastq.gz
 ```
 
 ### Full samplesheet
