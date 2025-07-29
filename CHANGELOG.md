@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [PR #123](https://github.com/nf-core/fastquorum/pull/123) - Validate read structures with the nf-fgbio plugin
 - [PR #128](https://github.com/nf-core/fastquorum/pull/128) - Add icon image
+- [PR #131](https://github.com/nf-core/fastquorum/pull/131) - Update to nf-core/tools template version 3.3.2
 
 ### Credits
 
