@@ -102,7 +102,7 @@
             },
             "mentions": [
                 {
-                    "@id": "#1db3f5f8-748d-435f-9413-cabdfb3d112a"
+                    "@id": "#6d8e931e-de2f-4dc0-9e30-40021bd49ea7"
                 }
             ],
             "name": "nf-core/fastquorum"
@@ -138,7 +138,7 @@
                 }
             ],
             "dateCreated": "",
-            "dateModified": "2025-07-21T14:16:43Z",
+            "dateModified": "2025-10-16T13:37:53Z",
             "dct:conformsTo": "https://bioschemas.org/profiles/ComputationalWorkflow/1.0-RELEASE/",
             "keywords": [
                 "nf-core",
@@ -183,14 +183,14 @@
             "url": {
                 "@id": "https://www.nextflow.io/"
             },
-            "version": "!>=24.10.5"
+            "version": "!>=25.04.0"
         },
         {
-            "@id": "#1db3f5f8-748d-435f-9413-cabdfb3d112a",
+            "@id": "#6d8e931e-de2f-4dc0-9e30-40021bd49ea7",
             "@type": "TestSuite",
             "instance": [
                 {
-                    "@id": "#895a2a8b-9a34-47b2-a485-6baf60900363"
+                    "@id": "#7c43887b-f85d-453d-969d-0dd1b4c4cc8f"
                 }
             ],
             "mainEntity": {
@@ -199,7 +199,7 @@
             "name": "Test suite for nf-core/fastquorum"
         },
         {
-            "@id": "#895a2a8b-9a34-47b2-a485-6baf60900363",
+            "@id": "#7c43887b-f85d-453d-969d-0dd1b4c4cc8f",
             "@type": "TestInstance",
             "name": "GitHub Actions workflow for testing nf-core/fastquorum",
             "resource": "repos/nf-core/fastquorum/actions/workflows/nf-test.yml",
