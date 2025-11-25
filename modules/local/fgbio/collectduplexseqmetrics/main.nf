@@ -12,7 +12,7 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
 
     output:
     tuple val(meta), path("*duplex_seq_metrics*.txt"), emit: metrics
-    tuple val(meta), path("*duplex_seq_metrics*.pdf"), emit: pdf
+    tuple val(meta), path("*duplex_qc.pdf"), emit: pdf
     path "versions.yml", emit: versions
 
     script:

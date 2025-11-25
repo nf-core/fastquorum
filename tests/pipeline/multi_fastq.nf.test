@@ -25,6 +25,9 @@ nextflow_pipeline {
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_fastqs/SRR6109255_two_fastqs.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_fastqs/SRR6109255_three_fastqs.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_four_fastqs/SRR6109255_four_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_three_fastqs/SRR6109255_three_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_four_fastqs/SRR6109255_four_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
                 { assert snapshot(
                     path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_fastqs/SRR6109255_two_fastqs.grouped-family-sizes.txt"),
                     path("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.family_sizes.txt"),
@@ -58,6 +61,9 @@ nextflow_pipeline {
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_fastqs/SRR6109255_two_fastqs.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_three_fastqs/SRR6109255_three_fastqs.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_four_fastqs/SRR6109255_four_fastqs.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_three_fastqs/SRR6109255_three_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255_four_fastqs/SRR6109255_four_fastqs.duplex_seq_metrics.duplex_qc.pdf").exists() },
                 { assert snapshot(
                     path("$outputDir/grouping/groupreadsbyumi/SRR6109255_two_fastqs/SRR6109255_two_fastqs.grouped-family-sizes.txt"),
                     path("$outputDir/metrics/duplex_seq/SRR6109255_two_fastqs/SRR6109255_two_fastqs.duplex_seq_metrics.family_sizes.txt"),
