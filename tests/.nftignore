@@ -11,4 +11,6 @@ multiqc/multiqc_report.html
 **/*fastqc.{html,zip}
 # BAM files include the staged file path of the reference in the sequence dictionary header entry, `UR`, which is not stable across different runs
 **/*.{bam,bai}
+# PDF files from fgbio CollectDuplexSeqMetrics include timestamps and are not stable across different runs
+**/*.duplex_seq_metrics.duplex_qc.pdf
 pipeline_info/*.{html,json,txt,yml}
