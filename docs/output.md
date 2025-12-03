@@ -179,12 +179,12 @@ Collect duplex sequencing specific metrics.
 
 Metrics produced by [`fgbio CollectDuplexSeqMetrics`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CollectDuplexSeqMetrics.html):
 
-- `*.family_sizes.txt*` - metrics on the frequency of different types of families of different sizes
-- `*.duplex_family_sizes.txt*`- metrics on the frequency of duplex tag families by the number of observations from each strand
-- `*.duplex_yield_metrics.txt*`- summary QC metrics produced using 5%, 10%, 15%...100% of the data
-- `*.umi_counts.txt*`- metrics on the frequency of observations of UMIs within reads and tag families
-- `*.duplex_qc.pdf*`- a series of plots generated from the preceding metrics files for visualization
-- `*.duplex_umi_counts.txt*`- (optional) metrics on the frequency of observations of duplex UMIs within reads and tag families. This file is only produced _if_ the `--duplex-umi-counts` option is used as it requires significantly more memory to track all pairs of UMIs seen when a large number of UMI sequences are present.
+- `*.family_sizes.txt` - metrics on the frequency of different types of families of different sizes
+- `*.duplex_family_sizes.txt`- metrics on the frequency of duplex tag families by the number of observations from each strand
+- `*.duplex_yield_metrics.txt`- summary QC metrics produced using 5%, 10%, 15%...100% of the data
+- `*.umi_counts.txt`- metrics on the frequency of observations of UMIs within reads and tag families
+- `*.duplex_qc.pdf`- a series of plots generated from the preceding metrics files for visualization
+- `*.duplex_umi_counts.txt`- (optional) metrics on the frequency of observations of duplex UMIs within reads and tag families. This file is only produced _if_ the `--duplex-umi-counts` option is used as it requires significantly more memory to track all pairs of UMIs seen when a large number of UMI sequences are present.
 
 </details>
 

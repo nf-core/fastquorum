@@ -58,6 +58,7 @@
                 "metrics/duplex_seq",
                 "metrics/duplex_seq/SRR6109255",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_family_sizes.txt",
+                "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_umi_counts.txt",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_yield_metrics.txt",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt",
