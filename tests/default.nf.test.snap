@@ -58,6 +58,7 @@
                 "metrics/duplex_seq",
                 "metrics/duplex_seq/SRR6109255",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_family_sizes.txt",
+                "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_umi_counts.txt",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_yield_metrics.txt",
                 "metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt",
@@ -145,6 +146,7 @@
             [
                 "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
                 "SRR6109255.duplex_seq_metrics.duplex_family_sizes.txt:md5,2e699edbafa21fb188a130de3b772bd0",
+                "SRR6109255.duplex_seq_metrics.duplex_qc.pdf:md5,dbe489b6696d1e8dbbf66d4ef3b55efb",
                 "SRR6109255.duplex_seq_metrics.duplex_umi_counts.txt:md5,13d446a97f0ca3fb3f63489b9a4d811e",
                 "SRR6109255.duplex_seq_metrics.duplex_yield_metrics.txt:md5,dc44d3f68aa837f5e1c492c1d107cfda",
                 "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56",
