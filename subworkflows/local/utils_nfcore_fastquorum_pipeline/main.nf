@@ -256,6 +256,10 @@ def validateInputSamplesheet(input) {
     if (!read_structures_ok) {
         error("Please check input samplesheet -> Multiple runs of a sample must have the same read stucture: ${metas[0].id}")
     }
+    def umi_files_ok = metas.collect { m -> m.umi_file }.unique().size == 1
+    if (!umi_files_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same umi_file: ${metas[0].id}")
+    }
 
     return [metas[0] + [n_samples: metas.size()], fastqs]
 }
