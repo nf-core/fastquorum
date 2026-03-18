@@ -82,6 +82,7 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 | `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
 | `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
 | `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)               |
+| `umi_file`       | Path to a text file containing known UMI sequences (one per line). Optional — only needed for non-random UMI libraries.                                                            |
 
 [read-structure-link]: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
 
@@ -113,6 +114,28 @@ By default, the `--strategy paired` is used when `--duplex_seq true`, otherwise 
 
 The `groupreadsbyumi_edits` option overrides the tool's `--edits` option.
 This provides the maximum number of allowable edits.
+
+### Non-Random UMI Options
+
+For libraries using a known, fixed set of UMI sequences (non-random UMIs), the pipeline supports UMI error-correction via [`fgbio CorrectUmis`](https://fulcrumgenomics.github.io/fgbio/tools/latest/CorrectUmis.html).
+
+To enable UMI correction, add a `umi_file` column to your samplesheet pointing to a text file containing the known UMI sequences (one per line):
+
+```csv title="samplesheet.csv"
+sample,fastq_1,fastq_2,read_structure,umi_file
+FIXED_UMI,R1.fastq.gz,R2.fastq.gz,5M2S+T 5M2S+T,/path/to/umis.txt
+RANDOM_UMI,R1.fastq.gz,R2.fastq.gz,12M+T +T,
+```
+
+Samples without a `umi_file` are processed as before (random UMIs). Samples with and without `umi_file` can coexist in the same run.
+
+The `--correct_umis_max_mismatches` option sets the maximum number of mismatches allowed when matching an observed UMI to the known set (default: 2). The `--correct_umis_min_distance` option sets the minimum edit distance between the best and next-best match (default: 1).
+
+Reads whose UMIs cannot be corrected are written to a reject BAM file for QC purposes and are excluded from downstream processing.
+
+:::warning
+When using UMI correction, consider setting `--groupreadsbyumi_strategy Identity` (or `Paired` with `--groupreadsbyumi_edits 0` for duplex sequencing), since UMIs have already been corrected to exact known sequences. The pipeline will emit a warning if a fuzzy-matching strategy is used with corrected UMIs.
+:::
 
 ### Consensus Calling Options
 
