@@ -51,7 +51,7 @@ workflow FASTQUORUM {
         ch_samplesheet
     )
     ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect { it[1] })
+    ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect { meta_zip -> meta_zip[1] })
 
     //
     // MODULE: Run fgbio FastqToBam
@@ -100,7 +100,7 @@ workflow FASTQUORUM {
     // MODULE: Run fgbio GroupReadsByUmi
     //
     GROUPREADSBYUMI(bam_all, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
-    ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map { it[1] }.collect())
+    ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map { meta_hist -> meta_hist[1] }.collect())
     ch_versions = ch_versions.mix(GROUPREADSBYUMI.out.versions.first())
 
     if (params.duplex_seq) {
@@ -178,7 +178,7 @@ workflow FASTQUORUM {
     //
     // Collate and save software versions
     //
-    def topic_versions = Channel.topic("versions")
+    def topic_versions = channel.topic("versions")
         .distinct()
         .branch { entry ->
             versions_file: entry instanceof Path
