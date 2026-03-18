@@ -1,13 +1,13 @@
 {
     "multi_lanes_rd_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.5.21, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.5.21, samtools=1.21}, CALLDDUPLEXCONSENSUSREADS={fgbio=2.5.21}, COLLECTDUPLEXSEQMETRICS={fgbio=2.5.21}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.5.21}, FILTERCONSENSUSREADS={fgbio=2.5.21}, GROUPREADSBYUMI={fgbio=2.5.21}, MERGE_BAM={samtools=1.21}, Workflow={nf-core/fastquorum=v1.3.0dev}}"
+            "[ALIGN_CONSENSUS_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], ALIGN_RAW_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], CALLDDUPLEXCONSENSUSREADS:[fgbio:2.5.21], COLLECTDUPLEXSEQMETRICS:[fgbio:2.5.21], FASTQC:[fastqc:0.12.1], FASTQTOBAM:[fgbio:2.5.21], FILTERCONSENSUSREADS:[fgbio:2.5.21], GROUPREADSBYUMI:[fgbio:2.5.21], MERGE_BAM:[samtools:1.21], Workflow:[nf-core/fastquorum:v1.3.0dev]]"
         ],
+        "timestamp": "2026-03-18T12:55:03.624735",
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
-        },
-        "timestamp": "2025-06-11T14:02:18.920554"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "multi_lanes_ht": {
         "content": [
@@ -18,21 +18,21 @@
             "SRR6109255_three_lanes.grouped-family-sizes.txt:md5,4c720d70e6c0bd8fe38cb3befc608982",
             "SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt:md5,dc78b321e46046f1ee1e5b3a678b79a2"
         ],
+        "timestamp": "2024-05-20T01:42:46.597128",
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-20T01:42:46.597128"
+        }
     },
     "multi_lanes_ht_software_versions": {
         "content": [
-            "{ALIGN_CONSENSUS_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.5.21, samtools=1.21}, ALIGN_RAW_BAM={bwa=0.7.18-r1243-dirty, fgbio=2.5.21, samtools=1.21}, CALLANDFILTERDUPLEXCONSENSUSREADS={fgbio=2.5.21}, COLLECTDUPLEXSEQMETRICS={fgbio=2.5.21}, FASTQC={fastqc=0.12.1}, FASTQTOBAM={fgbio=2.5.21}, GROUPREADSBYUMI={fgbio=2.5.21}, MERGE_BAM={samtools=1.21}, Workflow={nf-core/fastquorum=v1.3.0dev}}"
+            "[ALIGN_CONSENSUS_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], ALIGN_RAW_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], CALLANDFILTERDUPLEXCONSENSUSREADS:[fgbio:2.5.21], COLLECTDUPLEXSEQMETRICS:[fgbio:2.5.21], FASTQC:[fastqc:0.12.1], FASTQTOBAM:[fgbio:2.5.21], GROUPREADSBYUMI:[fgbio:2.5.21], MERGE_BAM:[samtools:1.21], Workflow:[nf-core/fastquorum:v1.3.0dev]]"
         ],
+        "timestamp": "2026-03-18T12:57:46.638559",
         "meta": {
-            "nf-test": "0.9.2",
-            "nextflow": "25.04.2"
-        },
-        "timestamp": "2025-06-11T14:05:36.935133"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
     },
     "multi_lanes_rd": {
         "content": [
@@ -43,10 +43,10 @@
             "SRR6109255_three_lanes.grouped-family-sizes.txt:md5,4c720d70e6c0bd8fe38cb3befc608982",
             "SRR6109255_three_lanes.duplex_seq_metrics.family_sizes.txt:md5,dc78b321e46046f1ee1e5b3a678b79a2"
         ],
+        "timestamp": "2024-05-20T01:34:44.993842",
         "meta": {
             "nf-test": "0.8.4",
             "nextflow": "23.10.1"
-        },
-        "timestamp": "2024-05-20T01:34:44.993842"
+        }
     }
 }

@@ -10,3 +10,9 @@ testing*
 .nf-test.log
 .idea
 null/
+.claude/
+.nf-test/
+.nf-test.log
+pixi.toml
+pixi.lock
+.pixi/

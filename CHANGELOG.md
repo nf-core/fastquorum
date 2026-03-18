@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #128](https://github.com/nf-core/fastquorum/pull/128) - Add icon image
 - [PR #131](https://github.com/nf-core/fastquorum/pull/131) - Update to nf-core/tools template version 3.3.2
 - [PR #138](https://github.com/nf-core/fastquorum/pull/138) - Ensure the PDF from CollectDuplexSeqMetrics is published
+- [PR #141](https://github.com/nf-core/fastquorum/pull/141) - Fix Twist UMI docs from random to nonrandom
+- [PR #142](https://github.com/nf-core/fastquorum/pull/142) - Update to nf-core/tools template version 3.5.2 with Nextflow strict syntax
 
 ### Credits
 
