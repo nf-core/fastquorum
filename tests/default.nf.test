@@ -19,11 +19,16 @@ nextflow_pipeline {
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             // bam_files: All bam files
             def bam_files  = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // versions: parsed YAML with Nextflow version removed, serialized to a stable string
+            def versions = removeNextflowVersion("$outputDir/pipeline_info/nf_core_fastquorum_software_mqc_versions.yml")
+            def stable_versions = versions.collect { process, tools ->
+                "${process}:" + tools.collect { tool, ver -> "${tool}=${ver}" }.sort().join(",")
+            }.sort().join("; ")
             assertAll(
                 { assert workflow.success},
                 { assert snapshot(
-                    // pipeline versions.yml file for multiqc from which Nextflow version is removed because we test pipelines on multiple Nextflow versions
-                    removeNextflowVersion("$outputDir/pipeline_info/nf_core_fastquorum_software_mqc_versions.yml"),
+                    // pipeline versions with stable serialization across Nextflow versions
+                    stable_versions,
                     // All stable path name, with a relative path
                     stable_name,
                     // All files with stable contents

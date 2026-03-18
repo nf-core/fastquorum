@@ -1,39 +1,7 @@
 {
     "-profile test": {
         "content": [
-            {
-                "ALIGN_CONSENSUS_BAM": {
-                    "bwa": "0.7.18-r1243-dirty",
-                    "fgbio": "2.5.21",
-                    "samtools": 1.21
-                },
-                "ALIGN_RAW_BAM": {
-                    "bwa": "0.7.18-r1243-dirty",
-                    "fgbio": "2.5.21",
-                    "samtools": 1.21
-                },
-                "CALLDDUPLEXCONSENSUSREADS": {
-                    "fgbio": "2.5.21"
-                },
-                "COLLECTDUPLEXSEQMETRICS": {
-                    "fgbio": "2.5.21"
-                },
-                "FASTQC": {
-                    "fastqc": "0.12.1"
-                },
-                "FASTQTOBAM": {
-                    "fgbio": "2.5.21"
-                },
-                "FILTERCONSENSUSREADS": {
-                    "fgbio": "2.5.21"
-                },
-                "GROUPREADSBYUMI": {
-                    "fgbio": "2.5.21"
-                },
-                "Workflow": {
-                    "nf-core/fastquorum": "v1.3.0dev"
-                }
-            },
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; Workflow:nf-core/fastquorum=v1.3.0dev",
             [
                 "consensus_calling",
                 "consensus_calling/called",
@@ -191,7 +159,7 @@
                 ]
             ]
         ],
-        "timestamp": "2026-03-18T12:46:53.320898",
+        "timestamp": "2026-03-18T14:25:03.886004",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"

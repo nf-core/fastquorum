@@ -1,9 +1,9 @@
 {
     "multi_lanes_rd_software_versions": {
         "content": [
-            "[ALIGN_CONSENSUS_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], ALIGN_RAW_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], CALLDDUPLEXCONSENSUSREADS:[fgbio:2.5.21], COLLECTDUPLEXSEQMETRICS:[fgbio:2.5.21], FASTQC:[fastqc:0.12.1], FASTQTOBAM:[fgbio:2.5.21], FILTERCONSENSUSREADS:[fgbio:2.5.21], GROUPREADSBYUMI:[fgbio:2.5.21], MERGE_BAM:[samtools:1.21], Workflow:[nf-core/fastquorum:v1.3.0dev]]"
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; MERGE_BAM:samtools=1.21; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-03-18T12:55:03.624735",
+        "timestamp": "2026-03-18T14:34:20.146004",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -26,9 +26,9 @@
     },
     "multi_lanes_ht_software_versions": {
         "content": [
-            "[ALIGN_CONSENSUS_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], ALIGN_RAW_BAM:[bwa:0.7.18-r1243-dirty, fgbio:2.5.21, samtools:1.21], CALLANDFILTERDUPLEXCONSENSUSREADS:[fgbio:2.5.21], COLLECTDUPLEXSEQMETRICS:[fgbio:2.5.21], FASTQC:[fastqc:0.12.1], FASTQTOBAM:[fgbio:2.5.21], GROUPREADSBYUMI:[fgbio:2.5.21], MERGE_BAM:[samtools:1.21], Workflow:[nf-core/fastquorum:v1.3.0dev]]"
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLANDFILTERDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; MERGE_BAM:samtools=1.21; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-03-18T12:57:46.638559",
+        "timestamp": "2026-03-18T14:37:28.880882",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
