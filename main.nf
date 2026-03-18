@@ -123,6 +123,31 @@ workflow NFCORE_FASTQUORUM {
         }
     }
 
+    // Warn if UMI correction is in use with a fuzzy-matching grouping strategy
+    def has_umi_file = false
+    def input_file = new File(params.input)
+    if (input_file.exists()) {
+        def lines = input_file.readLines()
+        if (lines.size() > 0) {
+            def header = lines[0].split(',')
+            def umi_col = header.findIndexOf { it.trim() == 'umi_file' }
+            if (umi_col >= 0) {
+                has_umi_file = lines[1..-1].any { line ->
+                    def fields = line.split(',', -1)
+                    umi_col < fields.size() && fields[umi_col]?.trim()
+                }
+            }
+        }
+    }
+    if (has_umi_file) {
+        if (params.groupreadsbyumi_strategy != 'Identity' &&
+            !(params.groupreadsbyumi_strategy == 'Paired' && params.groupreadsbyumi_edits == 0)) {
+            log.warn("UMI correction is enabled but groupreadsbyumi_strategy is " +
+                     "'${params.groupreadsbyumi_strategy}' with edits=${params.groupreadsbyumi_edits}. " +
+                     "Consider using 'Identity' or 'Paired' with edits=0 for corrected UMIs.")
+        }
+    }
+
     // WORKFLOW: build indexes if needed
     PREPARE_GENOME(fasta)
 
