@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/main/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/master/nextflow_schema.json",
     "title": "nf-core/fastquorum pipeline parameters",
     "description": "fgbio Best Practices FASTQ to Consensus Pipeline",
     "type": "object",
