@@ -46,6 +46,14 @@
                 "pattern": "^.*$",
                 "errorMessage": "Read structure must be provided; For format, see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures",
                 "meta": ["read_structure"]
+            },
+            "umi_file": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+$",
+                "errorMessage": "UMI file path cannot contain spaces",
+                "meta": ["umi_file"]
             }
         },
         "required": ["sample", "fastq_1", "read_structure"]
