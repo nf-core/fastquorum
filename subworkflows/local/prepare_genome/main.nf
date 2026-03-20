@@ -17,7 +17,7 @@ workflow PREPARE_GENOME {
     fasta // channel: [mandatory] fasta
 
     main:
-    versions = Channel.empty()
+    versions = channel.empty()
 
     BWAMEM1_INDEX(fasta)
     // If aligner is bwa-mem

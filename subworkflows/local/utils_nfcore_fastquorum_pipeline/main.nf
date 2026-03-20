@@ -32,10 +32,13 @@ workflow PIPELINE_INITIALISATION {
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir //  string: The output directory where the results will be saved
     input //  string: Path to input samplesheet
+    help
+    help_full
+    show_hidden
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -50,10 +53,35 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+    def before_text = """
+-\033[2m----------------------------------------------------\033[0m-
+                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+\033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
+\033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
+\033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
+                                        \033[0;32m`._,._,\'\033[0m
+\033[0;35m  nf-core/fastquorum ${workflow.manifest.version}\033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/fastquorum/blob/master/CITATIONS.md
+"""
+    def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+
     UTILS_NFSCHEMA_PLUGIN(
         workflow,
         validate_params,
         null,
+        help,
+        help_full,
+        show_hidden,
+        before_text,
+        after_text,
+        command,
     )
 
     //
@@ -72,7 +100,7 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    Channel
+    channel
         .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
         .map { meta, fastq_1, fastq_2, fastq_3, fastq_4 ->
             return [meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4]]
@@ -220,11 +248,11 @@ def validateInputSamplesheetRow(row) {
 // Adds the `n_samples` property to the metadata, and returns a tuple of the metadata and list of list of FASTQs.
 def validateInputSamplesheet(input) {
     def (metas, fastqs) = input[1..2]
-    def fastqs_per_sample_ok = fastqs.collect { it.size() }.unique().size == 1
+    def fastqs_per_sample_ok = fastqs.collect { fq -> fq.size() }.unique().size == 1
     if (!fastqs_per_sample_ok) {
         error("Please check input samplesheet -> Multiple runs of a sample must have the same number of FASTQs: ${metas[0].id}")
     }
-    def read_structures_ok = metas.collect { it.read_structure }.unique().size == 1
+    def read_structures_ok = metas.collect { m -> m.read_structure }.unique().size == 1
     if (!read_structures_ok) {
         error("Please check input samplesheet -> Multiple runs of a sample must have the same read stucture: ${metas[0].id}")
     }

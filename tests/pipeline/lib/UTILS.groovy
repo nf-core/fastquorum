@@ -6,6 +6,9 @@ class UTILS {
         if (softwareVersions.containsKey("Workflow")) {
             softwareVersions.Workflow.remove("Nextflow")
         }
-        return softwareVersions
+        // Return a stable sorted string representation that is consistent across Nextflow versions
+        return softwareVersions.collect { process, tools ->
+            "${process}:" + tools.collect { tool, ver -> "${tool}=${ver}" }.sort().join(",")
+        }.sort().join("; ")
     }
 }
