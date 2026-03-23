@@ -1,0 +1,37 @@
+nextflow_pipeline {
+
+    name "Test workflow - mixed UMIs"
+    script "main.nf"
+    tag "mixed_umis"
+    tag "pipeline"
+
+    test("mixed UMIs - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.mixed_umis.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("mixed_umis_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 21 },
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
+                // Fixed UMI sample goes through CorrectUmis
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.correct-umis-metrics.txt").exists() },
+                // Both samples produce consensus filtered BAMs
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_FIXED/SRR6109255_FIXED.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_RANDOM/SRR6109255_RANDOM.cons.filtered.bam").exists() },
+            )
+        }
+
+    }
+
+}
