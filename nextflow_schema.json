@@ -94,14 +94,14 @@
                     "type": "integer",
                     "default": 2,
                     "description": "Maximum mismatches when correcting UMIs",
-                    "fa_icon": "fas fa-book",
+                    "fa_icon": "fas fa-hashtag",
                     "help_text": "The maximum number of mismatches between a UMI and an expected UMI for fgbio's CorrectUmis. Only used when a sample has a umi_file in the samplesheet."
                 },
                 "correct_umis_min_distance": {
                     "type": "integer",
                     "default": 1,
                     "description": "Minimum distance between best and next-best UMI match",
-                    "fa_icon": "fas fa-book",
+                    "fa_icon": "fas fa-hashtag",
                     "help_text": "The minimum distance (in terms of mismatches) between the best match and next-best match for fgbio's CorrectUmis. Only used when a sample has a umi_file in the samplesheet."
                 }
             }
