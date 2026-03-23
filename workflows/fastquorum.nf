@@ -69,6 +69,16 @@ workflow FASTQUORUM {
         }
         .set { ch_fastqtobam }
 
+    // Warn if UMI correction is in use with a fuzzy-matching grouping strategy
+    ch_fastqtobam.correct.first().map { meta, bam ->
+        if (params.groupreadsbyumi_strategy != 'Identity' &&
+            !(params.groupreadsbyumi_strategy == 'Paired' && params.groupreadsbyumi_edits == 0)) {
+            log.warn("UMI correction is enabled but groupreadsbyumi_strategy is " +
+                     "'${params.groupreadsbyumi_strategy}' with edits=${params.groupreadsbyumi_edits}. " +
+                     "Consider using 'Identity' or 'Paired' with edits=0 for corrected UMIs.")
+        }
+    }
+
     CORRECTUMIS(
         ch_fastqtobam.correct.map { meta, bam -> [meta, bam, file(meta.umi_file)] },
         params.correct_umis_max_mismatches,
