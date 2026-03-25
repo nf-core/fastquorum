@@ -106,7 +106,8 @@ workflow FASTQUORUM {
     // NB: bam is a list (of one BAM) so return just the one BAM
     bam_to_merge = ALIGN_RAW_BAM.out.bam
         .map { meta, bam ->
-            [groupKey(meta, meta.n_samples), bam]
+            def merge_meta = meta.findAll { k, v -> !(k in ['lane', 'flowcell']) }
+            [groupKey(merge_meta, meta.n_samples), bam]
         }
         .groupTuple()
         .branch { meta, bam ->
