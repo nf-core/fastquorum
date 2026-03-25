@@ -30,6 +30,36 @@ CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5
 The `read_structure` must be the same for all FASTQs from the same sample.
 Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.
 
+### Library prep identification
+
+The `sample` column identifies the biological sample or source genetic material. By default, it is also used as the pipeline's processing unit — all rows with the same `sample` are merged before consensus calling.
+
+When you have multiple independent library preparations from the same biological sample, use the optional `library_id` column to distinguish them. Each `library_id` is processed independently through the entire pipeline (alignment, merging, grouping, consensus calling, filtering). The `library_id` is equivalent to the Illumina Sample_ID.
+
+> [!NOTE]
+> Fastquorum does not support merging consensus reads from different library preps. If needed, merge the final consensus BAM files externally after the pipeline completes.
+
+```csv title="samplesheet.csv"
+sample,library_id,fastq_1,fastq_2,read_structure
+PATIENT_A,PATIENT_A_LIB1,LIB1_S1_L001_R1_001.fastq.gz,LIB1_S1_L001_R2_001.fastq.gz,5M2S+T 5M2S+T
+PATIENT_A,PATIENT_A_LIB2,LIB2_S2_L001_R1_001.fastq.gz,LIB2_S2_L001_R2_001.fastq.gz,5M2S+T 5M2S+T
+```
+
+### Lane and flowcell identification
+
+The optional `lane` and `flowcell` columns distinguish sequencing lanes within the same processing unit. These are used in pre-merge output file naming to prevent overwrites when a sample is sequenced across multiple lanes.
+
+- If `lane` is not provided, it is auto-assigned as a 1-based integer from row order.
+- If `flowcell` is provided, it is included in the output file prefix.
+- If any row for a processing unit provides `lane` (or `flowcell`), all rows for that unit must provide it.
+
+```csv title="samplesheet.csv"
+sample,flowcell,lane,fastq_1,fastq_2,read_structure
+CONTROL_REP1,HXXYYBBXX,L002,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,HXXYYBBXX,L003,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,HXXYYBBXX,L004,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5M2S+T 5M2S+T
+```
+
 The number of FASTQs must match the number of _read segments_ in the read structure (a read structure is a space delimited string where each value is a _read segment_; see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures).
 E.g. for paired end reads, there must be two FASTQs (R1 and R2) and two segments in the read structure (e.g. a read structure "12M+T +T" specifies a read segment "12M+T" for R1 and read segment "+T" for R2)
 Additional FASTQs may be provided, for example for index reads (see [One to Four FASTQs](#one-to-four-fastqs) below).
@@ -76,7 +106,10 @@ TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 
 | Column           | Description                                                                                                                                                                            |
 | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
+| `sample`         | Biological sample or source genetic material. Maps to the BAM `SM` tag. Spaces are automatically converted to underscores (`_`).                                                       |
+| `library_id`     | Optional. Library prep identifier, equivalent to Illumina Sample_ID. When provided, becomes the pipeline's processing unit and maps to the BAM `LB` tag. Defaults to `sample` if not provided. |
+| `lane`           | Optional. Sequencing lane identifier. Auto-assigned if not provided. Must contain only alphanumeric characters.                                                                        |
+| `flowcell`       | Optional. Flowcell identifier. Must contain only alphanumeric characters.                                                                                                              |
 | `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
 | `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
 | `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
