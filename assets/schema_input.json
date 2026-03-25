@@ -11,7 +11,29 @@
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+                "meta": ["sample"],
+                "description": "Biological sample or source genetic material. Spaces are automatically converted to underscores."
+            },
+            "library_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Library ID cannot contain spaces",
+                "meta": ["library_id"],
+                "description": "Library prep identifier, equivalent to Illumina Sample_ID. When provided, becomes the pipeline processing unit instead of sample."
+            },
+            "lane": {
+                "type": ["string", "integer"],
+                "pattern": "^[A-Za-z0-9]+$",
+                "errorMessage": "Lane must contain only alphanumeric characters",
+                "meta": ["lane"],
+                "description": "Sequencing lane identifier. Auto-assigned if not provided."
+            },
+            "flowcell": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9]+$",
+                "errorMessage": "Flowcell must contain only alphanumeric characters",
+                "meta": ["flowcell"],
+                "description": "Flowcell identifier for the sequencing run."
             },
             "fastq_1": {
                 "type": "string",
