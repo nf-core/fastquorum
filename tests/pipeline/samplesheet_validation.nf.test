@@ -1,0 +1,107 @@
+nextflow_pipeline {
+
+    name "Test workflow - Samplesheet validation"
+    script "main.nf"
+    tag "samplesheet_validation"
+    tag "pipeline"
+
+    test("library_id partial within sample") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.library_id_partial.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("if library_id is provided for any row of a sample, it must be provided for all rows") } }
+            )
+        }
+    }
+
+    test("library_id reused across samples") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.library_id_cross_sample.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("library_id 'LIB001' is used for multiple samples") } }
+            )
+        }
+    }
+
+    test("lane partial within sample") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.lane_partial.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("if lane is provided for any run, it must be provided for all runs") } }
+            )
+        }
+    }
+
+    test("flowcell partial within sample") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.flowcell_partial.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("if flowcell is provided for any run, it must be provided for all runs") } }
+            )
+        }
+    }
+
+    test("duplicate flowcell+lane pairs") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.duplicate_flowcell_lane.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("(flowcell, lane) pairs must be unique within a sample") } }
+            )
+        }
+    }
+}
