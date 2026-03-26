@@ -105,7 +105,7 @@ workflow PIPELINE_INITIALISATION {
 
     // Step 1: Compute meta.id and validate each row
     rows = rows.collect { meta, fastq_1, fastq_2, fastq_3, fastq_4 ->
-        meta.id = meta.library_id != null ? meta.library_id : meta.sample
+        meta.id = meta.library_id ? meta.library_id : meta.sample
         return validateInputSamplesheetRow([meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4]])
     }
 
@@ -238,7 +238,7 @@ def validateLibraryIds(rows) {
     // All-or-nothing: if any row for a sample provides library_id, all must
     rows.groupBy { row -> row[1].sample }.each { sample, sampleRows ->
         def lib_ids = sampleRows.collect { r -> r[1].library_id }
-        def provided = lib_ids.findAll { v -> v != null }
+        def provided = lib_ids.findAll { v -> v }
         if (provided.size() > 0 && provided.size() != lib_ids.size()) {
             error("Please check input samplesheet -> if library_id is provided for any row of a sample, it must be provided for all rows: ${sample}")
         }
@@ -248,7 +248,7 @@ def validateLibraryIds(rows) {
     def lib_to_sample = [:]
     rows.each { row ->
         def lib = row[1].library_id
-        if (lib != null) {
+        if (lib) {
             def sample = row[1].sample
             if (lib_to_sample.containsKey(lib) && lib_to_sample[lib] != sample) {
                 error("Please check input samplesheet -> library_id '${lib}' is used for multiple samples: ${lib_to_sample[lib]} and ${sample}")
@@ -289,14 +289,14 @@ def validateInputSamplesheet(id, metas, fastqs) {
     def lanes = metas.collect { m -> m.lane }
     def flowcells = metas.collect { m -> m.flowcell }
 
-    // All-or-nothing for lane
-    def provided_lanes = lanes.findAll { v -> v != null }
+    // All-or-nothing for lane (nf-schema returns [] for empty CSV cells, which is falsy)
+    def provided_lanes = lanes.findAll { v -> v }
     if (provided_lanes.size() > 0 && provided_lanes.size() != lanes.size()) {
         error("Please check input samplesheet -> if lane is provided for any run, it must be provided for all runs: ${id}")
     }
 
     // All-or-nothing for flowcell
-    def provided_flowcells = flowcells.findAll { v -> v != null }
+    def provided_flowcells = flowcells.findAll { v -> v }
     if (provided_flowcells.size() > 0 && provided_flowcells.size() != flowcells.size()) {
         error("Please check input samplesheet -> if flowcell is provided for any run, it must be provided for all runs: ${id}")
     }
@@ -314,8 +314,8 @@ def validateInputSamplesheet(id, metas, fastqs) {
 
     // Expand back to per-run items with assigned lane/flowcell
     return fastqs.withIndex().collect { fq, index ->
-        def lane = lanes[index] != null ? lanes[index] : (index + 1)
-        def flowcell = flowcells[index]  // may be null
+        def lane = lanes[index] ? lanes[index] : (index + 1)
+        def flowcell = flowcells[index] ?: null  // nf-schema returns [] for empty cells; normalize to null
         def run_meta = shared_meta + [lane: lane, flowcell: flowcell]
         return [run_meta, fq]
     }
