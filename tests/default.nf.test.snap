@@ -97,16 +97,16 @@
                 "preprocessing",
                 "preprocessing/align_raw_bam",
                 "preprocessing/align_raw_bam/SRR6109255",
-                "preprocessing/align_raw_bam/SRR6109255/SRR6109255.mapped.bam",
+                "preprocessing/align_raw_bam/SRR6109255/SRR6109255.1.mapped.bam",
                 "preprocessing/fastqc",
                 "preprocessing/fastqc/SRR6109255",
-                "preprocessing/fastqc/SRR6109255/SRR6109255_1_fastqc.html",
-                "preprocessing/fastqc/SRR6109255/SRR6109255_1_fastqc.zip",
-                "preprocessing/fastqc/SRR6109255/SRR6109255_2_fastqc.html",
-                "preprocessing/fastqc/SRR6109255/SRR6109255_2_fastqc.zip",
+                "preprocessing/fastqc/SRR6109255/SRR6109255.1_1_fastqc.html",
+                "preprocessing/fastqc/SRR6109255/SRR6109255.1_1_fastqc.zip",
+                "preprocessing/fastqc/SRR6109255/SRR6109255.1_2_fastqc.html",
+                "preprocessing/fastqc/SRR6109255/SRR6109255.1_2_fastqc.zip",
                 "preprocessing/fastqtobam",
                 "preprocessing/fastqtobam/SRR6109255",
-                "preprocessing/fastqtobam/SRR6109255/SRR6109255.unmapped.bam"
+                "preprocessing/fastqtobam/SRR6109255/SRR6109255.1.unmapped.bam"
             ],
             [
                 "SRR6109255.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
@@ -115,22 +115,22 @@
                 "SRR6109255.duplex_seq_metrics.duplex_yield_metrics.txt:md5,dc44d3f68aa837f5e1c492c1d107cfda",
                 "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,1439dc926491ef89f34dc5c56dc61b56",
                 "SRR6109255.duplex_seq_metrics.umi_counts.txt:md5,b8b986e876cc1d1fc272d300fb77df86",
-                "fastqc-status-check-heatmap.txt:md5,7769f6ee6003f1d145ef33cf087f654f",
-                "fastqc_adapter_content_plot.txt:md5,e20a561bd554982b59f450c061d2238d",
-                "fastqc_per_base_n_content_plot.txt:md5,0069705abeb86bd32c8031bf56d5278d",
-                "fastqc_per_base_sequence_quality_plot.txt:md5,c5b676a9936c086df1babfa821256c04",
-                "fastqc_per_sequence_gc_content_plot_Counts.txt:md5,4fc72af29257f3ca7864fb6a15acaeb0",
-                "fastqc_per_sequence_gc_content_plot_Percentages.txt:md5,677badf9d487be9dd8ee0f7b210605ce",
-                "fastqc_per_sequence_quality_scores_plot.txt:md5,9106e1b5fa9234b8480972e2c7daa505",
-                "fastqc_sequence_counts_plot.txt:md5,65e96e9f2b49880cbd667b87284c8f81",
-                "fastqc_sequence_duplication_levels_plot.txt:md5,f2baf086b141316f46d0294e0a215655",
+                "fastqc-status-check-heatmap.txt:md5,9a275d367295407c24cb07bdbf82f793",
+                "fastqc_adapter_content_plot.txt:md5,5fe7b2ea8f1e0b485f917765a66c46a7",
+                "fastqc_per_base_n_content_plot.txt:md5,7b382b62a5633c0d113bb67e7b32b79c",
+                "fastqc_per_base_sequence_quality_plot.txt:md5,5cdac844dd020545b76932fb85f47e37",
+                "fastqc_per_sequence_gc_content_plot_Counts.txt:md5,eefbfe9b9a36bf325005444497949dca",
+                "fastqc_per_sequence_gc_content_plot_Percentages.txt:md5,d863569e3fe51737907e69f81521baa5",
+                "fastqc_per_sequence_quality_scores_plot.txt:md5,a42aa83cda2a008b29dc332f2d9a8ba8",
+                "fastqc_sequence_counts_plot.txt:md5,4c0a2716ada7140b4afd7cf4e633e012",
+                "fastqc_sequence_duplication_levels_plot.txt:md5,cd745beeb8f488dd8b13b53858037206",
                 "fgbio-groupreadsbyumi-plot_Counts.txt:md5,bde96e13306e9fe243d32b1e202341e5",
                 "fgbio-groupreadsbyumi-plot_Percentages.txt:md5,0f46e0423a8dcc1ad93a17e9e90db4c1",
                 "fgbio_umi.txt:md5,84ac87f559ea5cb7284b57b6a9d9aed8",
                 "fgbio_umi_normed.txt:md5,5ea5271614b18d5301d7403fe4e3cf96",
                 "multiqc_citations.txt:md5,4c806e63a283ec1b7e78cdae3a923d4f",
-                "multiqc_fastqc.txt:md5,03c14fab2dc316696f0aed9e94eeb8c9",
-                "multiqc_general_stats.txt:md5,bf18b4fa22cd15f42261ee2b2b9fb788"
+                "multiqc_fastqc.txt:md5,62058250906e96976f2baf9c430972b1",
+                "multiqc_general_stats.txt:md5,35078ddbf07fcfc63ceb91f9b362fcb1"
             ],
             [
                 [
@@ -150,16 +150,16 @@
                     "f0eda53303fd62625fa2c786142754fe"
                 ],
                 [
-                    "SRR6109255.mapped.bam",
+                    "SRR6109255.1.mapped.bam",
                     "5e60821e68e8614b1ed06fa5455c3f9b"
                 ],
                 [
-                    "SRR6109255.unmapped.bam",
+                    "SRR6109255.1.unmapped.bam",
                     "669c5a47ba1d0bcf8f68068b4da81cb5"
                 ]
             ]
         ],
-        "timestamp": "2026-03-18T14:25:03.886004",
+        "timestamp": "2026-03-26T11:30:19.736516",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
