@@ -243,7 +243,7 @@ def validateInputSamplesheetRow(row) {
 // Validates:
 // 1. The number of FASTQs is the same across all runs.  E.g. all runs are paired end.
 // 2. The read structure is the same for all runs.
-// 3. If provided, the UMI File is the same for all runs of a sample.
+// 3. If provided, the UMI file is the same for all runs of a sample.
 //
 // Returns:
 // Adds the `n_samples` property to the metadata, and returns a tuple of the metadata and list of list of FASTQs.
