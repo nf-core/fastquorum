@@ -13,7 +13,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 1. [Preprocessing](#preprocessing)
    1. [FastQC](#fastqc) - Raw read QC
    2. [fgbio FastqToBam](#fgbio-fastqtobam) - Fastq to BAM, extracting UMIs
-   3. [BWA](#bwa-raw-reads) - Align the raw reads
+   3. [fgbio CorrectUmis](#fgbio-correctumis) - Correct non-random UMIs (optional)
+   4. [BWA](#bwa-raw-reads) - Align the raw reads
 2. [Grouping](#grouping)
    1. [fgbio GroupReadsByUmi](#fgbio-groupreadsbyumi) - Group raw reads by UMI (to identify reads from the same source molecule)
 3. [Consensus Reads](#consensus-calling)
@@ -63,6 +64,25 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 - '\*.unmapped.bam`
   - the unmapped BAM produced by [`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html).
   - the `RX` [SAM tag](https://samtools.github.io/hts-specs/SAMtags.pdf) stores the raw bases for the reads unique molecular identifier (UMI)
+
+</details>
+
+### fgbio CorrectUmis
+
+Corrects UMI sequences against a known set of expected UMIs. Only runs for samples with a `umi_file` specified in the samplesheet.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+**Output directory: `{outdir}/preprocessing/correctumis/<sample>`**
+
+- `*.corrected.bam`
+  - the unmapped BAM with corrected UMI sequences in the `RX` tag, produced by [`fgbio CorrectUmis`](https://fulcrumgenomics.github.io/fgbio/tools/latest/CorrectUmis.html)
+  - original (uncorrected) UMI sequences are preserved in the `OX` tag
+- `*.rejected.bam`
+  - reads whose UMIs could not be corrected (for QC purposes; these reads are excluded from downstream processing)
+- `*.correct-umis-metrics.txt`
+  - metrics on UMI correction rates
 
 </details>
 

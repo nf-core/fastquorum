@@ -13,6 +13,7 @@ include { ALIGN_BAM as ALIGN_RAW_BAM } from '../modules/local/align_bam/main'
 include { ALIGN_BAM as ALIGN_CONSENSUS_BAM } from '../modules/local/align_bam/main'
 include { FASTQC } from '../modules/nf-core/fastqc/main'
 include { FGBIO_FASTQTOBAM as FASTQTOBAM } from '../modules/local/fgbio/fastqtobam/main'
+include { FGBIO_CORRECTUMIS as CORRECTUMIS } from '../modules/local/fgbio/correctumis/main'
 include { FGBIO_GROUPREADSBYUMI as GROUPREADSBYUMI } from '../modules/local/fgbio/groupreadsbyumi/main'
 include { FGBIO_CALLMOLECULARCONSENSUSREADS as CALLMOLECULARCONSENSUSREADS } from '../modules/local/fgbio/callmolecularconsensusreads/main'
 include { FGBIO_CALLDDUPLEXCONSENSUSREADS as CALLDDUPLEXCONSENSUSREADS } from '../modules/local/fgbio/callduplexconsensusreads/main'
@@ -59,9 +60,39 @@ workflow FASTQUORUM {
     ch_versions = ch_versions.mix(FASTQTOBAM.out.versions.first())
 
     //
+    // MODULE: Run fgbio CorrectUmis (for non-random UMIs)
+    //
+    FASTQTOBAM.out.bam
+        .branch { meta, bam ->
+            correct: meta.umi_file
+            passthrough: true
+        }
+        .set { ch_fastqtobam }
+
+    // Warn if UMI correction is in use with a fuzzy-matching grouping strategy
+    ch_fastqtobam.correct.first().map { meta, bam ->
+        if (params.groupreadsbyumi_strategy != 'Identity' &&
+            !(params.groupreadsbyumi_strategy == 'Paired' && params.groupreadsbyumi_edits == 0)) {
+            log.warn("UMI correction is enabled but groupreadsbyumi_strategy is " +
+                     "'${params.groupreadsbyumi_strategy}' with edits=${params.groupreadsbyumi_edits}. " +
+                     "Consider using 'Identity' or 'Paired' with edits=0 for corrected UMIs.")
+        }
+    }
+
+    CORRECTUMIS(
+        ch_fastqtobam.correct.map { meta, bam -> [meta, bam, file(meta.umi_file)] },
+        params.correct_umis_max_mismatches,
+        params.correct_umis_min_distance,
+    )
+    ch_versions = ch_versions.mix(CORRECTUMIS.out.versions)
+
+    // Mix corrected and passthrough BAMs
+    ch_unmapped_bam = CORRECTUMIS.out.bam.mix(ch_fastqtobam.passthrough)
+
+    //
     // MODULE: Align with bwa mem
     //
-    ALIGN_RAW_BAM(FASTQTOBAM.out.bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "template-coordinate")
+    ALIGN_RAW_BAM(ch_unmapped_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "template-coordinate")
     ch_versions = ch_versions.mix(ALIGN_RAW_BAM.out.versions.first())
 
     //

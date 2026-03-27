@@ -243,6 +243,7 @@ def validateInputSamplesheetRow(row) {
 // Validates:
 // 1. The number of FASTQs is the same across all runs.  E.g. all runs are paired end.
 // 2. The read structure is the same for all runs.
+// 3. If provided, the UMI file is the same for all runs of a sample.
 //
 // Returns:
 // Adds the `n_samples` property to the metadata, and returns a tuple of the metadata and list of list of FASTQs.
@@ -255,6 +256,10 @@ def validateInputSamplesheet(input) {
     def read_structures_ok = metas.collect { m -> m.read_structure }.unique().size == 1
     if (!read_structures_ok) {
         error("Please check input samplesheet -> Multiple runs of a sample must have the same read stucture: ${metas[0].id}")
+    }
+    def umi_files_ok = metas.collect { m -> m.umi_file }.unique().size == 1
+    if (!umi_files_ok) {
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same umi_file: ${metas[0].id}")
     }
 
     return [metas[0] + [n_samples: metas.size()], fastqs]
