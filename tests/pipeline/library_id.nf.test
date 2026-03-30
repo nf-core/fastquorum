@@ -41,4 +41,31 @@ nextflow_pipeline {
 
     }
 
+    test("library_id with multiple lanes - R&D mode") {
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.library_id_multi_lanes.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Per-lane pre-merge outputs
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A1/LIB_A1.1_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A1/LIB_A1.2_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A1/LIB_A1.1.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A1/LIB_A1.2.unmapped.bam").exists() },
+                // Post-merge outputs use library_id (lanes merged)
+                { assert new File("$outputDir/consensus_filtering/filtered/LIB_A1/LIB_A1.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/LIB_A1/LIB_A1.duplex_seq_metrics.duplex_qc.pdf").exists() },
+            )
+        }
+
+    }
+
 }

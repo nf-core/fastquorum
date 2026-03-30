@@ -282,12 +282,12 @@ def validateInputSamplesheet(id, metas, fastqs) {
     }
     def umi_files_ok = metas.collect { m -> m.umi_file }.unique().size == 1
     if (!umi_files_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same umi_file: ${metas[0].id}")
+        error("Please check input samplesheet -> Multiple runs of a sample must have the same umi_file: ${id}")
     }
 
     // Collect per-row lane and flowcell values
     def lanes = metas.collect { m -> m.lane }
-    def flowcells = metas.collect { m -> m.flowcell }
+    def flowcells = metas.collect { m -> m.flowcell ?: null }
 
     // All-or-nothing for lane (nf-schema returns [] for empty CSV cells, which is falsy)
     def provided_lanes = lanes.findAll { v -> v }
@@ -309,13 +309,15 @@ def validateInputSamplesheet(id, metas, fastqs) {
         }
     }
 
-    // Build shared meta from first row + n_samples count
+    // Build shared meta from first row + n_samples count.
+    // NB: all per-row fields (read_structure, umi_file, etc.) are validated identical above,
+    // so taking metas[0] is safe. If a new per-row field is added, add a uniqueness check above.
     def shared_meta = metas[0] + [n_samples: metas.size()]
 
     // Expand back to per-run items with assigned lane/flowcell
     return fastqs.withIndex().collect { fq, index ->
         def lane = lanes[index] ? lanes[index] : (index + 1)
-        def flowcell = flowcells[index] ?: null  // nf-schema returns [] for empty cells; normalize to null
+        def flowcell = flowcells[index]
         def run_meta = shared_meta + [lane: lane, flowcell: flowcell]
         return [run_meta, fq]
     }
