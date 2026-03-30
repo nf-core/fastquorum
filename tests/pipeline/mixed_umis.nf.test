@@ -23,9 +23,9 @@ nextflow_pipeline {
                 { assert workflow.trace.succeeded().size() == 21 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 // Fixed UMI sample goes through CorrectUmis
-                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.corrected.bam").exists() },
-                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.rejected.bam").exists() },
-                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.correct-umis-metrics.txt").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.1.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.1.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255_FIXED/SRR6109255_FIXED.1.correct-umis-metrics.txt").exists() },
                 // Both samples produce consensus filtered BAMs
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_FIXED/SRR6109255_FIXED.cons.filtered.bam").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_RANDOM/SRR6109255_RANDOM.cons.filtered.bam").exists() },

@@ -1,0 +1,80 @@
+nextflow_pipeline {
+
+    name "Test workflow - nonrandom UMIs with multiple lanes"
+    script "main.nf"
+    tag "nonrandom_multi_lanes"
+    tag "pipeline"
+
+    test("nonrandom UMIs with auto-assigned lanes - R&D mode (stub)") {
+        options "-stub"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.nonrandom_multi_lanes.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+                groupreadsbyumi_strategy = "Paired"
+                groupreadsbyumi_edits = 0
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Per-lane CORRECTUMIS outputs with lane-aware prefix
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.1.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.1.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.1.correct-umis-metrics.txt").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.2.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.2.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.2.correct-umis-metrics.txt").exists() },
+                // Per-lane pre-merge outputs
+                { assert new File("$outputDir/preprocessing/fastqtobam/SRR6109255/SRR6109255.1.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/SRR6109255/SRR6109255.2.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.1.mapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.2.mapped.bam").exists() },
+                // Post-merge outputs use sample name without lane
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+            )
+        }
+
+    }
+
+    test("nonrandom UMIs with explicit metadata - R&D mode (stub)") {
+        options "-stub"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.nonrandom_multi_lanes_with_metadata.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+                groupreadsbyumi_strategy = "Paired"
+                groupreadsbyumi_edits = 0
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Per-lane CORRECTUMIS outputs with flowcell+lane prefix
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L001.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L001.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L001.correct-umis-metrics.txt").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L002.corrected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L002.rejected.bam").exists() },
+                { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L002.correct-umis-metrics.txt").exists() },
+                // Per-lane pre-merge outputs with flowcell+lane prefix
+                { assert new File("$outputDir/preprocessing/fastqtobam/SRR6109255/SRR6109255.HXXYYBBXX.L001.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/SRR6109255/SRR6109255.HXXYYBBXX.L002.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.HXXYYBBXX.L001.mapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.HXXYYBBXX.L002.mapped.bam").exists() },
+                // Post-merge outputs use sample name without lane/flowcell
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+            )
+        }
+
+    }
+
+}
