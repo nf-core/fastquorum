@@ -21,7 +21,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("Multiple runs of a sample must have the same umi_file") } }
+                { assert workflow.stdout.any { line -> line.contains("Multiple runs of a library must have the same umi_file") } }
             )
         }
 

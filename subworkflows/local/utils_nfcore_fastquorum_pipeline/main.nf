@@ -274,15 +274,15 @@ def validateLibraryIds(rows) {
 def validateInputSamplesheet(id, metas, fastqs) {
     def fastqs_per_sample_ok = fastqs.collect { fq -> fq.size() }.unique().size == 1
     if (!fastqs_per_sample_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same number of FASTQs: ${id}")
+        error("Please check input samplesheet -> Multiple runs of a library must have the same number of FASTQs: ${id}")
     }
     def read_structures_ok = metas.collect { m -> m.read_structure }.unique().size == 1
     if (!read_structures_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same read structure: ${id}")
+        error("Please check input samplesheet -> Multiple runs of a library must have the same read structure: ${id}")
     }
     def umi_files_ok = metas.collect { m -> m.umi_file }.unique().size == 1
     if (!umi_files_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same umi_file: ${id}")
+        error("Please check input samplesheet -> Multiple runs of a library must have the same umi_file: ${id}")
     }
 
     // Collect per-row lane and flowcell values
@@ -305,14 +305,14 @@ def validateInputSamplesheet(id, metas, fastqs) {
     if (provided_lanes.size() > 0) {
         def fc_lane_pairs = [flowcells, lanes].transpose()
         if (fc_lane_pairs.size() != fc_lane_pairs.unique(false).size()) {
-            error("Please check input samplesheet -> (flowcell, lane) pairs must be unique within a sample: ${id}")
+            error("Please check input samplesheet -> (flowcell, lane) pairs must be unique within a library: ${id}")
         }
     }
 
-    // Build shared meta from first row + n_samples count.
+    // Build shared meta from first row + n_merge_pre_consensus count, stripping per-run fields.
     // NB: all per-row fields (read_structure, umi_file, etc.) are validated identical above,
     // so taking metas[0] is safe. If a new per-row field is added, add a uniqueness check above.
-    def shared_meta = metas[0] + [n_samples: metas.size()]
+    def shared_meta = metas[0].findAll { k, v -> !(k in ['lane', 'flowcell']) } + [n_merge_pre_consensus: metas.size()]
 
     // Expand back to per-run items with assigned lane/flowcell
     return fastqs.withIndex().collect { fq, index ->

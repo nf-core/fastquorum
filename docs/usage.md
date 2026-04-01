@@ -56,7 +56,7 @@ Additional FASTQs may be provided, for example for index reads (see [One to Four
 > [!NOTE]
 > Fastquorum does not support merging consensus reads from different library preps. If needed, merge the final consensus BAM files externally after the pipeline completes.
 
-### Lane and flowcell identification
+#### Lane and flowcell identification
 
 - `lane` [optional] identifies the lane the FASTQ files for this entry originate from. If `lane` is not provided, it is auto-assigned as a 1-based integer from row order.
 - `flowcell` [optional] identifies the flowcell the FASTQ files for this entry originate from. If `flowcell` is provided, it is included in the output file prefix.

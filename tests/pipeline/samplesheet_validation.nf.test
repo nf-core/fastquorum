@@ -100,7 +100,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("(flowcell, lane) pairs must be unique within a sample") } }
+                { assert workflow.stdout.any { line -> line.contains("(flowcell, lane) pairs must be unique within a library") } }
             )
         }
     }

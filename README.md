@@ -96,6 +96,8 @@ Each row represents a fastq file (single-end) or a pair of fastq files (paired e
 The `sample` column provides a unique identifier for the given sample, while the `read_structure` describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).
 (Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.)
 
+If you have multiple sets of FASTQ files for a single sample, be sure to read [usage.md/Multiple runs of the same sample](docs/usage.md#multiple-runs-of-the-same-sample).
+
 Now, you can run the pipeline using:
 
 ```bash
