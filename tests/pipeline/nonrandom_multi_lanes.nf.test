@@ -5,12 +5,11 @@ nextflow_pipeline {
     tag "nonrandom_multi_lanes"
     tag "pipeline"
 
-    test("nonrandom UMIs with auto-assigned lanes - R&D mode (stub)") {
-        options "-stub"
+    test("nonrandom UMIs with auto-assigned lanes - R&D mode") {
 
         when {
             params {
-                input  = "${baseDir}/tests/data/samplesheet.nonrandom_multi_lanes.csv"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.nonrandom_multi_lanes.csv'
                 fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
                 mode   = "rd"
@@ -22,6 +21,8 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("nonrandom_multi_lanes_auto_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 18 },
                 // Per-lane CORRECTUMIS outputs with lane-aware prefix
                 { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.1.corrected.bam").exists() },
                 { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.1.rejected.bam").exists() },
@@ -35,18 +36,23 @@ nextflow_pipeline {
                 { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.1.mapped.bam").exists() },
                 { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.2.mapped.bam").exists() },
                 // Post-merge outputs use sample name without lane
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),
+                ).match("nonrandom_multi_lanes_auto_rd") }
             )
         }
 
     }
 
-    test("nonrandom UMIs with explicit metadata - R&D mode (stub)") {
-        options "-stub"
+    test("nonrandom UMIs with explicit metadata - R&D mode") {
 
         when {
             params {
-                input  = "${baseDir}/tests/data/samplesheet.nonrandom_multi_lanes_with_metadata.csv"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.nonrandom_multi_lanes_with_metadata.csv'
                 fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
                 mode   = "rd"
@@ -58,6 +64,8 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("nonrandom_multi_lanes_metadata_rd_software_versions") },
+                { assert workflow.trace.succeeded().size() == 18 },
                 // Per-lane CORRECTUMIS outputs with flowcell+lane prefix
                 { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L001.corrected.bam").exists() },
                 { assert new File("$outputDir/preprocessing/correctumis/SRR6109255/SRR6109255.HXXYYBBXX.L001.rejected.bam").exists() },
@@ -71,7 +79,13 @@ nextflow_pipeline {
                 { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.HXXYYBBXX.L001.mapped.bam").exists() },
                 { assert new File("$outputDir/preprocessing/align_raw_bam/SRR6109255/SRR6109255.HXXYYBBXX.L002.mapped.bam").exists() },
                 // Post-merge outputs use sample name without lane/flowcell
+                { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),
+                ).match("nonrandom_multi_lanes_metadata_rd") }
             )
         }
 

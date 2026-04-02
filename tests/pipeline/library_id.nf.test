@@ -9,7 +9,7 @@ nextflow_pipeline {
 
         when {
             params {
-                input  = "${baseDir}/tests/data/samplesheet.library_id.csv"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.library_id.csv'
                 fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
                 mode   = "rd"
@@ -45,7 +45,7 @@ nextflow_pipeline {
 
         when {
             params {
-                input  = "${baseDir}/tests/data/samplesheet.library_id_multi_lanes.csv"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.library_id_multi_lanes.csv'
                 fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
                 mode   = "rd"

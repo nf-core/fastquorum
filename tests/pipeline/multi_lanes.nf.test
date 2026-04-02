@@ -81,7 +81,7 @@ nextflow_pipeline {
 
         when {
             params {
-                input  = "${baseDir}/tests/data/samplesheet.multi_lanes_with_metadata.csv"
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_lanes_with_metadata.csv'
                 fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
                 outdir = "$outputDir"
                 mode   = "rd"
