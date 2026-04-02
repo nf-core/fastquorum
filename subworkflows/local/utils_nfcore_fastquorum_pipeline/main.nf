@@ -316,7 +316,7 @@ def validateInputSamplesheet(id, metas, fastqs) {
 
     // Expand back to per-run items with assigned lane/flowcell
     return fastqs.withIndex().collect { fq, index ->
-        def lane = lanes[index] ? lanes[index] : (index + 1)
+        def lane = lanes[index] ? lanes[index] : (index + 1).toString()
         def flowcell = flowcells[index]
         def run_meta = shared_meta + [lane: lane, flowcell: flowcell]
         return [run_meta, fq]

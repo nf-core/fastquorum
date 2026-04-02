@@ -3,7 +3,7 @@
         "content": [
             "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; CORRECTUMIS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; MERGE_BAM:samtools=1.21; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-04-02T09:19:22.095661",
+        "timestamp": "2026-04-02T15:26:29.71753",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -13,7 +13,7 @@
         "content": [
             "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; CORRECTUMIS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; MERGE_BAM:samtools=1.21; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-04-02T09:21:47.68689",
+        "timestamp": "2026-04-02T15:28:58.61812",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -24,7 +24,7 @@
             "SRR6109255.grouped-family-sizes.txt:md5,c9497f87e2c8c7fbc848d752d4916fba",
             "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,99fda09508850737e000fdbef1e8eee6"
         ],
-        "timestamp": "2026-04-02T09:19:22.107311",
+        "timestamp": "2026-04-02T15:26:29.729996",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -35,7 +35,7 @@
             "SRR6109255.grouped-family-sizes.txt:md5,c9497f87e2c8c7fbc848d752d4916fba",
             "SRR6109255.duplex_seq_metrics.family_sizes.txt:md5,99fda09508850737e000fdbef1e8eee6"
         ],
-        "timestamp": "2026-04-02T09:21:47.694947",
+        "timestamp": "2026-04-02T15:28:58.627676",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
