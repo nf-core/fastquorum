@@ -12,7 +12,7 @@ lint:
     - docs/images/nf-core-fastquorum_logo_dark.png
     - docs/images/Fulcrum.svg
   template_strings: false
-nf_core_version: 4.0.0
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: Nils Homer
