@@ -104,4 +104,24 @@ nextflow_pipeline {
             )
         }
     }
+
+    test("multiple runs without lane or flowcell") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.multi_run_no_metadata.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("a sample/library with multiple runs must provide lane and/or flowcell") } }
+            )
+        }
+    }
 }

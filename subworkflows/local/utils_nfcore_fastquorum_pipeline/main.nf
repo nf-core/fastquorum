@@ -266,10 +266,11 @@ def validateLibraryIds(rows) {
 // 2. The read structure is the same for all runs.
 // 3. If provided, the UMI file is the same for all runs of a sample.
 // 4. Lane and flowcell follow all-or-nothing rules.
-// 5. (flowcell, lane) pairs are unique when user-provided.
+// 5. A sample/library with multiple runs provides lane and/or flowcell to identify each run.
+// 6. (flowcell, lane) pairs are unique.
 //
 // Returns:
-// A list of [meta, fastqs] tuples, one per run, with lane/flowcell assigned.
+// A list of [meta, fastqs] tuples, one per run, carrying any user-provided lane/flowcell.
 //
 def validateInputSamplesheet(id, metas, fastqs) {
     def fastqs_per_sample_ok = fastqs.collect { fq -> fq.size() }.unique().size == 1
@@ -285,11 +286,11 @@ def validateInputSamplesheet(id, metas, fastqs) {
         error("Please check input samplesheet -> Multiple runs of a library must have the same umi_file: ${id}")
     }
 
-    // Collect per-row lane and flowcell values
-    def lanes = metas.collect { m -> m.lane }
+    // Collect per-row lane and flowcell values (nf-schema returns [] for empty CSV cells, which is falsy)
+    def lanes = metas.collect { m -> m.lane ?: null }
     def flowcells = metas.collect { m -> m.flowcell ?: null }
 
-    // All-or-nothing for lane (nf-schema returns [] for empty CSV cells, which is falsy)
+    // All-or-nothing for lane
     def provided_lanes = lanes.findAll { v -> v }
     if (provided_lanes.size() > 0 && provided_lanes.size() != lanes.size()) {
         error("Please check input samplesheet -> if lane is provided for any run, it must be provided for all runs: ${id}")
@@ -301,12 +302,16 @@ def validateInputSamplesheet(id, metas, fastqs) {
         error("Please check input samplesheet -> if flowcell is provided for any run, it must be provided for all runs: ${id}")
     }
 
-    // Validate uniqueness of (flowcell, lane) pairs (only when user-provided)
-    if (provided_lanes.size() > 0) {
-        def fc_lane_pairs = [flowcells, lanes].transpose()
-        if (fc_lane_pairs.size() != fc_lane_pairs.unique(false).size()) {
-            error("Please check input samplesheet -> (flowcell, lane) pairs must be unique within a library: ${id}")
-        }
+    // A sample/library with multiple runs must be disambiguated by an explicit lane and/or flowcell.
+    // If the rows are distinct libraries, a unique library_id will instead split them into separate units.
+    if (metas.size() > 1 && provided_lanes.size() == 0 && provided_flowcells.size() == 0) {
+        error("Please check input samplesheet -> a sample/library with multiple runs must provide lane and/or flowcell (or a distinct library_id) to identify each run: ${id}")
+    }
+
+    // Validate uniqueness of (flowcell, lane) pairs
+    def fc_lane_pairs = [flowcells, lanes].transpose()
+    if (fc_lane_pairs.size() != fc_lane_pairs.unique(false).size()) {
+        error("Please check input samplesheet -> (flowcell, lane) pairs must be unique within a library: ${id}")
     }
 
     // Build shared meta from first row + n_merge_pre_consensus count, stripping per-run fields.
@@ -314,10 +319,10 @@ def validateInputSamplesheet(id, metas, fastqs) {
     // so taking metas[0] is safe. If a new per-row field is added, add a uniqueness check above.
     def shared_meta = metas[0].findAll { k, v -> !(k in ['lane', 'flowcell']) } + [n_merge_pre_consensus: metas.size()]
 
-    // Expand back to per-run items with assigned lane/flowcell
+    // Expand back to per-run items, preserving any user-provided lane/flowcell as strings
     return fastqs.withIndex().collect { fq, index ->
-        def lane = lanes[index] ? lanes[index] : (index + 1).toString()
-        def flowcell = flowcells[index]
+        def lane = lanes[index] ? lanes[index].toString() : null
+        def flowcell = flowcells[index] ? flowcells[index].toString() : null
         def run_meta = shared_meta + [lane: lane, flowcell: flowcell]
         return [run_meta, fq]
     }
