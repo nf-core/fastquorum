@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #141](https://github.com/nf-core/fastquorum/pull/141) - Fix Twist UMI docs from random to nonrandom
 - [PR #142](https://github.com/nf-core/fastquorum/pull/142) - Update to nf-core/tools template version 3.5.2 with Nextflow strict syntax
 - [PR #145](https://github.com/nf-core/fastquorum/pull/145) - Add non-random UMI correction via fgbio CorrectUmis, enabled by an optional `umi_file` column in the samplesheet
+- [PR #147](https://github.com/nf-core/fastquorum/pull/147) - Add optional `library_id`, `lane`, and `flowcell` samplesheet columns and fix silent pre-merge output overwrites across lanes ([#146](https://github.com/nf-core/fastquorum/issues/146))
 
 ### Credits
 
