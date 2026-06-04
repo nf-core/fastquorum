@@ -256,6 +256,19 @@ def validateLibraryIds(rows) {
             lib_to_sample[lib] = sample
         }
     }
+
+    // Processing-unit collision: meta.id (library_id, or sample when no library_id) is the unit that
+    // rows are grouped and merged on. Guard against a bare sample name colliding with a different
+    // sample's library_id, which would otherwise silently merge reads from unrelated samples.
+    def id_to_sample = [:]
+    rows.each { row ->
+        def id = row[1].id
+        def sample = row[1].sample
+        if (id_to_sample.containsKey(id) && id_to_sample[id] != sample) {
+            error("Please check input samplesheet -> processing unit '${id}' (a sample name and/or library_id) maps to multiple samples: ${id_to_sample[id]} and ${sample}")
+        }
+        id_to_sample[id] = sample
+    }
 }
 
 //
@@ -286,9 +299,11 @@ def validateInputSamplesheet(id, metas, fastqs) {
         error("Please check input samplesheet -> Multiple runs of a library must have the same umi_file: ${id}")
     }
 
-    // Collect per-row lane and flowcell values (nf-schema returns [] for empty CSV cells, which is falsy)
-    def lanes = metas.collect { m -> m.lane ?: null }
-    def flowcells = metas.collect { m -> m.flowcell ?: null }
+    // Collect per-row lane and flowcell values, normalized to strings so the uniqueness check below
+    // and the output prefix treat e.g. integer 1 and string "1" as the same value.
+    // (nf-schema returns [] for empty CSV cells, which is falsy.)
+    def lanes = metas.collect { m -> m.lane ? m.lane.toString() : null }
+    def flowcells = metas.collect { m -> m.flowcell ? m.flowcell.toString() : null }
 
     // All-or-nothing for lane
     def provided_lanes = lanes.findAll { v -> v }
@@ -317,13 +332,11 @@ def validateInputSamplesheet(id, metas, fastqs) {
     // Build shared meta from first row + n_merge_pre_consensus count, stripping per-run fields.
     // NB: all per-row fields (read_structure, umi_file, etc.) are validated identical above,
     // so taking metas[0] is safe. If a new per-row field is added, add a uniqueness check above.
-    def shared_meta = metas[0].findAll { k, v -> !(k in ['lane', 'flowcell']) } + [n_merge_pre_consensus: metas.size()]
+    def shared_meta = metas[0].findAll { k, _v -> !(k in ['lane', 'flowcell']) } + [n_merge_pre_consensus: metas.size()]
 
-    // Expand back to per-run items, preserving any user-provided lane/flowcell as strings
+    // Expand back to per-run items, preserving any user-provided lane/flowcell (already normalized to strings)
     return fastqs.withIndex().collect { fq, index ->
-        def lane = lanes[index] ? lanes[index].toString() : null
-        def flowcell = flowcells[index] ? flowcells[index].toString() : null
-        def run_meta = shared_meta + [lane: lane, flowcell: flowcell]
+        def run_meta = shared_meta + [lane: lanes[index], flowcell: flowcells[index]]
         return [run_meta, fq]
     }
 }

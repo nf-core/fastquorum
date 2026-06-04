@@ -58,13 +58,16 @@ Additional FASTQs may be provided, for example for index reads (see [One to Four
 
 #### Lane and flowcell identification
 
-- `lane` [optional] identifies the lane the FASTQ files for this entry originate from. If `lane` is not provided, it is auto-assigned as a 1-based integer from row order.
-- `flowcell` [optional] identifies the flowcell the FASTQ files for this entry originate from. If `flowcell` is provided, it is included in the output file prefix.
+- `lane` [optional] identifies the lane the FASTQ files for this entry originate from. When provided, it is included in the output file prefix.
+- `flowcell` [optional] identifies the flowcell the FASTQ files for this entry originate from. When provided, it is included in the output file prefix.
+
+These are used in pre-merge output file naming to prevent overwrites when a library is sequenced across multiple lanes and/or flowcells.
 
 > [!NOTE]
 > If any row for a processing unit provides `lane` (or `flowcell`), all rows for that unit must provide it.
 
-These are used in pre-merge output file naming to prevent overwrites when a library is sequenced across multiple lanes and/or flowcells.
+> [!NOTE]
+> When a processing unit (`library_id`, or `sample` if no `library_id`) spans multiple rows, those rows must be distinguished by `lane` and/or `flowcell` so their pre-merge outputs do not overwrite one another. Each `(flowcell, lane)` pair must be unique within the unit.
 
 #### Two samples, three libraries, four lanes, and two flowcells
 

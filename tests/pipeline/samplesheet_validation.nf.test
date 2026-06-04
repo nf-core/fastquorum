@@ -45,6 +45,26 @@ nextflow_pipeline {
         }
     }
 
+    test("sample name collides with another sample's library_id") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/data/samplesheet.id_collision.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("processing unit 'LIB001' (a sample name and/or library_id) maps to multiple samples") } }
+            )
+        }
+    }
+
     test("lane partial within sample") {
         options "-stub"
         tag "error"
