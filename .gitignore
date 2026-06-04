@@ -16,3 +16,4 @@ null/
 pixi.toml
 pixi.lock
 .pixi/
+.worktrees

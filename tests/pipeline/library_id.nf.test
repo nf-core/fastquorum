@@ -1,0 +1,71 @@
+nextflow_pipeline {
+
+    name "Test workflow - library_id as processing unit"
+    script "main.nf"
+    tag "library_id"
+    tag "pipeline"
+
+    test("library_id - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.library_id.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                { assert snapshot(UTILS.removeNextflowVersion("$outputDir")).match("library_id_rd_software_versions") },
+                // Two libraries from the same sample, each processed independently
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A1/LIB_A1_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A2/LIB_A2_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A1/LIB_A1.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A2/LIB_A2.unmapped.bam").exists() },
+                // Post-merge outputs use library_id
+                { assert new File("$outputDir/consensus_filtering/filtered/LIB_A1/LIB_A1.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/consensus_filtering/filtered/LIB_A2/LIB_A2.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/LIB_A1/LIB_A1.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/LIB_A2/LIB_A2.duplex_seq_metrics.duplex_qc.pdf").exists() },
+                { assert snapshot(
+                    path("$outputDir/grouping/groupreadsbyumi/LIB_A1/LIB_A1.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/LIB_A1/LIB_A1.duplex_seq_metrics.family_sizes.txt"),
+                    path("$outputDir/grouping/groupreadsbyumi/LIB_A2/LIB_A2.grouped-family-sizes.txt"),
+                    path("$outputDir/metrics/duplex_seq/LIB_A2/LIB_A2.duplex_seq_metrics.family_sizes.txt"),
+                ).match("library_id_rd") }
+            )
+        }
+
+    }
+
+    test("library_id with multiple lanes - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.library_id_multi_lanes.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Per-lane pre-merge outputs
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A1/LIB_A1.1_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqc/LIB_A1/LIB_A1.2_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A1/LIB_A1.1.unmapped.bam").exists() },
+                { assert new File("$outputDir/preprocessing/fastqtobam/LIB_A1/LIB_A1.2.unmapped.bam").exists() },
+                // Post-merge outputs use library_id (lanes merged)
+                { assert new File("$outputDir/consensus_filtering/filtered/LIB_A1/LIB_A1.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/LIB_A1/LIB_A1.duplex_seq_metrics.duplex_qc.pdf").exists() },
+            )
+        }
+
+    }
+
+}

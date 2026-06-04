@@ -97,22 +97,23 @@ workflow FASTQUORUM {
 
     //
     // Create a channel that:
-    // 1. Groups the aligned BAMs by sample identifier.  We use `groupKey` here since we know how many BAMs each
-    //    sample expects to have.  Typically a sample has more than one BAM if it had multiple runs or lanes.
-    // 2. Splits the samples into those that have more than one BAM, and those that have exactly one BAM.  The former
-    //    samples will have their BAMs merged.
+    // 1. Groups the aligned BAMs by library identifier.  We use `groupKey` here since we know how many BAMs each
+    //    library expects to have.  Typically a library has more than one BAM if it had multiple runs or lanes.
+    // 2. Splits the libraries into those that have more than one BAM, and those that have exactly one BAM.  The former
+    //    libraries will have their BAMs merged.
     //
-    // The `n_samples` is added by `validateInputSamplesheet` method in `PIPELINE_INITIALISATION` workflow
+    // The `n_merge_pre_consensus` is added by `validateInputSamplesheet` method in `PIPELINE_INITIALISATION` workflow
     // NB: bam is a list (of one BAM) so return just the one BAM
     bam_to_merge = ALIGN_RAW_BAM.out.bam
         .map { meta, bam ->
-            [groupKey(meta, meta.n_samples), bam]
+            def merge_meta = meta.findAll { k, _v -> !(k in ['lane', 'flowcell']) }
+            [groupKey(merge_meta, meta.n_merge_pre_consensus), bam]
         }
         .groupTuple()
         .branch { meta, bam ->
-            single: meta.n_samples <= 1
+            single: meta.n_merge_pre_consensus <= 1
             return [meta, bam[0]]
-            multiple: meta.n_samples > 1
+            multiple: meta.n_merge_pre_consensus > 1
         }
 
     //

@@ -55,6 +55,7 @@ process FGBIO_GROUPREADSBYUMI {
     """
     touch ${prefix}.grouped.bam
     touch ${prefix}.grouped-family-sizes.txt
+    touch ${prefix}.grouped-read-metrics.txt
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

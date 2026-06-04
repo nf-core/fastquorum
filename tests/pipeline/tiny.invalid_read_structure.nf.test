@@ -21,7 +21,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { it.contains("Please check input samplesheet -> Read structure") } }
+                { assert workflow.stdout.any { line -> line.contains("Please check input samplesheet -> Read structure") } }
             )
         }
 

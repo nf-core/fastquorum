@@ -77,4 +77,28 @@ nextflow_pipeline {
 
     }
 
+    test("Multiple Lanes with explicit metadata - R&D mode") {
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.multi_lanes_with_metadata.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+                mode   = "rd"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.success },
+                // Pre-merge files include flowcell and lane in prefix
+                { assert new File("$outputDir/preprocessing/fastqc/SRR6109255_two_lanes/SRR6109255_two_lanes.HXXYYBBXX.L001_1_fastqc.html").exists() },
+                { assert new File("$outputDir/preprocessing/fastqc/SRR6109255_two_lanes/SRR6109255_two_lanes.HXXYYBBXX.L002_1_fastqc.html").exists() },
+                // Post-merge files are unchanged
+                { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255_two_lanes/SRR6109255_two_lanes.cons.filtered.bam").exists() },
+            )
+        }
+
+    }
+
 }
