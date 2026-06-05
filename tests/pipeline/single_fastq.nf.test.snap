@@ -11,9 +11,9 @@
     },
     "single_fastq_ht_software_versions": {
         "content": [
-            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLANDFILTERMOLECULARCONSENSUSREADS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; Workflow:nf-core/fastquorum=v1.3.0dev"
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLANDFILTERMOLECULARCONSENSUSREADS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-03-18T14:41:40.522103",
+        "timestamp": "2026-06-05T15:20:22.918042",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -21,9 +21,9 @@
     },
     "single_fastq_rd_software_versions": {
         "content": [
-            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLMOLECULARCONSENSUSREADS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; Workflow:nf-core/fastquorum=v1.3.0dev"
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLMOLECULARCONSENSUSREADS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-03-18T14:39:41.885384",
+        "timestamp": "2026-06-05T15:18:26.075556",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
