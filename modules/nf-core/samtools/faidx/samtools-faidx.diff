@@ -14,6 +14,5 @@ Changes in 'samtools/faidx/environment.yml':
 'modules/nf-core/samtools/faidx/main.nf' is unchanged
 'modules/nf-core/samtools/faidx/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/samtools/faidx/tests/nextflow.config' is unchanged
-'modules/nf-core/samtools/faidx/tests/nextflow2.config' is unchanged
 'modules/nf-core/samtools/faidx/tests/main.nf.test' is unchanged
 ************************************************************

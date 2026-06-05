@@ -50,7 +50,6 @@ workflow FASTQUORUM {
     FASTQC(
         ch_samplesheet
     )
-    ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     ch_multiqc_files = ch_multiqc_files.mix(FASTQC.out.zip.collect { meta_item -> meta_item[1] })
 
     //
@@ -119,8 +118,7 @@ workflow FASTQUORUM {
     //
     // MODULE: Run samtools merge to merge across runs/lanes for the same sample
     //
-    MERGE_BAM(bam_to_merge.multiple, [[], []], [[], []], [[], []])
-    ch_versions = ch_versions.mix(MERGE_BAM.out.versions.first())
+    MERGE_BAM(bam_to_merge.multiple.map { meta, bam -> [meta, bam, []] }, [[], [], [], []])
 
     //
     // Create a channel that contains the merged BAMs and those that did not need to be merged.
