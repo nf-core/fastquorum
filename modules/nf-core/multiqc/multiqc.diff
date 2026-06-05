@@ -15,4 +15,7 @@ Changes in 'multiqc/environment.yml':
 'modules/nf-core/multiqc/tests/main.nf.test.snap' is unchanged
 'modules/nf-core/multiqc/tests/nextflow.config' is unchanged
 'modules/nf-core/multiqc/tests/main.nf.test' is unchanged
+'modules/nf-core/multiqc/tests/custom_prefix.config' is unchanged
+'modules/nf-core/multiqc/.conda-lock/linux_amd64-bd-c17fb751507e9dfc_1.txt' is unchanged
+'modules/nf-core/multiqc/.conda-lock/linux_arm64-bd-5c84a5000a226ab5_1.txt' is unchanged
 ************************************************************
