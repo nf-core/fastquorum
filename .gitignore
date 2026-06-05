@@ -11,9 +11,8 @@ testing*
 .idea
 null/
 .claude/
-.nf-test/
-.nf-test.log
 pixi.toml
 pixi.lock
 .pixi/
 .worktrees
+.lineage/
