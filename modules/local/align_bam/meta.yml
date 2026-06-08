@@ -78,3 +78,15 @@ output:
 
 authors:
   - "@nh13"
+
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio_bwa_samtools:04bc9788bca8242c
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio_bwa_samtools:fef72c31e6e94318
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio_bwa_samtools:ee569c458f161e6b
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio_bwa_samtools:b612d5cd7a652862

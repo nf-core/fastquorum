@@ -50,3 +50,15 @@ output:
 
 authors:
   - "@nh13"
+
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--561e291fd356d057
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--61a21b7736fed99a

@@ -2,7 +2,7 @@ process FGBIO_FILTERCONSENSUSREADS {
     tag "${meta.id}"
     label 'process_low'
 
-    conda "bioconda::fgbio=2.5.21 bioconda::samtools=1.21"
+    conda "${moduleDir}/environment.yml"
     container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
         ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/fe/fe831f4de10a655551c14ef3d113eac2aec186b73ffffa686691d7471522fef7/data'
         : 'community.wave.seqera.io/library/fgbio_samtools:4f7e98e5f90057a3'}"

@@ -1,0 +1,52 @@
+name: fgbio_filterconsensusreads
+description: Filter consensus reads with fgbio
+keywords:
+  - fgbio
+  - consensus
+  - bam
+tools:
+  - fgbio:
+      description: A set of tools for working with genomic and high throughput sequencing data, including UMIs
+      homepage: http://fulcrumgenomics.github.io/fgbio/
+      documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
+      tool_dev_url: https://github.com/fulcrumgenomics/fgbio
+      licence: ["MIT"]
+  - samtools:
+      description: Tools for manipulating next-generation sequencing data
+      homepage: http://www.htslib.org/
+      documentation: http://www.htslib.org/doc/samtools.html
+      tool_dev_url: https://github.com/samtools/samtools
+      licence: ["MIT"]
+input:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
+  - bam:
+      type: file
+      description: Input BAM file
+      pattern: "*.bam"
+output:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information
+  - bam:
+      type: file
+      description: Output BAM file
+      pattern: "*.bam"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio_samtools:4f7e98e5f90057a3
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio_samtools:9bb31f2fc2d8d1c9
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio_samtools:b4fdf6d47eb1eb4a
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio_samtools:bdd8d3bb0416659a
+authors:
+  - "@nh13"
+  - "@znorgaard"
+maintainers:
+  - "@nh13"
+  - "@znorgaard"
