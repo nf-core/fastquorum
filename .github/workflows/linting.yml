@@ -15,6 +15,8 @@ jobs:
 
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@b4ec1bc7c16a94435159de94a05253542fddf6ef # v3
+        with:
+          version: "25.10.4"
 
       - name: Run prek
         uses: j178/prek-action@6ad80277337ad479fe43bd70701c3f7f8aa74db3 # v2
@@ -27,6 +29,8 @@ jobs:
 
       - name: Install Nextflow
         uses: nf-core/setup-nextflow@b4ec1bc7c16a94435159de94a05253542fddf6ef # v3
+        with:
+          version: "25.10.4"
 
       - uses: actions/setup-python@a309ff8b426b58ec0e2a45f0f869d46889d02405 # v6
         with:
