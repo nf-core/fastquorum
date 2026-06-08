@@ -56,7 +56,6 @@ workflow FASTQUORUM {
     // MODULE: Run fgbio FastqToBam
     //
     FASTQTOBAM(ch_samplesheet)
-    ch_versions = ch_versions.mix(FASTQTOBAM.out.versions.first())
 
     //
     // MODULE: Run fgbio CorrectUmis (for non-random UMIs)
@@ -83,7 +82,6 @@ workflow FASTQUORUM {
         params.correct_umis_max_mismatches,
         params.correct_umis_min_distance,
     )
-    ch_versions = ch_versions.mix(CORRECTUMIS.out.versions)
 
     // Mix corrected and passthrough BAMs
     ch_unmapped_bam = CORRECTUMIS.out.bam.mix(ch_fastqtobam.passthrough)
@@ -92,7 +90,6 @@ workflow FASTQUORUM {
     // MODULE: Align with bwa mem
     //
     ALIGN_RAW_BAM(ch_unmapped_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "template-coordinate")
-    ch_versions = ch_versions.mix(ALIGN_RAW_BAM.out.versions.first())
 
     //
     // Create a channel that:
@@ -130,14 +127,12 @@ workflow FASTQUORUM {
     //
     GROUPREADSBYUMI(bam_all, params.groupreadsbyumi_strategy, params.groupreadsbyumi_edits)
     ch_multiqc_files = ch_multiqc_files.mix(GROUPREADSBYUMI.out.histogram.map { meta_item -> meta_item[1] }.collect())
-    ch_versions = ch_versions.mix(GROUPREADSBYUMI.out.versions.first())
 
     if (params.duplex_seq) {
         //
         // MODULE: Run fgbio CollectDuplexSeqMetrics
         //
         COLLECTDUPLEXSEQMETRICS(GROUPREADSBYUMI.out.bam)
-        ch_versions = ch_versions.mix(COLLECTDUPLEXSEQMETRICS.out.versions.first())
     }
 
     // TODO: duplex_seq can be inferred from the read structure, but that's out of scope for now
@@ -147,7 +142,6 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallDuplexConsensusReads
             //
             CALLDDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
-            ch_versions = ch_versions.mix(CALLDDUPLEXCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
             CALLDDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
@@ -157,7 +151,6 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallMolecularConsensusReads
             //
             CALLMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, params.call_min_reads, params.call_min_baseq)
-            ch_versions = ch_versions.mix(CALLMOLECULARCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
             CALLMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
@@ -167,13 +160,11 @@ workflow FASTQUORUM {
         // MODULE: Align with bwa mem
         //
         ALIGN_CONSENSUS_BAM(ch_consensus_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "none")
-        ch_versions = ch_versions.mix(ALIGN_CONSENSUS_BAM.out.versions.first())
 
         //
         // MODULE: Run fgbio FilterConsensusReads
         //
         FILTERCONSENSUSREADS(ALIGN_CONSENSUS_BAM.out.bam, ch_fasta, params.filter_min_reads, params.filter_min_baseq, params.filter_max_base_error_rate)
-        ch_versions = ch_versions.mix(FILTERCONSENSUSREADS.out.versions.first())
     }
     else {
         if (params.duplex_seq) {
@@ -181,7 +172,6 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallDuplexConsensusReads and fgbio FilterConsensusReads
             //
             CALLANDFILTERDUPLEXCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai, params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
-            ch_versions = ch_versions.mix(CALLANDFILTERDUPLEXCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
             CALLANDFILTERDUPLEXCONSENSUSREADS.out.bam.set { ch_consensus_bam }
@@ -191,7 +181,6 @@ workflow FASTQUORUM {
             // MODULE: Run fgbio CallMolecularConsensusReads and fgbio FilterConsensusReads
             //
             CALLANDFILTERMOLECULARCONSENSUSREADS(GROUPREADSBYUMI.out.bam, ch_fasta, ch_fasta_fai, params.call_min_reads, params.call_min_baseq, params.filter_max_base_error_rate)
-            ch_versions = ch_versions.mix(CALLANDFILTERMOLECULARCONSENSUSREADS.out.versions.first())
 
             // Add the consensus BAM to the channel for downstream processing
             CALLANDFILTERMOLECULARCONSENSUSREADS.out.bam.set { ch_consensus_bam }
@@ -201,7 +190,6 @@ workflow FASTQUORUM {
         // MODULE: Align with bwa mem
         //
         ALIGN_CONSENSUS_BAM(ch_consensus_bam, ch_fasta, ch_fasta_fai, ch_dict, ch_bwa, "coordinate")
-        ch_versions = ch_versions.mix(ALIGN_CONSENSUS_BAM.out.versions.first())
     }
 
     //

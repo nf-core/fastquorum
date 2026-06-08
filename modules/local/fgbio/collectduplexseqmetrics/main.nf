@@ -13,7 +13,7 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
     output:
     tuple val(meta), path("*duplex_seq_metrics*.txt"), emit: metrics
     tuple val(meta), path("*duplex_qc.pdf"), emit: pdf
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def args = task.ext.args ?: ''
@@ -36,11 +36,6 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
         --output ${prefix}.duplex_seq_metrics \\
         --duplex-umi-counts=true \\
         ${args};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -52,10 +47,5 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
     touch ${prefix}.duplex_seq_metrics.family_sizes.txt
     touch ${prefix}.duplex_seq_metrics.umi_counts.txt
     touch ${prefix}.duplex_seq_metrics.duplex_qc.pdf
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

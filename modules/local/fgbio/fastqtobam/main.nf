@@ -12,7 +12,7 @@ process FGBIO_FASTQTOBAM {
 
     output:
     tuple val(meta), path("*.unmapped.bam"), emit: bam
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     when:
     task.ext.when == null || task.ext.when
@@ -42,21 +42,11 @@ process FGBIO_FASTQTOBAM {
         --sample ${meta.sample} \\
         --library ${meta.id} \\
         ${args}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.unmapped.bam
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

@@ -16,7 +16,7 @@ process FGBIO_GROUPREADSBYUMI {
     tuple val(meta), path("*.grouped.bam"), emit: bam
     tuple val(meta), path("*.grouped-family-sizes.txt"), emit: histogram
     tuple val(meta), path("*.grouped-read-metrics.txt"), emit: read_metrics
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def args = task.ext.args ?: ''
@@ -43,11 +43,6 @@ process FGBIO_GROUPREADSBYUMI {
         --family-size-histogram ${prefix}.grouped-family-sizes.txt \\
         --grouping-metrics ${prefix}.grouped-read-metrics.txt \\
         ${args}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -56,10 +51,5 @@ process FGBIO_GROUPREADSBYUMI {
     touch ${prefix}.grouped.bam
     touch ${prefix}.grouped-family-sizes.txt
     touch ${prefix}.grouped-read-metrics.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

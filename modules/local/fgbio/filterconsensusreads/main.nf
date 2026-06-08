@@ -18,7 +18,7 @@ process FGBIO_FILTERCONSENSUSREADS {
     output:
     tuple val(meta), path("*.cons.filtered.bam"), emit: bam
     tuple val(meta), path("*.cons.filtered.bam.bai"), emit: bai
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def fgbio_args = task.ext.fgbio_args ?: ''
@@ -50,11 +50,6 @@ process FGBIO_FILTERCONSENSUSREADS {
         -o ${prefix}.cons.filtered.bam##idx##${prefix}.cons.filtered.bam.bai \\
         --write-index \\
         ${samtools_args};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -62,10 +57,5 @@ process FGBIO_FILTERCONSENSUSREADS {
     """
     touch ${prefix}.cons.filtered.bam
     touch ${prefix}.cons.filtered.bam.bai
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

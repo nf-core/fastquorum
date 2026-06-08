@@ -16,7 +16,7 @@ process FGBIO_CORRECTUMIS {
     tuple val(meta), path("*.corrected.bam"), emit: bam
     tuple val(meta), path("*.rejected.bam"), emit: rejects
     tuple val(meta), path("*.correct-umis-metrics.txt"), emit: metrics
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     when:
     task.ext.when == null || task.ext.when
@@ -46,11 +46,6 @@ process FGBIO_CORRECTUMIS {
         --min-distance ${min_distance} \\
         --umi-files ${umi_file} \\
         ${args}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -59,10 +54,5 @@ process FGBIO_CORRECTUMIS {
     touch ${prefix}.corrected.bam
     touch ${prefix}.rejected.bam
     touch ${prefix}.correct-umis-metrics.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

@@ -17,7 +17,7 @@ process FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS {
 
     output:
     tuple val(meta), path("*.cons.filtered.bam"), emit: bam
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def fgbio_call_args = task.ext.fgbio_call_args ?: ''
@@ -64,21 +64,11 @@ process FGBIO_CALLANDFILTERDUPLEXCONSENSUSREADS {
         --min-base-quality ${min_baseq} \\
         --max-base-error-rate ${max_base_error_rate} \\
         ${fgbio_filter_args};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"
     """
     touch ${prefix}.cons.filtered.bam
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }
