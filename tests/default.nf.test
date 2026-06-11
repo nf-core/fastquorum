@@ -14,9 +14,9 @@ nextflow_pipeline {
 
         then {
             // stable_name: All files + folders in ${params.outdir}/ with a stable name
-            // multiqc_plots/ exports are environment-dependent (rendered on linux/amd64 CI but not on
-            // some local arch), so exclude them from the file-list snapshot for stability.
-            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}', 'multiqc/multiqc_plots', 'multiqc/multiqc_plots/**'])
+            // (the test profile disables MultiQC static plot export, so multiqc_plots/ — which is
+            // only rendered on some architectures — never appears here and the list is deterministic)
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
             // stable_path: All files in ${params.outdir}/ with stable content
             def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
             // bam_files: All bam files

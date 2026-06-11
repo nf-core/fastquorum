@@ -1,0 +1,6 @@
+# Test-only MultiQC overrides, merged on top of assets/multiqc_config.yml.
+# Disable static plot export (multiqc_plots/) so the test output is deterministic across
+# architectures: MultiQC only renders multiqc_plots/ where its kaleido backend works
+# (linux/amd64) and skips it elsewhere (e.g. arm64, or amd64 under Rosetta), which made the
+# file-list snapshot environment-dependent. Production runs keep export_plots: true.
+export_plots: false
