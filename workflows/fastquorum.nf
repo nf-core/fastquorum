@@ -42,7 +42,6 @@ workflow FASTQUORUM {
 
     main:
 
-    ch_versions = channel.empty()
     ch_multiqc_files = channel.empty()
     //
     // MODULE: Run FastQC
@@ -212,7 +211,7 @@ workflow FASTQUORUM {
             "${process}:\n${tool_versions.join('\n')}"
         }
 
-    softwareVersionsToYAML(ch_versions.mix(topic_versions.versions_file))
+    softwareVersionsToYAML(topic_versions.versions_file)
         .mix(topic_versions_string)
         .collectFile(
             storeDir: "${params.outdir}/pipeline_info",
@@ -262,5 +261,4 @@ workflow FASTQUORUM {
 
     emit:
     multiqc_report = MULTIQC.out.report.map { _meta, report -> [report] }.toList() // channel: /path/to/multiqc_report.html
-    versions = ch_versions // channel: [ path(versions.yml) ]
 }

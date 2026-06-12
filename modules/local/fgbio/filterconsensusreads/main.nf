@@ -19,6 +19,7 @@ process FGBIO_FILTERCONSENSUSREADS {
     tuple val(meta), path("*.cons.filtered.bam"), emit: bam
     tuple val(meta), path("*.cons.filtered.bam.bai"), emit: bai
     tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
+    tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), topic: versions, emit: versions_samtools
 
     script:
     def fgbio_args = task.ext.fgbio_args ?: ''
