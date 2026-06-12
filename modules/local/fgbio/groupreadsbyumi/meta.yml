@@ -1,62 +1,50 @@
 name: fgbio_groupreadsbyumi
 description: |
-  Groups reads together that appear to have come from the same original molecule.
+  Groups reads together that appear to have come from the same original molecule,
+  based on their UMIs and mapping positions.
 keywords:
-  - UMI
+  - umi
   - groupreads
   - fgbio
+  - bam
 tools:
   - fgbio:
       description: A set of tools for working with genomic and high throughput sequencing data, including UMIs
       homepage: http://fulcrumgenomics.github.io/fgbio/
       documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
       tool_dev_url: https://github.com/fulcrumgenomics/fgbio
-      doi: ""
       licence: ["MIT"]
-
 input:
   - meta:
       type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
   - mapped_bam:
       type: file
-      description: |
-        BAM file.
+      description: Mapped BAM with UMIs present in the RX tag
       pattern: "*.bam"
   - strategy:
-      type: value
+      type: string
       description: |
-        The UMI assignment strategy.
-        Must be chosen among: Identity, Edit, Adjacency, Paired.
-  - edit:
-      type: value
-      description: |
-        The allowable number of edits between UMIs
-
+        The UMI assignment strategy, one of: Identity, Edit, Adjacency, Paired.
+  - edits:
+      type: integer
+      description: The allowable number of edits between UMIs
 output:
   - meta:
       type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
-  - versions:
-      type: file
-      description: File containing software versions
-      pattern: "versions.yml"
+      description: Groovy Map containing sample information
   - bam:
       type: file
-      description: UMI-grouped BAM
+      description: UMI-grouped BAM with the MI tag assigned
       pattern: "*.grouped.bam"
   - histogram:
       type: file
-      description: A text file containing the tag family size counts
+      description: Text file containing the tag family size counts
       pattern: "*.grouped-family-sizes.txt"
-
-authors:
-  - "@lescai"
-
+  - read_metrics:
+      type: file
+      description: Text file containing per-read grouping metrics
+      pattern: "*.grouped-read-metrics.txt"
 containers:
   docker:
     linux/amd64:
@@ -68,3 +56,7 @@ containers:
       name: oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b
     linux/arm64:
       name: oras://community.wave.seqera.io/library/fgbio:2.5.21--61a21b7736fed99a
+authors:
+  - "@nh13"
+maintainers:
+  - "@nh13"

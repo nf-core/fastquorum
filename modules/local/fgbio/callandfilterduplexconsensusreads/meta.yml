@@ -17,15 +17,32 @@ input:
       description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
   - bam:
       type: file
-      description: Input BAM file
+      description: Input BAM file with UMI grouped reads, from fgbio's GroupReadsByUmi paired mode
       pattern: "*.bam"
+  - fasta:
+      type: file
+      description: FASTA reference file, used by the filtering step
+      pattern: "*.{fasta,fa}"
+  - fasta_fai:
+      type: file
+      description: FASTA index (.fai) for the reference
+      pattern: "*.fai"
+  - min_reads:
+      type: integer
+      description: The minimum number of reads supporting a consensus base/read
+  - min_baseq:
+      type: integer
+      description: The minimum base quality (used for both calling input and filtering)
+  - max_base_error_rate:
+      type: float
+      description: The maximum raw-read error rate at a consensus base
 output:
   - meta:
       type: map
       description: Groovy Map containing sample information
   - bam:
       type: file
-      description: Output BAM file
+      description: Output BAM file containing filtered duplex consensus reads
       pattern: "*.bam"
 containers:
   docker:
@@ -40,7 +57,5 @@ containers:
       name: oras://community.wave.seqera.io/library/fgbio:2.5.21--61a21b7736fed99a
 authors:
   - "@nh13"
-  - "@znorgaard"
 maintainers:
   - "@nh13"
-  - "@znorgaard"

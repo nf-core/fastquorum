@@ -23,16 +23,36 @@ input:
       description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
   - bam:
       type: file
-      description: Input BAM file
+      description: Input BAM file containing consensus reads
       pattern: "*.bam"
+  - genome:
+      type: map
+      description: Groovy Map containing reference information
+  - fasta:
+      type: file
+      description: FASTA reference file
+      pattern: "*.{fasta,fa}"
+  - min_reads:
+      type: integer
+      description: The minimum number of reads supporting a consensus base/read
+  - min_baseq:
+      type: integer
+      description: The minimum consensus base quality to retain a base
+  - max_base_error_rate:
+      type: float
+      description: The maximum raw-read error rate at a consensus base
 output:
   - meta:
       type: map
       description: Groovy Map containing sample information
   - bam:
       type: file
-      description: Output BAM file
-      pattern: "*.bam"
+      description: Coordinate-sorted BAM of filtered consensus reads
+      pattern: "*.cons.filtered.bam"
+  - bai:
+      type: file
+      description: Index for the filtered consensus BAM
+      pattern: "*.cons.filtered.bam.bai"
 containers:
   docker:
     linux/amd64:
@@ -46,7 +66,5 @@ containers:
       name: oras://community.wave.seqera.io/library/fgbio_samtools:bdd8d3bb0416659a
 authors:
   - "@nh13"
-  - "@znorgaard"
 maintainers:
   - "@nh13"
-  - "@znorgaard"
