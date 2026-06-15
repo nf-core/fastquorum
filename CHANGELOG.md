@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [PR #145](https://github.com/nf-core/fastquorum/pull/145) - Add non-random UMI correction via fgbio CorrectUmis, enabled by an optional `umi_file` column in the samplesheet
 - [PR #147](https://github.com/nf-core/fastquorum/pull/147) - Add optional `library_id`, `lane`, and `flowcell` samplesheet columns and fix silent pre-merge output overwrites across lanes ([#146](https://github.com/nf-core/fastquorum/issues/146))
 - [PR #150](https://github.com/nf-core/fastquorum/pull/150) - Update to nf-core/tools template version 4.0.2 (raise minimum Nextflow to 25.10.4; remove webhook notifications; move `CONTRIBUTING.md` to `docs/`; switch git hooks to `prek`)
+- [PR #151](https://github.com/nf-core/fastquorum/pull/151) - Update nf-core modules (bwa, fastqc, multiqc, samtools) and remove the `name` field from module `environment.yml` files so the local patches are no longer needed
 
 ### Credits
 

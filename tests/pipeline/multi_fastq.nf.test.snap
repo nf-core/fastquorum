@@ -1,4 +1,14 @@
 {
+    "multi_fastq_ht_software_versions": {
+        "content": [
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLANDFILTERDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v1.3.0dev"
+        ],
+        "timestamp": "2026-06-05T14:57:44.448018",
+        "meta": {
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
+        }
+    },
     "multi_fastq_rd": {
         "content": [
             "SRR6109255_two_fastqs.grouped-family-sizes.txt:md5,d2b8b8eb6c01a58f9aea6596b44e3735",
@@ -8,17 +18,7 @@
             "SRR6109255_four_fastqs.grouped-family-sizes.txt:md5,150a851a1ae78822b65b74040d05172c",
             "SRR6109255_four_fastqs.duplex_seq_metrics.family_sizes.txt:md5,60dafa16823744a37fe9ad85d08b038c"
         ],
-        "timestamp": "2024-05-20T01:50:53.564089",
-        "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
-        }
-    },
-    "multi_fastq_ht_software_versions": {
-        "content": [
-            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLANDFILTERDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; Workflow:nf-core/fastquorum=v1.3.0dev"
-        ],
-        "timestamp": "2026-03-18T14:31:02.836937",
+        "timestamp": "2026-06-12T16:09:35.523504",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -26,9 +26,9 @@
     },
     "multi_fastq_rd_software_versions": {
         "content": [
-            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; Workflow:nf-core/fastquorum=v1.3.0dev"
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v1.3.0dev"
         ],
-        "timestamp": "2026-03-18T14:28:18.512622",
+        "timestamp": "2026-06-05T14:55:21.115395",
         "meta": {
             "nf-test": "0.9.4",
             "nextflow": "25.10.4"
@@ -43,10 +43,10 @@
             "SRR6109255_four_fastqs.grouped-family-sizes.txt:md5,150a851a1ae78822b65b74040d05172c",
             "SRR6109255_four_fastqs.duplex_seq_metrics.family_sizes.txt:md5,60dafa16823744a37fe9ad85d08b038c"
         ],
-        "timestamp": "2024-05-20T01:58:10.241449",
+        "timestamp": "2026-06-12T16:12:01.884969",
         "meta": {
-            "nf-test": "0.8.4",
-            "nextflow": "23.10.1"
+            "nf-test": "0.9.4",
+            "nextflow": "25.10.4"
         }
     }
 }

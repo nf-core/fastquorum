@@ -77,6 +77,14 @@ Update the snapshots with the following command:
 nf-test test --tag test --profile +docker --verbose --update-snapshots
 ```
 
+> [!NOTE]
+> The `test` profile sets `multiqc_config = assets/multiqc_test_config.yml`, which disables
+> MultiQC static plot export (`export_plots: false`). MultiQC only renders `multiqc/multiqc_plots/`
+> where its kaleido backend works (linux/amd64) and silently skips it elsewhere (e.g. arm64, or
+> amd64 under Rosetta), so leaving it enabled makes the file-list snapshot architecture-dependent.
+> Disabling it for tests keeps snapshots deterministic and reproducible on any architecture.
+> Production runs are unaffected — `assets/multiqc_config.yml` keeps `export_plots: true`.
+
 When you create a pull request with changes, GitHub Actions will run automatic tests.
 Pull requests are typically reviewed when these tests are passing.
 
