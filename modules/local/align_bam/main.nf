@@ -2,10 +2,10 @@ process ALIGN_BAM {
     tag "${meta.id}"
     label 'process_high'
 
-    conda "bioconda::fgbio=2.5.21 bioconda::bwa=0.7.18 bioconda::samtools=1.21"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/22/22fbb5151a7ad857d7a56f28237cdba655110cdd5e685626b0247bd3f04b1b88/data'
-        : 'community.wave.seqera.io/library/bwa_fgbio_samtools:9e8214f5bc9fbfc1'}"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'oras://community.wave.seqera.io/library/fgbio_bwa_samtools:ee569c458f161e6b'
+        : 'community.wave.seqera.io/library/fgbio_bwa_samtools:04bc9788bca8242c'}"
 
     input:
     tuple val(meta), path(unmapped_bam)
@@ -18,7 +18,9 @@ process ALIGN_BAM {
     output:
     tuple val(meta), path("*.mapped.bam"), emit: bam
     tuple val(meta), path("*.mapped.bam.bai"), emit: bai, optional: true
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('bwa'), eval('bwa 2>&1 | sed -n "s/^Version: //p"'), topic: versions, emit: versions_bwa
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
+    tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), topic: versions, emit: versions_samtools
 
     when:
     task.ext.when == null || task.ext.when
@@ -86,13 +88,6 @@ process ALIGN_BAM {
             --tags-to-revcomp Consensus \\
             ${fgbio_args} \\
             ${extra_command};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bwa: \$(echo \$(bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -101,12 +96,5 @@ process ALIGN_BAM {
     """
     touch ${prefix}.mapped.bam
     ${index_command}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        bwa: \$(echo \$(bwa 2>&1) | sed 's/^.*Version: //; s/Contact:.*\$//')
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
-    END_VERSIONS
     """
 }

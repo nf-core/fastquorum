@@ -1,11 +1,8 @@
-name: fgbio_groupreadsbyumi
-description: |
-  Groups reads together that appear to have come from the same original molecule,
-  based on their UMIs and mapping positions.
+name: fgbio_callduplexconsensusreads
+description: Call duplex consensus reads from grouped reads with fgbio
 keywords:
-  - umi
-  - groupreads
   - fgbio
+  - duplex
   - bam
 tools:
   - fgbio:
@@ -18,33 +15,24 @@ input:
   - meta:
       type: map
       description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
-  - mapped_bam:
+  - bam:
       type: file
-      description: Mapped BAM with UMIs present in the RX tag
+      description: Input BAM file with UMI grouped reads, from fgbio's GroupReadsByUmi paired mode
       pattern: "*.bam"
-  - strategy:
-      type: string
-      description: |
-        The UMI assignment strategy, one of: Identity, Edit, Adjacency, Paired.
-  - edits:
+  - min_reads:
       type: integer
-      description: The allowable number of edits between UMIs
+      description: The minimum number of input reads to a consensus read
+  - min_baseq:
+      type: integer
+      description: The minimum input base quality for a base to contribute to a consensus
 output:
   - meta:
       type: map
       description: Groovy Map containing sample information
   - bam:
       type: file
-      description: UMI-grouped BAM with the MI tag assigned
-      pattern: "*.grouped.bam"
-  - histogram:
-      type: file
-      description: Text file containing the tag family size counts
-      pattern: "*.grouped-family-sizes.txt"
-  - read_metrics:
-      type: file
-      description: Text file containing per-read grouping metrics
-      pattern: "*.grouped-read-metrics.txt"
+      description: Output BAM file containing duplex consensus reads
+      pattern: "*.bam"
 containers:
   docker:
     linux/amd64:

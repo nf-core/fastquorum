@@ -1,11 +1,8 @@
-name: fgbio_groupreadsbyumi
-description: |
-  Groups reads together that appear to have come from the same original molecule,
-  based on their UMIs and mapping positions.
+name: fgbio_correctumis
+description: Correct UMIs against a known set of expected UMIs with fgbio
 keywords:
-  - umi
-  - groupreads
   - fgbio
+  - umi
   - bam
 tools:
   - fgbio:
@@ -18,33 +15,36 @@ input:
   - meta:
       type: map
       description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
-  - mapped_bam:
+  - bam:
       type: file
-      description: Mapped BAM with UMIs present in the RX tag
+      description: Input BAM file with UMIs in the RX tag
       pattern: "*.bam"
-  - strategy:
-      type: string
-      description: |
-        The UMI assignment strategy, one of: Identity, Edit, Adjacency, Paired.
-  - edits:
+  - umi_file:
+      type: file
+      description: File listing the expected UMI sequences, one per line
+      pattern: "*.{txt,fasta,fa}"
+  - max_mismatches:
       type: integer
-      description: The allowable number of edits between UMIs
+      description: The maximum number of mismatches between a read's UMI and an expected UMI
+  - min_distance:
+      type: integer
+      description: The minimum edit distance to the second-best expected UMI to accept a correction
 output:
   - meta:
       type: map
       description: Groovy Map containing sample information
   - bam:
       type: file
-      description: UMI-grouped BAM with the MI tag assigned
-      pattern: "*.grouped.bam"
-  - histogram:
+      description: BAM with corrected UMIs (reads whose UMIs were matched/corrected)
+      pattern: "*.corrected.bam"
+  - rejects:
       type: file
-      description: Text file containing the tag family size counts
-      pattern: "*.grouped-family-sizes.txt"
-  - read_metrics:
+      description: BAM containing reads whose UMIs could not be matched to an expected UMI
+      pattern: "*.rejected.bam"
+  - metrics:
       type: file
-      description: Text file containing per-read grouping metrics
-      pattern: "*.grouped-read-metrics.txt"
+      description: Metrics describing the frequency with which each expected UMI was observed
+      pattern: "*.correct-umis-metrics.txt"
 containers:
   docker:
     linux/amd64:

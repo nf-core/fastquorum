@@ -2,9 +2,9 @@ process FGBIO_GROUPREADSBYUMI {
     tag "${meta.id}"
     label 'process_low'
 
-    conda "bioconda::fgbio=2.5.21"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/87/b4047e3e517b57fae311eab139a12f0887d898b7da5fceeb2a1029c73b9e3904/data'
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b'
         : 'community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243'}"
 
     input:
@@ -16,7 +16,7 @@ process FGBIO_GROUPREADSBYUMI {
     tuple val(meta), path("*.grouped.bam"), emit: bam
     tuple val(meta), path("*.grouped-family-sizes.txt"), emit: histogram
     tuple val(meta), path("*.grouped-read-metrics.txt"), emit: read_metrics
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def args = task.ext.args ?: ''
@@ -43,11 +43,6 @@ process FGBIO_GROUPREADSBYUMI {
         --family-size-histogram ${prefix}.grouped-family-sizes.txt \\
         --grouping-metrics ${prefix}.grouped-read-metrics.txt \\
         ${args}
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -56,10 +51,5 @@ process FGBIO_GROUPREADSBYUMI {
     touch ${prefix}.grouped.bam
     touch ${prefix}.grouped-family-sizes.txt
     touch ${prefix}.grouped-read-metrics.txt
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

@@ -1,11 +1,8 @@
-name: fgbio_groupreadsbyumi
-description: |
-  Groups reads together that appear to have come from the same original molecule,
-  based on their UMIs and mapping positions.
+name: fgbio_callandfiltermolecularconsensusreads
+description: Call and filter molecular (single-strand) consensus reads in one step with fgbio
 keywords:
-  - umi
-  - groupreads
   - fgbio
+  - consensus
   - bam
 tools:
   - fgbio:
@@ -18,33 +15,35 @@ input:
   - meta:
       type: map
       description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
-  - mapped_bam:
+  - bam:
       type: file
-      description: Mapped BAM with UMIs present in the RX tag
+      description: Input BAM file with UMI grouped reads, from fgbio's GroupReadsByUmi
       pattern: "*.bam"
-  - strategy:
-      type: string
-      description: |
-        The UMI assignment strategy, one of: Identity, Edit, Adjacency, Paired.
-  - edits:
+  - fasta:
+      type: file
+      description: FASTA reference file, used by the filtering step
+      pattern: "*.{fasta,fa}"
+  - fasta_fai:
+      type: file
+      description: FASTA index (.fai) for the reference
+      pattern: "*.fai"
+  - min_reads:
       type: integer
-      description: The allowable number of edits between UMIs
+      description: The minimum number of reads supporting a consensus base/read
+  - min_baseq:
+      type: integer
+      description: The minimum base quality (used for both calling input and filtering)
+  - max_base_error_rate:
+      type: float
+      description: The maximum raw-read error rate at a consensus base
 output:
   - meta:
       type: map
       description: Groovy Map containing sample information
   - bam:
       type: file
-      description: UMI-grouped BAM with the MI tag assigned
-      pattern: "*.grouped.bam"
-  - histogram:
-      type: file
-      description: Text file containing the tag family size counts
-      pattern: "*.grouped-family-sizes.txt"
-  - read_metrics:
-      type: file
-      description: Text file containing per-read grouping metrics
-      pattern: "*.grouped-read-metrics.txt"
+      description: Output BAM file containing filtered single strand consensus reads
+      pattern: "*.bam"
 containers:
   docker:
     linux/amd64:
