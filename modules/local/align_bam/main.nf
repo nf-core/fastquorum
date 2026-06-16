@@ -3,7 +3,7 @@ process ALIGN_BAM {
     label 'process_high'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'oras://community.wave.seqera.io/library/fgbio_bwa_samtools:ee569c458f161e6b'
         : 'community.wave.seqera.io/library/fgbio_bwa_samtools:04bc9788bca8242c'}"
 

@@ -3,7 +3,7 @@ process FGBIO_FILTERCONSENSUSREADS {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'oras://community.wave.seqera.io/library/fgbio_samtools:b4fdf6d47eb1eb4a'
         : 'community.wave.seqera.io/library/fgbio_samtools:4f7e98e5f90057a3'}"
 

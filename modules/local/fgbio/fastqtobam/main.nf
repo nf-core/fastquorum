@@ -3,7 +3,7 @@ process FGBIO_FASTQTOBAM {
     label 'process_low'
 
     conda "${moduleDir}/environment.yml"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
         ? 'oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b'
         : 'community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243'}"
 
