@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
-## [[2.0.0]](https://github.com/nf-core/fastquorum/releases/tag/2.0.0) -- 2026-06-18
+## [[2.0.0]](https://github.com/nf-core/fastquorum/releases/tag/2.0.0) -- 2026-06-22
 
 ### Credits
 
