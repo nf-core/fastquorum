@@ -10,3 +10,9 @@ testing*
 .nf-test.log
 .idea
 null/
+.claude/
+pixi.toml
+pixi.lock
+.pixi/
+.worktrees
+.lineage/

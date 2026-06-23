@@ -1,5 +1,4 @@
 lint:
-  actions_ci: false
   files_exist:
     - .github/workflows/awsfulltest.yml
     - .github/workflows/awstest.yml
@@ -7,10 +6,13 @@ lint:
   files_unchanged:
     - .gitignore
     - .github/PULL_REQUEST_TEMPLATE.md
+    - .github/workflows/branch.yml
+    - .github/workflows/linting.yml
     - assets/nf-core-fastquorum_logo_light.png
+    - docs/images/nf-core-fastquorum_logo_dark.png
     - docs/images/Fulcrum.svg
   template_strings: false
-nf_core_version: 3.2.0
+nf_core_version: 4.0.2
 repository_type: pipeline
 template:
   author: Nils Homer
@@ -20,4 +22,4 @@ template:
   name: fastquorum
   org: nf-core
   outdir: .
-  version: 1.2.0
+  version: 2.0.0

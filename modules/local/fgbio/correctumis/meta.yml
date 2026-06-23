@@ -1,0 +1,62 @@
+name: fgbio_correctumis
+description: Correct UMIs against a known set of expected UMIs with fgbio
+keywords:
+  - fgbio
+  - umi
+  - bam
+tools:
+  - fgbio:
+      description: A set of tools for working with genomic and high throughput sequencing data, including UMIs
+      homepage: http://fulcrumgenomics.github.io/fgbio/
+      documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
+      tool_dev_url: https://github.com/fulcrumgenomics/fgbio
+      licence: ["MIT"]
+input:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
+  - bam:
+      type: file
+      description: Input BAM file with UMIs in the RX tag
+      pattern: "*.bam"
+  - umi_file:
+      type: file
+      description: File listing the expected UMI sequences, one per line
+      pattern: "*.{txt,fasta,fa}"
+  - max_mismatches:
+      type: integer
+      description: The maximum number of mismatches between a read's UMI and an expected UMI
+  - min_distance:
+      type: integer
+      description: The minimum edit distance to the second-best expected UMI to accept a correction
+output:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information
+  - bam:
+      type: file
+      description: BAM with corrected UMIs (reads whose UMIs were matched/corrected)
+      pattern: "*.corrected.bam"
+  - rejects:
+      type: file
+      description: BAM containing reads whose UMIs could not be matched to an expected UMI
+      pattern: "*.rejected.bam"
+  - metrics:
+      type: file
+      description: Metrics describing the frequency with which each expected UMI was observed
+      pattern: "*.correct-umis-metrics.txt"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--561e291fd356d057
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--61a21b7736fed99a
+authors:
+  - "@nh13"
+maintainers:
+  - "@nh13"

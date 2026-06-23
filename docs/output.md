@@ -13,7 +13,8 @@ The pipeline is built using [Nextflow](https://www.nextflow.io/) and processes d
 1. [Preprocessing](#preprocessing)
    1. [FastQC](#fastqc) - Raw read QC
    2. [fgbio FastqToBam](#fgbio-fastqtobam) - Fastq to BAM, extracting UMIs
-   3. [BWA](#bwa-raw-reads) - Align the raw reads
+   3. [fgbio CorrectUmis](#fgbio-correctumis) - Correct non-random UMIs (optional)
+   4. [BWA](#bwa-raw-reads) - Align the raw reads
 2. [Grouping](#grouping)
    1. [fgbio GroupReadsByUmi](#fgbio-groupreadsbyumi) - Group raw reads by UMI (to identify reads from the same source molecule)
 3. [Consensus Reads](#consensus-calling)
@@ -38,7 +39,9 @@ This significantly speeds up the workflow by eliminating an intermediate file (p
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/preprocessing/fastqc/<sample>`**
+In the examples below `meta.id` will be `library_id` if defined and `sample` if `library_id` is not defined.
+
+**Output directory: `{outdir}/preprocessing/fastqc/<meta.id>`**
 
 - `*_fastqc.html`: [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) report containing quality metrics.
 - `*_fastqc.zip`: Zip archive containing the [FastQC](http://www.bioinformatics.babraham.ac.uk/projects/fastqc/) report, tab-delimited data file and plot images.
@@ -58,11 +61,30 @@ The FastQC plots displayed in the MultiQC report shows _untrimmed_ reads. They m
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/preprocessing/fastqtobam/<sample>`**
+**Output directory: `{outdir}/preprocessing/fastqtobam/<meta.id>`**
 
 - '\*.unmapped.bam`
   - the unmapped BAM produced by [`fgbio FastqToBam`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FastqToBam.html).
   - the `RX` [SAM tag](https://samtools.github.io/hts-specs/SAMtags.pdf) stores the raw bases for the reads unique molecular identifier (UMI)
+
+</details>
+
+### fgbio CorrectUmis
+
+Corrects UMI sequences against a known set of expected UMIs. Only runs for samples with a `umi_file` specified in the samplesheet.
+
+<details markdown="1">
+<summary>Output files</summary>
+
+**Output directory: `{outdir}/preprocessing/correctumis/<meta.id>`**
+
+- `*.corrected.bam`
+  - the unmapped BAM with corrected UMI sequences in the `RX` tag, produced by [`fgbio CorrectUmis`](https://fulcrumgenomics.github.io/fgbio/tools/latest/CorrectUmis.html)
+  - original (uncorrected) UMI sequences are preserved in the `OX` tag
+- `*.rejected.bam`
+  - reads whose UMIs could not be corrected (for QC purposes; these reads are excluded from downstream processing)
+- `*.correct-umis-metrics.txt`
+  - metrics on UMI correction rates
 
 </details>
 
@@ -73,7 +95,7 @@ Aligns the raw reads to the genome, and then [template-coordinate](https://www.h
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/preprocessing/align_raw_bam/<sample>`**
+**Output directory: `{outdir}/preprocessing/align_raw_bam/<meta.id>`**
 
 - '\*.mapped.bam`
   - the mapped BAM produced by:
@@ -93,7 +115,7 @@ Groups the reads by their UMI, identifying reads that originate from the same so
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/grouping/groupreadsbyumi/<sample>`**
+**Output directory: `{outdir}/grouping/groupreadsbyumi/<meta.id>`**
 
 - '\*.mapped.bam`
   - the group BAM produced by [`fgbio GroupReadsByUmi`](http://fulcrumgenomics.github.io/fgbio/tools/latest/GroupReadsByUmi.html)
@@ -110,7 +132,7 @@ The output for both [`fgbio CallDuplexConsensusReads`](http://fulcrumgenomics.gi
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/consensus_calling/called/<sample>`**
+**Output directory: `{outdir}/consensus_calling/called/<meta.id>`**
 
 - '\*.cons.unmapped.bam`
   - the BAM with consensus calls
@@ -141,7 +163,7 @@ See [`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/consensus_filtering/filtered/<sample>`**
+**Output directory: `{outdir}/consensus_filtering/filtered/<meta.id>`**
 
 - '\*.cons.filtered.bam`
   - the BAM with filtered consensus calls produced by [`fgbio FilterConsensusReads`](http://fulcrumgenomics.github.io/fgbio/tools/latest/FilterConsensusReads.html)
@@ -155,7 +177,7 @@ Aligns the consensus reads to the genome.
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/filtering/align_consensus_bam/<sample>`**
+**Output directory: `{outdir}/filtering/align_consensus_bam/<meta.id>`**
 
 - '\*.mapped.bam`
   - the mapped BAM produced by:
@@ -175,16 +197,16 @@ Collect duplex sequencing specific metrics.
 <details markdown="1">
 <summary>Output files</summary>
 
-**Output directory: `{outdir}/metrics/duplex_seq/<sample>`**
+**Output directory: `{outdir}/metrics/duplex_seq/<meta.id>`**
 
 Metrics produced by [`fgbio CollectDuplexSeqMetrics`](http://fulcrumgenomics.github.io/fgbio/tools/latest/CollectDuplexSeqMetrics.html):
 
-- `*.family_sizes.txt*` - metrics on the frequency of different types of families of different sizes
-- `*.duplex_family_sizes.txt*`- metrics on the frequency of duplex tag families by the number of observations from each strand
-- `*.duplex_yield_metrics.txt*`- summary QC metrics produced using 5%, 10%, 15%...100% of the data
-- `*.umi_counts.txt*`- metrics on the frequency of observations of UMIs within reads and tag families
-- `*.duplex_qc.pdf*`- a series of plots generated from the preceding metrics files for visualization
-- `*.duplex_umi_counts.txt*`- (optional) metrics on the frequency of observations of duplex UMIs within reads and tag families. This file is only produced _if_ the `--duplex-umi-counts` option is used as it requires significantly more memory to track all pairs of UMIs seen when a large number of UMI sequences are present.
+- `*.family_sizes.txt` - metrics on the frequency of different types of families of different sizes
+- `*.duplex_family_sizes.txt`- metrics on the frequency of duplex tag families by the number of observations from each strand
+- `*.duplex_yield_metrics.txt`- summary QC metrics produced using 5%, 10%, 15%...100% of the data
+- `*.umi_counts.txt`- metrics on the frequency of observations of UMIs within reads and tag families
+- `*.duplex_qc.pdf`- a series of plots generated from the preceding metrics files for visualization
+- `*.duplex_umi_counts.txt`- (optional) metrics on the frequency of observations of duplex UMIs within reads and tag families. This file is only produced _if_ the `--duplex-umi-counts` option is used as it requires significantly more memory to track all pairs of UMIs seen when a large number of UMI sequences are present.
 
 </details>
 

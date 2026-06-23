@@ -5,17 +5,19 @@
   </picture>
 </h1>
 
-[![GitHub Actions CI Status](https://github.com/nf-core/fastquorum/actions/workflows/ci.yml/badge.svg)](https://github.com/nf-core/fastquorum/actions/workflows/ci.yml)
+[![Open in GitHub Codespaces](https://img.shields.io/badge/Open_In_GitHub_Codespaces-black?labelColor=grey&logo=github)](https://github.com/codespaces/new/nf-core/fastquorum)
+[![GitHub Actions CI Status](https://github.com/nf-core/fastquorum/actions/workflows/nf-test.yml/badge.svg)](https://github.com/nf-core/fastquorum/actions/workflows/nf-test.yml)
 [![GitHub Actions Linting Status](https://github.com/nf-core/fastquorum/actions/workflows/linting.yml/badge.svg)](https://github.com/nf-core/fastquorum/actions/workflows/linting.yml)[![AWS CI](https://img.shields.io/badge/CI%20tests-full%20size-FF9900?labelColor=000000&logo=Amazon%20AWS)](https://nf-co.re/fastquorum/results)[![Cite with Zenodo](http://img.shields.io/badge/DOI-10.5281/zenodo.11267672-1073c8?labelColor=000000)](https://doi.org/10.5281/zenodo.11267672)
 [![nf-test](https://img.shields.io/badge/unit_tests-nf--test-337ab7.svg)](https://www.nf-test.com)
 
-[![Nextflow](https://img.shields.io/badge/nextflow%20DSL2-%E2%89%A524.04.2-23aa62.svg)](https://www.nextflow.io/)
+[![Nextflow](https://img.shields.io/badge/version-%E2%89%A525.10.4-green?style=flat&logo=nextflow&logoColor=white&color=%230DC09D&link=https%3A%2F%2Fnextflow.io)](https://www.nextflow.io/)
+[![nf-core template version](https://img.shields.io/badge/nf--core_template-4.0.2-green?style=flat&logo=nfcore&logoColor=white&color=%2324B064&link=https%3A%2F%2Fnf-co.re)](https://github.com/nf-core/tools/releases/tag/4.0.2)
 [![run with conda](http://img.shields.io/badge/run%20with-conda-3EB049?labelColor=000000&logo=anaconda)](https://docs.conda.io/en/latest/)
 [![run with docker](https://img.shields.io/badge/run%20with-docker-0db7ed?labelColor=000000&logo=docker)](https://www.docker.com/)
 [![run with singularity](https://img.shields.io/badge/run%20with-singularity-1d355c.svg?labelColor=000000)](https://sylabs.io/docs/)
-[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://tower.nf/launch?pipeline=https://github.com/nf-core/fastquorum)
+[![Launch on Seqera Platform](https://img.shields.io/badge/Launch%20%F0%9F%9A%80-Seqera%20Platform-%234256e7)](https://cloud.seqera.io/launch?pipeline=https://github.com/nf-core/fastquorum)
 
-[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23fastquorum-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/fastquorum)[![Follow on Twitter](http://img.shields.io/badge/twitter-%40nf__core-1DA1F2?labelColor=000000&logo=twitter)](https://twitter.com/nf_core)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
+[![Get help on Slack](http://img.shields.io/badge/slack-nf--core%20%23fastquorum-4A154B?labelColor=000000&logo=slack)](https://nfcore.slack.com/channels/fastquorum)[![Follow on Bluesky](https://img.shields.io/badge/bluesky-%40nf__core-1185fe?labelColor=000000&logo=bluesky)](https://bsky.app/profile/nf-co.re)[![Follow on Mastodon](https://img.shields.io/badge/mastodon-nf__core-6364ff?labelColor=FFFFFF&logo=mastodon)](https://mstdn.science/@nf_core)[![Watch on YouTube](http://img.shields.io/badge/youtube-nf--core-FF0000?labelColor=000000&logo=youtube)](https://www.youtube.com/c/nf-core)
 
 ## Introduction
 
@@ -60,7 +62,7 @@ On release, automated continuous integration tests run the pipeline on a full-si
 | No       | NEBNext                                                   | New England Biosciences     | Single | Random     | index1 (i7)      |                 | [link](https://www.neb.com/en-us/products/e7874nebnext-multiplex-oligos-for-illumina-unique-dual-index-umi-adaptors-dna-set-2)                                                      |
 | No       | AML MRD                                                   | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/aml-assay/)                                                                                                                                        |
 | No       | Mutagenesis                                               | TwinStrand Biosciences      | Dual   | Random     |                  |                 | [link](https://twinstrandbio.com/mutagenesis-assay/)                                                                                                                                |
-| No       | UMI Adapter System                                        | Twist Biosciences           | Dual   | Random     | Inline (R1 & R2) | `5M2S+T 5M2S+T` | [link](https://www.twistbioscience.com/products/ngs/library-preparation/twist-umi-adapter-system)                                                                                   |
+| No       | UMI Adapter System                                        | Twist Biosciences           | Dual   | Nonrandom  | Inline (R1 & R2) | `5M2S+T 5M2S+T` | [link](https://www.twistbioscience.com/products/ngs/library-preparation/twist-umi-adapter-system)                                                                                   |
 
 Column Definitions:
 
@@ -93,6 +95,8 @@ CONTROL_REP1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5
 Each row represents a fastq file (single-end) or a pair of fastq files (paired end).
 The `sample` column provides a unique identifier for the given sample, while the `read_structure` describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es).
 (Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.)
+
+If you have multiple sets of FASTQ files for a single sample, be sure to read [usage.md/Multiple runs of the same sample](docs/usage.md#multiple-runs-of-the-same-sample).
 
 Now, you can run the pipeline using:
 
@@ -145,7 +149,7 @@ We thank [Fulcrum Genomics](https://www.fulcrumgenomics.com/) for their extensiv
 
 ## Contributions and Support
 
-If you would like to contribute to this pipeline, please see the [contributing guidelines](.github/CONTRIBUTING.md).
+If you would like to contribute to this pipeline, please see the [contributing guidelines](docs/CONTRIBUTING.md).
 
 For further information or help, don't hesitate to get in touch on the [Slack `#fastquorum` channel](https://nfcore.slack.com/channels/fastquorum) (you can join with [this invite](https://nf-co.re/join/slack)).
 

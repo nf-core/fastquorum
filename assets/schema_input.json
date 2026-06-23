@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/master/assets/schema_input.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/main/assets/schema_input.json",
     "title": "nf-core/fastquorum pipeline - params.input schema",
     "description": "Schema for the file provided with params.input",
     "type": "array",
@@ -11,7 +11,29 @@
                 "type": "string",
                 "pattern": "^\\S+$",
                 "errorMessage": "Sample name must be provided and cannot contain spaces",
-                "meta": ["id"]
+                "meta": ["sample"],
+                "description": "Biological sample or source genetic material. Cannot contain spaces."
+            },
+            "library_id": {
+                "type": "string",
+                "pattern": "^\\S+$",
+                "errorMessage": "Library ID cannot contain spaces",
+                "meta": ["library_id"],
+                "description": "A library prep identifier; must be globally unique across the samplesheet. When provided, becomes the pipeline processing unit instead of sample."
+            },
+            "lane": {
+                "type": ["string", "integer"],
+                "pattern": "^[A-Za-z0-9]+$",
+                "errorMessage": "Lane must contain only alphanumeric characters",
+                "meta": ["lane"],
+                "description": "Sequencing lane identifier. Together with flowcell, identifies and distinguishes multiple runs of the same sample/library."
+            },
+            "flowcell": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9]+$",
+                "errorMessage": "Flowcell must contain only alphanumeric characters",
+                "meta": ["flowcell"],
+                "description": "Flowcell identifier for the sequencing run."
             },
             "fastq_1": {
                 "type": "string",
@@ -46,6 +68,14 @@
                 "pattern": "^.*$",
                 "errorMessage": "Read structure must be provided; For format, see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures",
                 "meta": ["read_structure"]
+            },
+            "umi_file": {
+                "type": "string",
+                "format": "file-path",
+                "exists": true,
+                "pattern": "^\\S+$",
+                "errorMessage": "UMI file path cannot contain spaces",
+                "meta": ["umi_file"]
             }
         },
         "required": ["sample", "fastq_1", "read_structure"]

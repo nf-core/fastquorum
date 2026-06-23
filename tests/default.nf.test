@@ -1,0 +1,44 @@
+nextflow_pipeline {
+
+    name "Test pipeline"
+    script "../main.nf"
+    tag "pipeline"
+
+    test("-profile test") {
+
+        when {
+            params {
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            // stable_name: All files + folders in ${params.outdir}/ with a stable name
+            // (the test profile disables MultiQC static plot export, so multiqc_plots/ — which is
+            // only rendered on some architectures — never appears here and the list is deterministic)
+            def stable_name = getAllFilesFromDir(params.outdir, relative: true, includeDir: true, ignore: ['pipeline_info/*.{html,json,txt}'])
+            // stable_path: All files in ${params.outdir}/ with stable content
+            def stable_path = getAllFilesFromDir(params.outdir, ignoreFile: 'tests/.nftignore')
+            // bam_files: All bam files
+            def bam_files  = getAllFilesFromDir(params.outdir, include: ['**/*.bam'])
+            // versions: parsed YAML with Nextflow version removed, serialized to a stable string
+            def versions = removeNextflowVersion("$outputDir/pipeline_info/nf_core_fastquorum_software_mqc_versions.yml")
+            def stable_versions = versions.collect { process, tools ->
+                "${process}:" + tools.collect { tool, ver -> "${tool}=${ver}" }.sort().join(",")
+            }.sort().join("; ")
+            assertAll(
+                { assert workflow.success},
+                { assert snapshot(
+                    // pipeline versions with stable serialization across Nextflow versions
+                    stable_versions,
+                    // All stable path name, with a relative path
+                    stable_name,
+                    // All files with stable contents
+                    stable_path,
+                    // All bam files
+                    bam_files.collect{ file -> [ file.getName(), bam(file.toString()).getReadsMD5() ] }
+                ).match() }
+            )
+        }
+    }
+}

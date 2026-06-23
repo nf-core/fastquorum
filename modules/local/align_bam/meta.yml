@@ -1,25 +1,22 @@
-name: fgbio_fastqtobam
+name: align_bam
 description: |
-  Generates an unmapped BAM (or SAM or CRAM) file from fastq files.
+  Aligns reads from an unmapped BAM: streams reads with samtools fastq, aligns
+  with bwa mem, and merges alignment information back into the original records
+  with fgbio ZipperBams, optionally sorting the output with samtools.
 keywords:
+  - bwa
   - fgbio
   - samtools
   - zipperbams
-  - mem
-  - bwa
   - alignment
-  - map
-  - fastq
   - bam
-  - sam
-  -
 tools:
   - bwa:
       description: |
         BWA is a software package for mapping DNA sequences against
         a large reference genome, such as the human genome.
       homepage: http://bio-bwa.sourceforge.net/
-      documentation: http://www.htslib.org/doc/samtools.html
+      documentation: http://bio-bwa.sourceforge.net/bwa.shtml
       arxiv: arXiv:1303.3997
       licence: ["GPL-3.0-or-later"]
   - fgbio:
@@ -27,54 +24,80 @@ tools:
       homepage: http://fulcrumgenomics.github.io/fgbio/
       documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
       tool_dev_url: https://github.com/fulcrumgenomics/fgbio
-      doi: ""
       licence: ["MIT"]
   - samtools:
       description: |
         SAMtools is a set of utilities for interacting with and post-processing
-        short DNA sequence read alignments in the SAM, BAM and CRAM formats, written by Heng Li.
-        These files are generated as output by short read aligners like BWA.
+        short DNA sequence read alignments in the SAM, BAM and CRAM formats.
       homepage: http://www.htslib.org/
-      documentation: hhttp://www.htslib.org/doc/samtools.html
+      documentation: http://www.htslib.org/doc/samtools.html
       doi: 10.1093/bioinformatics/btp352
       licence: ["MIT"]
 input:
   - meta:
       type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
   - unmapped_bam:
       type: file
-      description: the unmapped BAM/SAM/CRAM file.
-      pattern: "*.{bam,cram,sam}"
+      description: Unmapped BAM whose reads will be aligned and zipped back together
+      pattern: "*.bam"
+  - meta2:
+      type: map
+      description: Groovy Map containing reference information
   - fasta:
       type: file
       description: FASTA reference file
       pattern: "*.{fasta,fa}"
-  - index:
+  - meta3:
+      type: map
+      description: Groovy Map containing reference information
+  - fasta_fai:
       type: file
-      description: BWA genome index files
-      pattern: "Directory containing BWA index *.{amb,ann,bwt,pac,sa}"
-  - sort:
-      type: bool
-      description: True to sort the output in template-coordinate order, otherwise don't sort
-      pattern: "{true,false}"
-
+      description: FASTA index (.fai) for the reference
+      pattern: "*.fai"
+  - meta4:
+      type: map
+      description: Groovy Map containing reference information
+  - dict:
+      type: file
+      description: Sequence dictionary (.dict) for the reference
+      pattern: "*.dict"
+  - meta5:
+      type: map
+      description: Groovy Map containing reference information
+  - bwa_dir:
+      type: directory
+      description: Directory containing the BWA index files (*.amb, *.ann, *.bwt, *.pac, *.sa)
+  - sort_type:
+      type: string
+      description: |
+        How to sort the aligned output. One of `none` (leave in input order),
+        `coordinate` (coordinate sort and index), or `template-coordinate`.
+      pattern: "{none,coordinate,template-coordinate}"
 output:
   - meta:
       type: map
-      description: |
-        Groovy Map containing sample information
-        e.g. [ id:'test', single_end:false ]
-  - version:
-      type: file
-      description: File containing software version
-      pattern: "*.{version.yml}"
+      description: Groovy Map containing sample information
   - bam:
       type: file
-      description: Mapped bam (unsorted)
-      pattern: "*.{bam}"
-
+      description: Aligned BAM with consensus tags reversed/reverse-complemented, optionally sorted
+      pattern: "*.mapped.bam"
+  - bai:
+      type: file
+      description: BAM index, emitted when a coordinate sort with indexing is requested
+      pattern: "*.mapped.bam.bai"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio_bwa_samtools:04bc9788bca8242c
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio_bwa_samtools:fef72c31e6e94318
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio_bwa_samtools:ee569c458f161e6b
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio_bwa_samtools:b612d5cd7a652862
 authors:
+  - "@nh13"
+maintainers:
   - "@nh13"

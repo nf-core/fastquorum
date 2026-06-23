@@ -2,18 +2,18 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
     tag "${meta.id}"
     label 'process_low'
 
-    conda "bioconda::fgbio=2.4.0"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/87/87626ef674e2f19366ae6214575a114fe80ce598e796894820550731706a84be/data'
-        : 'community.wave.seqera.io/library/fgbio:2.4.0--913bad9d47ff8ddc'}"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b'
+        : 'community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243'}"
 
     input:
     tuple val(meta), path(grouped_bam)
 
     output:
     tuple val(meta), path("*duplex_seq_metrics*.txt"), emit: metrics
-    tuple val(meta), path("*duplex_seq_metrics*.pdf"), emit: pdf
-    path "versions.yml", emit: versions
+    tuple val(meta), path("*duplex_qc.pdf"), emit: pdf
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
 
     script:
     def args = task.ext.args ?: ''
@@ -36,11 +36,6 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
         --output ${prefix}.duplex_seq_metrics \\
         --duplex-umi-counts=true \\
         ${args};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -52,10 +47,5 @@ process FGBIO_COLLECTDUPLEXSEQMETRICS {
     touch ${prefix}.duplex_seq_metrics.family_sizes.txt
     touch ${prefix}.duplex_seq_metrics.umi_counts.txt
     touch ${prefix}.duplex_seq_metrics.duplex_qc.pdf
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

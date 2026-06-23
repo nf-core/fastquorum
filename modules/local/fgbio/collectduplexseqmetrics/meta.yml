@@ -1,0 +1,54 @@
+name: fgbio_collectduplexseqmetrics
+description: Collect duplex-sequencing QC metrics with fgbio
+keywords:
+  - fgbio
+  - metrics
+  - bam
+tools:
+  - fgbio:
+      description: A set of tools for working with genomic and high throughput sequencing data, including UMIs
+      homepage: http://fulcrumgenomics.github.io/fgbio/
+      documentation: http://fulcrumgenomics.github.io/fgbio/tools/latest/
+      tool_dev_url: https://github.com/fulcrumgenomics/fgbio
+      licence: ["MIT"]
+input:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information, e.g. `[ id:'sample1' ]`
+  - bam:
+      type: file
+      description: BAM file with MI tags present and in Template Coordinate sort order, typically the output of fgbio GroupReadsByUMI in paired mode
+      pattern: "*.bam"
+output:
+  - meta:
+      type: map
+      description: Groovy Map containing sample information
+  - metrics:
+      type: file
+      description: |
+        Duplex sequencing QC metric files, sharing the output prefix:
+          `*.family_sizes.txt` (frequency of tag families by size),
+          `*.duplex_family_sizes.txt` (frequency of duplex tag families by observations from each strand),
+          `*.duplex_yield_metrics.txt` (summary QC metrics computed across 5%..100% subsamples of the data),
+          `*.umi_counts.txt` (frequency of UMI observations within reads and tag families), and
+          `*.duplex_umi_counts.txt` (frequency of duplex UMI observations; emitted because `--duplex-umi-counts=true`).
+      pattern: "*duplex_seq_metrics*.txt"
+  - pdf:
+      type: file
+      description: PDF of plots generated from the duplex sequencing QC metrics files
+      pattern: "*duplex_qc.pdf"
+containers:
+  docker:
+    linux/amd64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--368dab1b4f308243
+    linux/arm64:
+      name: community.wave.seqera.io/library/fgbio:2.5.21--561e291fd356d057
+  singularity:
+    linux/amd64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--1afc8befe439164b
+    linux/arm64:
+      name: oras://community.wave.seqera.io/library/fgbio:2.5.21--61a21b7736fed99a
+authors:
+  - "@nh13"
+maintainers:
+  - "@nh13"

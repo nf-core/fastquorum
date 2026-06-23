@@ -23,6 +23,7 @@ nextflow_pipeline {
                 { assert workflow.trace.succeeded().size() == 12 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf").exists() },
                 { assert snapshot(
                     path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
                     path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),
@@ -50,6 +51,7 @@ nextflow_pipeline {
                 { assert workflow.trace.succeeded().size() == 11 },
                 { assert new File("$outputDir/multiqc/multiqc_report.html").exists() },
                 { assert new File("$outputDir/consensus_filtering/filtered/SRR6109255/SRR6109255.cons.filtered.bam").exists() },
+                { assert new File("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.duplex_qc.pdf").exists() },
                 { assert snapshot(
                     path("$outputDir/grouping/groupreadsbyumi/SRR6109255/SRR6109255.grouped-family-sizes.txt"),
                     path("$outputDir/metrics/duplex_seq/SRR6109255/SRR6109255.duplex_seq_metrics.family_sizes.txt"),

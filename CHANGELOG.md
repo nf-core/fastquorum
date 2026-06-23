@@ -3,6 +3,38 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## Unreleased
+
+### Credits
+
+### Enhancements & fixes
+
+## [[2.0.0]](https://github.com/nf-core/fastquorum/releases/tag/2.0.0) -- 2026-06-22
+
+### Credits
+
+Special thanks to the following for their contributions to the release:
+
+- [Charlotte Tolonen](https://github.com/cehtolonen)
+- [Clint Valentine](https://github.com/clintval)
+- [Nils Homer](https://github.com/nh13)
+- [Simon Pearce](https://github.com/SPPearce)
+- [Zach Norgaard](https://github.com/znorgaard)
+
+### Enhancements & fixes
+
+- [PR #123](https://github.com/nf-core/fastquorum/pull/123) - Validate read structures with the nf-fgbio plugin
+- [PR #128](https://github.com/nf-core/fastquorum/pull/128) - Add icon image
+- [PR #131](https://github.com/nf-core/fastquorum/pull/131) - Update to nf-core/tools template version 3.3.2
+- [PR #138](https://github.com/nf-core/fastquorum/pull/138) - Ensure the PDF from CollectDuplexSeqMetrics is published
+- [PR #141](https://github.com/nf-core/fastquorum/pull/141) - Fix Twist UMI docs from random to nonrandom
+- [PR #142](https://github.com/nf-core/fastquorum/pull/142) - Update to nf-core/tools template version 3.5.2 with Nextflow strict syntax
+- [PR #145](https://github.com/nf-core/fastquorum/pull/145) - Add non-random UMI correction via fgbio CorrectUmis, enabled by an optional `umi_file` column in the samplesheet
+- [PR #147](https://github.com/nf-core/fastquorum/pull/147) - Add optional `library_id`, `lane`, and `flowcell` samplesheet columns and fix silent pre-merge output overwrites across lanes ([#146](https://github.com/nf-core/fastquorum/issues/146))
+- [PR #150](https://github.com/nf-core/fastquorum/pull/150) - Update to nf-core/tools template version 4.0.2 (raise minimum Nextflow to 25.10.4; remove webhook notifications; move `CONTRIBUTING.md` to `docs/`; switch git hooks to `prek`)
+- [PR #151](https://github.com/nf-core/fastquorum/pull/151) - Update nf-core modules (bwa, fastqc, multiqc, samtools) and remove the `name` field from module `environment.yml` files so the local patches are no longer needed
+- [PR #152](https://github.com/nf-core/fastquorum/pull/152) - Add `environment.yml`, `meta.yml`, and container configs to local modules and recognize the `apptainer` container engine
+
 ## [[1.2.0]](https://github.com/nf-core/fastquorum/releases/tag/1.2.0) -- 2025-04-11
 
 ### Credits

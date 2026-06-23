@@ -1,6 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/master/nextflow_schema.json",
+    "$id": "https://raw.githubusercontent.com/nf-core/fastquorum/main/nextflow_schema.json",
     "title": "nf-core/fastquorum pipeline parameters",
     "description": "fgbio Best Practices FASTQ to Consensus Pipeline",
     "type": "object",
@@ -60,7 +60,8 @@
                     "type": "boolean",
                     "fa_icon": "fas fa-dna",
                     "description": "Enable when the input is duplex sequenecing.",
-                    "help_text": "With this parameter flags in various tools are set for duplex sequencing data."
+                    "help_text": "With this parameter flags in various tools are set for duplex sequencing data.",
+                    "default": true
                 }
             }
         },
@@ -80,7 +81,30 @@
                     "type": "integer",
                     "description": "Maximum number of edits",
                     "fa_icon": "fas fa-book",
-                    "help_text": "Maximum number of allowable edits for fgbio's GroupReadsByUmi."
+                    "help_text": "Maximum number of allowable edits for fgbio's GroupReadsByUmi.",
+                    "default": 1
+                }
+            }
+        },
+        "umi_correction": {
+            "title": "UMI correction options",
+            "type": "object",
+            "fa_icon": "fas fa-dna",
+            "description": "Options for correcting non-random UMIs against a known set",
+            "properties": {
+                "correct_umis_max_mismatches": {
+                    "type": "integer",
+                    "default": 2,
+                    "description": "Maximum mismatches when correcting UMIs",
+                    "fa_icon": "fas fa-hashtag",
+                    "help_text": "The maximum number of mismatches between a UMI and an expected UMI for fgbio's CorrectUmis. Only used when a sample has a umi_file in the samplesheet."
+                },
+                "correct_umis_min_distance": {
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Minimum distance between best and next-best UMI match",
+                    "fa_icon": "fas fa-hashtag",
+                    "help_text": "The minimum distance (in terms of mismatches) between the best match and next-best match for fgbio's CorrectUmis. Only used when a sample has a umi_file in the samplesheet."
                 }
             }
         },
@@ -100,7 +124,8 @@
                     "type": "integer",
                     "description": "Minimum input base quality",
                     "fa_icon": "fas fa-book",
-                    "help_text": "The minimum input base quality to use when calling a consensus for fgbio's CallMolecularConsensusReads/CallDuplexConsensusReads."
+                    "help_text": "The minimum input base quality to use when calling a consensus for fgbio's CallMolecularConsensusReads/CallDuplexConsensusReads.",
+                    "default": 10
                 }
             }
         },
@@ -120,13 +145,15 @@
                     "type": "integer",
                     "description": "Minimum consensus base quality",
                     "fa_icon": "fas fa-book",
-                    "help_text": "The minimum consensus base quality to keep when calling a consensus for fgbio's FilterConsensusReads."
+                    "help_text": "The minimum consensus base quality to keep when calling a consensus for fgbio's FilterConsensusReads.",
+                    "default": 10
                 },
                 "filter_max_base_error_rate": {
                     "type": ["number", "string"],
                     "description": "The maximum error rate for a single consensus base",
                     "fa_icon": "fas fa-book",
-                    "help_text": "The maximum error rate for a single consensus base when filtering a consensus for fgbio's FilterConsensusReads."
+                    "help_text": "The maximum error rate for a single consensus base when filtering a consensus for fgbio's FilterConsensusReads.",
+                    "default": 0.1
                 }
             }
         },
@@ -296,13 +323,6 @@
                     "fa_icon": "fas fa-palette",
                     "hidden": true
                 },
-                "hook_url": {
-                    "type": "string",
-                    "description": "Incoming hook URL for messaging service",
-                    "fa_icon": "fas fa-people-group",
-                    "help_text": "Incoming hook URL for messaging service. Currently, MS Teams and Slack are supported.",
-                    "hidden": true
-                },
                 "multiqc_config": {
                     "type": "string",
                     "format": "file-path",
@@ -354,6 +374,18 @@
                     "fa_icon": "far calendar",
                     "description": "Suffix to add to the trace report filename. Default is the date and time in the format yyyy-MM-dd_HH-mm-ss.",
                     "hidden": true
+                },
+                "help": {
+                    "type": ["boolean", "string"],
+                    "description": "Display the help message."
+                },
+                "help_full": {
+                    "type": "boolean",
+                    "description": "Display the full detailed help message."
+                },
+                "show_hidden": {
+                    "type": "boolean",
+                    "description": "Display hidden parameters in the help message (only works when --help or --help_full are provided)."
                 }
             }
         }
@@ -367,6 +399,9 @@
         },
         {
             "$ref": "#/$defs/grouping"
+        },
+        {
+            "$ref": "#/$defs/umi_correction"
         },
         {
             "$ref": "#/$defs/consensus_calling"

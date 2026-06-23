@@ -1,0 +1,29 @@
+nextflow_pipeline {
+
+    name "Test workflow - Invalid umi_file across runs"
+    script "main.nf"
+    tag "tiny"
+    tag "pipeline"
+    tag "invalid_umi_file"
+
+    test("mismatched umi_file across runs of same sample") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = "${baseDir}/tests/pipeline/testdata/samplesheet.invalid_umi_file.csv"
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("Multiple runs of a library must have the same umi_file") } }
+            )
+        }
+
+    }
+}

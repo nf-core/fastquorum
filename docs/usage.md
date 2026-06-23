@@ -10,7 +10,7 @@ Please provide pipeline parameters via the CLI or Nextflow `-params-file` option
 
 ## Samplesheet input
 
-You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with 3 columns, and a header row as shown in the examples below.
+You will need to create a samplesheet with information about the samples you would like to analyse before running the pipeline. Use this parameter to specify its location. It has to be a comma-separated file with at least 3 columns, and a header row as shown in the examples below.
 
 ```bash
 --input '[path to samplesheet file]'
@@ -18,7 +18,17 @@ You will need to create a samplesheet with information about the samples you wou
 
 ### Multiple runs of the same sample
 
-The `sample` identifiers have to be the same when you have re-sequenced the same sample more than once e.g. to increase sequencing depth. The pipeline will concatenate the raw reads before performing any downstream analysis. Below is an example for the same sample sequenced across 3 lanes:
+- `sample` identifies the biological source material used in library preparation
+- `library_id` [optional] identifies an independent library preparation for the given sample
+
+`fastquorum` currently only supports merging data before grouping UMIs and consensus calling.
+This is appropriate for merging sequencing data from multiple runs of the same library.
+These are instances where reads across runs sharing the same UMI (or pair of UMIs) and alignment coordinates originate from the same original molecule.
+This includes situations where sequencing of a single library has been split across multiple lanes or flowcells to increase raw sequencing depth (common for high diversity or high genomic input libraries).
+
+Entries in the samplesheet that share a `library_id` (or `sample` if `library_id` is not defined) will have their reads merged before UMI grouping or consensus calling occurs.
+
+#### With only sample defined
 
 ```csv title="samplesheet.csv"
 sample,fastq_1,fastq_2,read_structure
@@ -27,12 +37,54 @@ CONTROL_REP1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,5
 CONTROL_REP1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5M2S+T 5M2S+T
 ```
 
-The `read_structure` must be the same for all FASTQs from the same sample.
+#### With sample and library_id defined
+
+```csv title="samplesheet.csv"
+sample,library_id,fastq_1,fastq_2,read_structure
+CONTROL_REP1,CONTROL_REP1.1,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,CONTROL_REP1.1,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_REP1,CONTROL_REP1.1,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5M2S+T 5M2S+T
+```
+
+The `read_structure` must be the same for all FASTQs from the same `library_id` (or `sample` if `library_id` is not defined).
 Please see the [fgbio documentation](https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures) for detailed information on read structure syntax and formatting.
 
 The number of FASTQs must match the number of _read segments_ in the read structure (a read structure is a space delimited string where each value is a _read segment_; see: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures).
 E.g. for paired end reads, there must be two FASTQs (R1 and R2) and two segments in the read structure (e.g. a read structure "12M+T +T" specifies a read segment "12M+T" for R1 and read segment "+T" for R2)
 Additional FASTQs may be provided, for example for index reads (see [One to Four FASTQs](#one-to-four-fastqs) below).
+
+> [!NOTE]
+> Fastquorum does not support merging consensus reads from different library preps. If needed, merge the final consensus BAM files externally after the pipeline completes.
+
+#### Lane and flowcell identification
+
+- `lane` [optional] identifies the lane the FASTQ files for this entry originate from. When provided, it is included in the output file prefix.
+- `flowcell` [optional] identifies the flowcell the FASTQ files for this entry originate from. When provided, it is included in the output file prefix.
+
+These are used in pre-merge output file naming to prevent overwrites when a library is sequenced across multiple lanes and/or flowcells.
+
+> [!NOTE]
+> If any row for a processing unit provides `lane` (or `flowcell`), all rows for that unit must provide it.
+
+> [!NOTE]
+> When a processing unit (`library_id`, or `sample` if no `library_id`) spans multiple rows, those rows must be distinguished by `lane` and/or `flowcell` so their pre-merge outputs do not overwrite one another. Each `(flowcell, lane)` pair must be unique within the unit.
+
+#### Two samples, three libraries, four lanes, and two flowcells
+
+```csv title="samplesheet.csv"
+sample,library_id,flowcell,lane,fastq_1,fastq_2,read_structure
+CONTROL_DNA,CONTROL_DNA.1,HMJFJBBXX,2,AEG588A1_S1_L002_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_DNA,CONTROL_DNA.1,HMJFJBBXX,3,AEG588A1_S1_L003_R1_001.fastq.gz,AEG588A1_S1_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+CONTROL_DNA,CONTROL_DNA.1,HMJFJBBXX,4,AEG588A1_S1_L004_R1_001.fastq.gz,AEG588A1_S1_L004_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.1,HMJFJBBXX,2,P0001.01_S2_L002_R1_001.fastq.gz,P0001.01_S2_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.1,HMJFJBBXX,3,P0001.01_S2_L003_R1_001.fastq.gz,P0001.01_S2_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.1,HOPETALXX,1,P0001.01_S2_L001_R1_001.fastq.gz,P0001.01_S2_L001_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.2,HOPETALXX,1,P0001.02_S1_L001_R1_001.fastq.gz,P0001.02_S1_L001_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.2,HOPETALXX,2,P0001.02_S2_L002_R1_001.fastq.gz,P0001.02_S2_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
+P0001_PBMNC,P0001_PBMNC.2,HOPETALXX,3,P0001.02_S2_L003_R1_001.fastq.gz,P0001.02_S2_L003_R2_001.fastq.gz,5M2S+T 5M2S+T
+```
+
+For this samplesheet, we would expect a consensus BAM for each of the three libraries: CONTROL_DNA.1, P0001_PBMNC.1, and P0001_PBMNC.2.
 
 ### One to Four FASTQs
 
@@ -47,14 +99,14 @@ The sample sheet below shows four samples, each with a different number of FASTQ
 1. CONTROL1 is a single-end run, with one FASTQ (R1), and the UMI inline at the start of the read
 2. CONTROL2 is a paired-end run, with two FASTQs (R1 and R2), and UMIs inline at the start of read one (R1) and read two (R2).
 3. CONTROL3 is a single-indexed paired-end run, with three FASTQs, UMIs inline at the start of read one (R1) and read two, and a sample barcode in I1 (typically index1/i7)
-4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containing template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 ((typically index2/i5)
+4. CONTROL3 is a dual-indexed paired-end run, with four FASTQs, read one (R1) and (R2) containing template bases, with a sample barcode in I1 (typically index1/i7), and the UMI in I2 (typically index2/i5).
 
 ```csv title="samplesheet.csv"
-sample,fastq_1,fastq_2,read_structure
-CONTROL1,SAMPLE_S1_L001_R1_001.fastq.gz,5M2S+T
-CONTROL2,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,5M2S+T 5M2S+T
-CONTROL3,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,5M2S+T 5M2S+T 8B
-CONTROL4,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,AEG588A1_S1_L002_I22_001.fastq.gz,+T +T +B +M
+sample,read_structure,fastq_1,fastq_2,fastq_3,fastq_4
+CONTROL1,5M2S+T,SAMPLE_S1_L001_R1_001.fastq.gz,,,
+CONTROL2,5M2S+T 5M2S+T,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,,
+CONTROL3,5M2S+T 5M2S+T +B,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,
+CONTROL4,+T +T +B +M,SAMPLE_S1_L001_R1_001.fastq.gz,AEG588A1_S1_L002_R2_001.fastq.gz,AEG588A1_S1_L002_I1_001.fastq.gz,AEG588A1_S1_L002_I2_001.fastq.gz
 ```
 
 ### Full samplesheet
@@ -74,14 +126,18 @@ TREATMENT_REP3,AEG588A6_S6_L003_R1_001.fastq.gz,12M+T +T
 TREATMENT_REP3,AEG588A6_S6_L004_R1_001.fastq.gz,12M+T +T
 ```
 
-| Column           | Description                                                                                                                                                                            |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `sample`         | Custom sample name. This entry will be identical for multiple sequencing libraries/runs from the same sample. Spaces in sample names are automatically converted to underscores (`_`). |
-| `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
-| `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                                           |
-| `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
-| `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                          |
-| `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es)               |
+| Column           | Description                                                                                                                                                              |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `sample`         | Biological sample or source genetic material. Maps to the BAM `SM` tag. Spaces are automatically converted to underscores (`_`).                                         |
+| `library_id`     | Optional. Library prep identifier. When provided, becomes the pipeline's processing unit and maps to the BAM `LB` tag. Defaults to `sample` if not provided.             |
+| `lane`           | Optional. Sequencing lane identifier. Auto-assigned if not provided. Must contain only alphanumeric characters.                                                          |
+| `flowcell`       | Optional. Flowcell identifier. Must contain only alphanumeric characters.                                                                                                |
+| `fastq_1`        | Full path to FastQ file for Illumina short reads 1. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                             |
+| `fastq_2`        | Full path to FastQ file for Illumina short reads 2. File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                                             |
+| `fastq_3`        | Full path to FastQ file for Illumina short reads 3 (e.g. index1/i7). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                            |
+| `fastq_4`        | Full path to FastQ file for Illumina short reads 4 (e.g. index2/i5). File has to have the extension ".fastq", ".fq", ".fastq.gz" or ".fq.gz".                            |
+| `read_structure` | the [`read_structure`][read-structure-link] describes how the bases in a sequencing run should be allocated into logical reads, including the unique molecular index(es) |
+| `umi_file`       | Path to a text file containing known UMI sequences (one per line). Optional — only needed for non-random UMI libraries.                                                  |
 
 [read-structure-link]: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
 
@@ -113,6 +169,28 @@ By default, the `--strategy paired` is used when `--duplex_seq true`, otherwise 
 
 The `groupreadsbyumi_edits` option overrides the tool's `--edits` option.
 This provides the maximum number of allowable edits.
+
+### Non-Random UMI Options
+
+For libraries using a known, fixed set of UMI sequences (non-random UMIs), the pipeline supports UMI error-correction via [`fgbio CorrectUmis`](https://fulcrumgenomics.github.io/fgbio/tools/latest/CorrectUmis.html).
+
+To enable UMI correction, add a `umi_file` column to your samplesheet pointing to a text file containing the known UMI sequences (one per line):
+
+```csv title="samplesheet.csv"
+sample,fastq_1,fastq_2,read_structure,umi_file
+FIXED_UMI,R1.fastq.gz,R2.fastq.gz,5M2S+T 5M2S+T,/path/to/umis.txt
+RANDOM_UMI,R1.fastq.gz,R2.fastq.gz,12M+T +T,
+```
+
+Samples without a `umi_file` are processed as before (random UMIs). Samples with and without `umi_file` can coexist in the same run.
+
+The `--correct_umis_max_mismatches` option sets the maximum number of mismatches allowed when matching an observed UMI to the known set (default: 2). The `--correct_umis_min_distance` option sets the minimum edit distance between the best and next-best match (default: 1).
+
+Reads whose UMIs cannot be corrected are written to a reject BAM file for QC purposes and are excluded from downstream processing.
+
+:::warning
+When using UMI correction, consider setting `--groupreadsbyumi_strategy Identity` (or `Paired` with `--groupreadsbyumi_edits 0` for duplex sequencing), since UMIs have already been corrected to exact known sequences. The pipeline will emit a warning if a fuzzy-matching strategy is used with corrected UMIs.
+:::
 
 ### Consensus Calling Options
 
@@ -265,9 +343,11 @@ If `-profile` is not specified, the pipeline will run locally and expect all sof
 - `shifter`
   - A generic configuration profile to be used with [Shifter](https://nersc.gitlab.io/development/shifter/how-to-use/)
 - `charliecloud`
-  - A generic configuration profile to be used with [Charliecloud](https://hpc.github.io/charliecloud/)
+  - A generic configuration profile to be used with [Charliecloud](https://charliecloud.io/)
 - `apptainer`
   - A generic configuration profile to be used with [Apptainer](https://apptainer.org/)
+- `wave`
+  - A generic configuration profile to enable [Wave](https://seqera.io/wave/) containers. Use together with one of the above (requires Nextflow `24.03.0-edge` or later).
 - `conda`
   - A generic configuration profile to be used with [Conda](https://conda.io/docs/). Please only use Conda as a last resort i.e. when it's not possible to run the pipeline with Docker, Singularity, Podman, Shifter, Charliecloud, or Apptainer.
 
@@ -287,19 +367,19 @@ Specify the path to a specific config file (this is a core Nextflow command). Se
 
 Whilst the default requirements set within the pipeline will hopefully work for most people and with most input data, you may find that you want to customise the compute resources that the pipeline requests. Each step in the pipeline has a default set of requirements for number of CPUs, memory and time. For most of the pipeline steps, if the job exits with any of the error codes specified [here](https://github.com/nf-core/rnaseq/blob/4c27ef5610c87db00c3c5a3eed10b1d161abf575/conf/base.config#L18) it will automatically be resubmitted with higher resources request (2 x original, then 3 x original). If it still fails after the third attempt then the pipeline execution is stopped.
 
-To change the resource requests, please see the [max resources](https://nf-co.re/docs/usage/configuration#max-resources) and [tuning workflow resources](https://nf-co.re/docs/usage/configuration#tuning-workflow-resources) section of the nf-core website.
+To change the resource requests, please see the [max resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#set-max-resources) and [customise process resources](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#customize-process-resources) section of the nf-core website.
 
 ### Custom Containers
 
 In some cases, you may wish to change the container or conda environment used by a pipeline step for a particular tool. By default, nf-core pipelines use containers and software from the [biocontainers](https://biocontainers.pro/) or [bioconda](https://bioconda.github.io/) projects. However, in some cases the pipeline specified version maybe out of date.
 
-To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/usage/configuration#updating-tool-versions) section of the nf-core website.
+To use a different container from the default container or conda environment specified in a pipeline, please see the [updating tool versions](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#update-tool-versions) section of the nf-core website.
 
 ### Custom Tool Arguments
 
 A pipeline might not always support every possible argument or option of a particular tool used in pipeline. Fortunately, nf-core pipelines provide some freedom to users to insert additional parameters that the pipeline does not include by default.
 
-To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/usage/configuration#customising-tool-arguments) section of the nf-core website.
+To learn how to provide additional arguments to a particular tool of the pipeline, please see the [customising tool arguments](https://nf-co.re/docs/running/configuration/nextflow-for-your-system#modifying-tool-arguments) section of the nf-core website.
 
 ### nf-core/configs
 

@@ -11,9 +11,9 @@
 include { UTILS_NFSCHEMA_PLUGIN } from '../../nf-core/utils_nfschema_plugin'
 include { paramsSummaryMap } from 'plugin/nf-schema'
 include { samplesheetToList } from 'plugin/nf-schema'
+include { readStructure } from 'plugin/nf-fgbio'
 include { completionEmail } from '../../nf-core/utils_nfcore_pipeline'
 include { completionSummary } from '../../nf-core/utils_nfcore_pipeline'
-include { imNotification } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NFCORE_PIPELINE } from '../../nf-core/utils_nfcore_pipeline'
 include { UTILS_NEXTFLOW_PIPELINE } from '../../nf-core/utils_nextflow_pipeline'
 
@@ -31,10 +31,13 @@ workflow PIPELINE_INITIALISATION {
     nextflow_cli_args //   array: List of positional nextflow CLI args
     outdir //  string: The output directory where the results will be saved
     input //  string: Path to input samplesheet
+    help
+    help_full
+    show_hidden
 
     main:
 
-    ch_versions = Channel.empty()
+    ch_versions = channel.empty()
 
     //
     // Print version and exit if required and dump pipeline parameters to JSON file
@@ -49,9 +52,35 @@ workflow PIPELINE_INITIALISATION {
     //
     // Validate parameters and generate parameter summary to stdout
     //
+    def before_text = """
+-\033[2m----------------------------------------------------\033[0m-
+                                        \033[0;32m,--.\033[0;30m/\033[0;32m,-.\033[0m
+\033[0;34m        ___     __   __   __   ___     \033[0;32m/,-._.--~\'\033[0m
+\033[0;34m  |\\ | |__  __ /  ` /  \\ |__) |__         \033[0;33m}  {\033[0m
+\033[0;34m  | \\| |       \\__, \\__/ |  \\ |___     \033[0;32m\\`-._,-`-,\033[0m
+                                        \033[0;32m`._,._,\'\033[0m
+\033[0;35m  nf-core/fastquorum ${workflow.manifest.version}\033[0m
+-\033[2m----------------------------------------------------\033[0m-
+"""
+    def after_text = """${workflow.manifest.doi ? "\n* The pipeline\n" : ""}${workflow.manifest.doi.tokenize(",").collect { doi -> "    https://doi.org/${doi.trim().replace('https://doi.org/', '')}" }.join("\n")}${workflow.manifest.doi ? "\n" : ""}
+* The nf-core framework
+    https://doi.org/10.1038/s41587-020-0439-x
+
+* Software dependencies
+    https://github.com/nf-core/fastquorum/blob/main/CITATIONS.md
+"""
+    def command = "nextflow run ${workflow.manifest.name} -profile <docker/singularity/.../institute> --input samplesheet.csv --outdir <OUTDIR>"
+
     UTILS_NFSCHEMA_PLUGIN(
         workflow,
         validate_params,
+        null,
+        help,
+        help_full,
+        show_hidden,
+        before_text,
+        after_text,
+        command,
         null,
     )
 
@@ -71,29 +100,28 @@ workflow PIPELINE_INITIALISATION {
     // Create channel from input file provided through params.input
     //
 
-    Channel
-        .fromList(samplesheetToList(params.input, "${projectDir}/assets/schema_input.json"))
-        .map { meta, fastq_1, fastq_2, fastq_3, fastq_4 ->
-            return [meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4]]
+    // Parse samplesheet into a plain Groovy list — ordering is deterministic
+    def rows = samplesheetToList(params.input, "${projectDir}/assets/schema_input.json")
+
+    // Step 1: Compute meta.id and validate each row
+    rows = rows.collect { meta, fastq_1, fastq_2, fastq_3, fastq_4 ->
+        meta.id = meta.library_id ? meta.library_id : meta.sample
+        return validateInputSamplesheetRow([meta.id, meta, [fastq_1, fastq_2, fastq_3, fastq_4]])
+    }
+
+    // Step 2: Cross-group validation (library_id constraints)
+    validateLibraryIds(rows)
+
+    // Step 3: Group by meta.id, validate within-group, and flatten to per-run items
+    def processed = rows.groupBy { row -> row[0] }
+        .collectMany { id, groupRows ->
+            def metas = groupRows.collect { r -> r[1] }
+            def fastqs = groupRows.collect { r -> r[2] }
+            validateInputSamplesheet(id, metas, fastqs)
         }
-        .map {
-            // Validate a given _row_ in the sample sheet.  Does not compare runs (e.g. lanes) for a given sample across
-            // rows
-            validateInputSamplesheetRow(it)
-        }
-        .groupTuple()
-        .map {
-            // Validate runs (e.g. lanes) for a given sample.
-            validateInputSamplesheet(it)
-        }
-        .flatMap { meta, fastqs ->
-            // Convert back to having one item per run (not sample).  This enables us to pre-process each run
-            // independently up through mapping, then merge them prior to grouping by UMI.
-            fastqs.collect {
-                return [meta, it]
-            }
-        }
-        .set { ch_samplesheet }
+
+    // Step 4: Create channel from the fully validated, ordered list
+    channel.fromList(processed).set { ch_samplesheet }
 
     emit:
     samplesheet = ch_samplesheet
@@ -113,7 +141,6 @@ workflow PIPELINE_COMPLETION {
     plaintext_email // boolean: Send plain-text email instead of HTML
     outdir // path: Path to output directory where results will be published
     monochrome_logs // boolean: Disable ANSI colour codes in log output
-    hook_url // string: hook URL for notifications
     multiqc_report // string: Path to MultiQC report
 
     main:
@@ -137,9 +164,10 @@ workflow PIPELINE_COMPLETION {
         }
 
         completionSummary(monochrome_logs)
-        if (hook_url) {
-            imNotification(summary_params, hook_url)
-        }
+    }
+
+    workflow.onError {
+        log.error "Pipeline failed. Please refer to troubleshooting docs for common issues: https://nf-co.re/docs/running/troubleshooting"
     }
 }
 
@@ -178,36 +206,139 @@ def validateInputSamplesheetRow(row) {
         error("Please check input samplesheet -> Too many read structures (${num_segments}) for ${num_fastqs} FASTQs for ${meta.id}")
     }
 
+    // Validate the read structure
+    meta.read_structure.tokenize(" ").each { rs->
+        // If parsing the read structure fails, then a java.lang.reflect.InvocationTargetException will be thrown, with
+        // the cause containing the exception produced by fgbio.
+        try {
+            readStructure(rs)
+        } catch (java.lang.reflect.InvocationTargetException ex) {
+            def message = """
+                |Please check input samplesheet -> Read structure`${rs}` invalid
+                |
+                |   ${ex.getCause().getMessage()}
+                |
+                |   For more information on read structures, visit: https://github.com/fulcrumgenomics/fgbio/wiki/Read-Structures
+                |
+                |   Validate your read structures here: https://fulcrumgenomics.github.io/fgbio/validate-read-structure.html
+                |""".stripMargin()
+            error(message)
+            throw ex
+        }
+    }
+
     // NB: the collect here doesn't care which FASTQ list is empty
-    return [row[0], row[1], row[2].findAll { it -> it.size() > 0 }]
+    return [row[0], row[1], row[2].findAll { fq -> fq.size() > 0 }]
 }
 
 //
-// Validate channels from input samplesheet _after_ grouping by the sample identifier
+// Validate library_id constraints across all samples
 //
-// Assumes that multiple runs (e.g. lanes) for a given sample have been grouped together.  Input should be a tuple:
-// 1. The unique sample identifier
-// 2. The list of run-specific metadata.  NB: all runs must have the same `id` property, matching (1).
-// 3. The list of run-specific FASTQs in the same order as (2).  Each run will have a list of FASTQs (e.g. paired end).
-//
-// Validates:
-// 1. The number of FASTQs is the same across all runs.  E.g. all runs are paired end.
-// 2. The read structure is the same for all runs.
-//
-// Returns:
-// Adds the `n_samples` property to the metadata, and returns a tuple of the metadata and list of list of FASTQs.
-def validateInputSamplesheet(input) {
-    def (metas, fastqs) = input[1..2]
-    def fastqs_per_sample_ok = fastqs.collect { it.size() }.unique().size == 1
-    if (!fastqs_per_sample_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same number of FASTQs: ${metas[0].id}")
-    }
-    def read_structures_ok = metas.collect { it.read_structure }.unique().size == 1
-    if (!read_structures_ok) {
-        error("Please check input samplesheet -> Multiple runs of a sample must have the same read stucture: ${metas[0].id}")
+def validateLibraryIds(rows) {
+    // All-or-nothing: if any row for a sample provides library_id, all must
+    rows.groupBy { row -> row[1].sample }.each { sample, sampleRows ->
+        def lib_ids = sampleRows.collect { r -> r[1].library_id }
+        def provided = lib_ids.findAll { v -> v }
+        if (provided.size() > 0 && provided.size() != lib_ids.size()) {
+            error("Please check input samplesheet -> if library_id is provided for any row of a sample, it must be provided for all rows: ${sample}")
+        }
     }
 
-    return [metas[0] + [n_samples: metas.size()], fastqs]
+    // Global uniqueness: library_id must not be reused across different samples
+    def lib_to_sample = [:]
+    rows.each { row ->
+        def lib = row[1].library_id
+        if (lib) {
+            def sample = row[1].sample
+            if (lib_to_sample.containsKey(lib) && lib_to_sample[lib] != sample) {
+                error("Please check input samplesheet -> library_id '${lib}' is used for multiple samples: ${lib_to_sample[lib]} and ${sample}")
+            }
+            lib_to_sample[lib] = sample
+        }
+    }
+
+    // Processing-unit collision: meta.id (library_id, or sample when no library_id) is the unit that
+    // rows are grouped and merged on. Guard against a bare sample name colliding with a different
+    // sample's library_id, which would otherwise silently merge reads from unrelated samples.
+    def id_to_sample = [:]
+    rows.each { row ->
+        def id = row[1].id
+        def sample = row[1].sample
+        if (id_to_sample.containsKey(id) && id_to_sample[id] != sample) {
+            error("Please check input samplesheet -> processing unit '${id}' (a sample name and/or library_id) maps to multiple samples: ${id_to_sample[id]} and ${sample}")
+        }
+        id_to_sample[id] = sample
+    }
+}
+
+//
+// Validate channels from input samplesheet _after_ grouping by the processing unit identifier (meta.id).
+//
+// Validates:
+// 1. The number of FASTQs is the same across all runs.
+// 2. The read structure is the same for all runs.
+// 3. If provided, the UMI file is the same for all runs of a sample.
+// 4. Lane and flowcell follow all-or-nothing rules.
+// 5. A sample/library with multiple runs provides lane and/or flowcell to identify each run.
+// 6. (flowcell, lane) pairs are unique.
+//
+// Returns:
+// A list of [meta, fastqs] tuples, one per run, carrying any user-provided lane/flowcell.
+//
+def validateInputSamplesheet(id, metas, fastqs) {
+    def fastqs_per_sample_ok = fastqs.collect { fq -> fq.size() }.unique().size == 1
+    if (!fastqs_per_sample_ok) {
+        error("Please check input samplesheet -> Multiple runs of a library must have the same number of FASTQs: ${id}")
+    }
+    def read_structures_ok = metas.collect { m -> m.read_structure }.unique().size == 1
+    if (!read_structures_ok) {
+        error("Please check input samplesheet -> Multiple runs of a library must have the same read structure: ${id}")
+    }
+    def umi_files_ok = metas.collect { m -> m.umi_file }.unique().size == 1
+    if (!umi_files_ok) {
+        error("Please check input samplesheet -> Multiple runs of a library must have the same umi_file: ${id}")
+    }
+
+    // Collect per-row lane and flowcell values, normalized to strings so the uniqueness check below
+    // and the output prefix treat e.g. integer 1 and string "1" as the same value.
+    // (nf-schema returns [] for empty CSV cells, which is falsy.)
+    def lanes = metas.collect { m -> m.lane ? m.lane.toString() : null }
+    def flowcells = metas.collect { m -> m.flowcell ? m.flowcell.toString() : null }
+
+    // All-or-nothing for lane
+    def provided_lanes = lanes.findAll { v -> v }
+    if (provided_lanes.size() > 0 && provided_lanes.size() != lanes.size()) {
+        error("Please check input samplesheet -> if lane is provided for any run, it must be provided for all runs: ${id}")
+    }
+
+    // All-or-nothing for flowcell
+    def provided_flowcells = flowcells.findAll { v -> v }
+    if (provided_flowcells.size() > 0 && provided_flowcells.size() != flowcells.size()) {
+        error("Please check input samplesheet -> if flowcell is provided for any run, it must be provided for all runs: ${id}")
+    }
+
+    // A sample/library with multiple runs must be disambiguated by an explicit lane and/or flowcell.
+    // If the rows are distinct libraries, a unique library_id will instead split them into separate units.
+    if (metas.size() > 1 && provided_lanes.size() == 0 && provided_flowcells.size() == 0) {
+        error("Please check input samplesheet -> a sample/library with multiple runs must provide lane and/or flowcell (or a distinct library_id) to identify each run: ${id}")
+    }
+
+    // Validate uniqueness of (flowcell, lane) pairs
+    def fc_lane_pairs = [flowcells, lanes].transpose()
+    if (fc_lane_pairs.size() != fc_lane_pairs.unique(false).size()) {
+        error("Please check input samplesheet -> (flowcell, lane) pairs must be unique within a library: ${id}")
+    }
+
+    // Build shared meta from first row + n_merge_pre_consensus count, stripping per-run fields.
+    // NB: all per-row fields (read_structure, umi_file, etc.) are validated identical above,
+    // so taking metas[0] is safe. If a new per-row field is added, add a uniqueness check above.
+    def shared_meta = metas[0].findAll { k, _v -> !(k in ['lane', 'flowcell']) } + [n_merge_pre_consensus: metas.size()]
+
+    // Expand back to per-run items, preserving any user-provided lane/flowcell (already normalized to strings)
+    return fastqs.withIndex().collect { fq, index ->
+        def run_meta = shared_meta + [lane: lanes[index], flowcell: flowcells[index]]
+        return [run_meta, fq]
+    }
 }
 
 //

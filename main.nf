@@ -52,6 +52,9 @@ workflow {
         args,
         params.outdir,
         params.input,
+        params.help,
+        params.help_full,
+        params.show_hidden,
     )
 
     //
@@ -69,7 +72,6 @@ workflow {
         params.plaintext_email,
         params.outdir,
         params.monochrome_logs,
-        params.hook_url,
         NFCORE_FASTQUORUM.out.multiqc_report,
     )
 }
@@ -86,7 +88,7 @@ workflow NFCORE_FASTQUORUM {
 
     main:
     // Initialize fasta file with meta map:
-    fasta = params.fasta ? Channel.fromPath(params.fasta).map { it -> [[id: it.baseName], it] }.collect() : Channel.empty()
+    fasta = params.fasta ? channel.fromPath(params.fasta).map { it -> [[id: it.baseName], it] }.collect() : channel.empty()
 
     // Set various consensus calling and filtering parameters if not given
     if (params.duplex_seq) {
@@ -126,13 +128,13 @@ workflow NFCORE_FASTQUORUM {
     // Gather built indices or get them from the params
     // Built from the fasta file:
     dict = params.dict
-        ? Channel.fromPath(params.dict).map { it -> [[id: 'dict'], it] }.collect()
+        ? channel.fromPath(params.dict).map { it -> [[id: 'dict'], it] }.collect()
         : PREPARE_GENOME.out.dict
     fasta_fai = params.fasta_fai
-        ? Channel.fromPath(params.fasta_fai).map { it -> [[id: 'fai'], it] }.collect()
+        ? channel.fromPath(params.fasta_fai).map { it -> [[id: 'fai'], it] }.collect()
         : PREPARE_GENOME.out.fasta_fai
     bwa = params.bwa
-        ? Channel.fromPath(params.bwa).map { it -> [[id: 'bwa'], it] }.collect()
+        ? channel.fromPath(params.bwa).map { it -> [[id: 'bwa'], it] }.collect()
         : PREPARE_GENOME.out.bwa
     //
     // WORKFLOW: Run pipeline

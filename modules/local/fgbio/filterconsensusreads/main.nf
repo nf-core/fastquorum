@@ -2,10 +2,11 @@ process FGBIO_FILTERCONSENSUSREADS {
     tag "${meta.id}"
     label 'process_low'
 
-    conda "bioconda::fgbio=2.4.0 bioconda::samtools=1.21"
-    container "${workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container
-        ? 'https://community-cr-prod.seqera.io/docker/registry/v2/blobs/sha256/22/22e054c20192395e0e143df6c36fbed6ce4bd404feba05793aff16819e01fff1/data'
-        : 'community.wave.seqera.io/library/fgbio_bwa_samtools:6fad70472c85d4d3'}"
+    conda "${moduleDir}/environment.yml"
+    container "${workflow.containerEngine in ['singularity', 'apptainer'] && !task.ext.singularity_pull_docker_container
+        ? 'oras://community.wave.seqera.io/library/fgbio_samtools:b4fdf6d47eb1eb4a'
+        : 'community.wave.seqera.io/library/fgbio_samtools:4f7e98e5f90057a3'}"
+
 
     input:
     tuple val(meta), path(consensus_bam)
@@ -17,7 +18,8 @@ process FGBIO_FILTERCONSENSUSREADS {
     output:
     tuple val(meta), path("*.cons.filtered.bam"), emit: bam
     tuple val(meta), path("*.cons.filtered.bam.bai"), emit: bai
-    path "versions.yml", emit: versions
+    tuple val("${task.process}"), val('fgbio'), eval("fgbio --version 2>&1 | tr -d '[:cntrl:]' | sed -e 's/^.*Version: //;s/\\[.*\$//'"), topic: versions, emit: versions_fgbio
+    tuple val("${task.process}"), val('samtools'), eval("samtools version | sed '1!d;s/.* //'"), topic: versions, emit: versions_samtools
 
     script:
     def fgbio_args = task.ext.fgbio_args ?: ''
@@ -49,11 +51,6 @@ process FGBIO_FILTERCONSENSUSREADS {
         -o ${prefix}.cons.filtered.bam##idx##${prefix}.cons.filtered.bam.bai \\
         --write-index \\
         ${samtools_args};
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 
     stub:
@@ -61,10 +58,5 @@ process FGBIO_FILTERCONSENSUSREADS {
     """
     touch ${prefix}.cons.filtered.bam
     touch ${prefix}.cons.filtered.bam.bai
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        fgbio: \$( echo \$(fgbio --version 2>&1 | tr -d '[:cntrl:]' ) | sed -e 's/^.*Version: //;s/\\[.*\$//')
-    END_VERSIONS
     """
 }

@@ -1,0 +1,29 @@
+nextflow_pipeline {
+
+    name "Test workflow - Invalid read structure"
+    script "main.nf"
+    tag "tiny"
+    tag "pipeline"
+    tag "invalid_read_structure"
+
+    test("bad read structure") {
+        options "-stub"
+        tag "error"
+
+        when {
+            params {
+                input  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/testdata/samplesheets/samplesheet.tiny.invalid_read_structure.csv'
+                fasta  = 'https://raw.githubusercontent.com/nf-core/test-datasets/fastquorum/references/chr17.fa'
+                outdir = "$outputDir"
+            }
+        }
+
+        then {
+            assertAll(
+                { assert workflow.failed },
+                { assert workflow.stdout.any { line -> line.contains("Please check input samplesheet -> Read structure") } }
+            )
+        }
+
+    }
+}
