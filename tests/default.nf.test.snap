@@ -1,7 +1,7 @@
 {
     "-profile test": {
         "content": [
-            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21,samtools=1.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v2.0.0",
+            "ALIGN_CONSENSUS_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; ALIGN_RAW_BAM:bwa=0.7.18-r1243-dirty,fgbio=2.5.21,samtools=1.21; BWAMEM1_INDEX:bwa=0.7.19-r1273; CALLDDUPLEXCONSENSUSREADS:fgbio=2.5.21; COLLECTDUPLEXSEQMETRICS:fgbio=2.5.21; FASTQC:fastqc=0.12.1; FASTQTOBAM:fgbio=2.5.21; FILTERCONSENSUSREADS:fgbio=2.5.21,samtools=1.21; GROUPREADSBYUMI:fgbio=2.5.21; SAMTOOLS_DICT:samtools=1.23.1; SAMTOOLS_FAIDX:samtools=1.23.1; Workflow:nf-core/fastquorum=v2.1.0dev",
             [
                 "consensus_calling",
                 "consensus_calling/called",
