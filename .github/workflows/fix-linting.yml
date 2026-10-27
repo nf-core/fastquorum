@@ -8,7 +8,7 @@ concurrency:
 
 jobs:
   fix-linting:
-    uses: nf-core/actions/.github/workflows/fix-linting.yml@v1
+    uses: nf-core/actions/.github/workflows/fix-linting.yml@7fb34a05569ea1555e81c47c300a817c98501695 # v1.0.1
     with:
       nextflow-versions: '["25.10.4","latest-everything"]'
     permissions:
