@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
+- [PR #166](https://github.com/nf-core/fastquorum/pull/166) - Update to nf-core/tools template version 4.2.1 (nf-schema 2.7.3; fastqc 0.13.0; actions remain pinned to SHAs)
+
 ## [[2.0.0]](https://github.com/nf-core/fastquorum/releases/tag/2.0.0) -- 2026-06-22
 
 ### Credits
