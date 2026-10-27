@@ -69,11 +69,12 @@ Special thanks to the following for their contributions to the release:
 - [PR #98](https://github.com/nf-core/fastquorum/pull/98) - Update nf-core modules/subworkflows to most recent versions
 - [PR #93](https://github.com/nf-core/fastquorum/pull/93) - Allow non-gzipped input fastq files
 - [PR #90](https://github.com/nf-core/fastquorum/pull/90) - Update dependency versions in fastquorum environments
+
   | Dependency | Previous Version | New Version |
   | ---------- | ---------------- | ----------- |
-  | bwa | 0.7.17 | 0.7.18 |
-  | fgbio | 2.0.2 | 2.4.0 |
-  | samtools | 1.16.1 | 1.21 |
+  | bwa        | 0.7.17           | 0.7.18      |
+  | fgbio      | 2.0.2            | 2.4.0       |
+  | samtools   | 1.16.1           | 1.21        |
 
   | Module         | Previous SHA | New SHA |
   | -------------- | ------------ | ------- |
