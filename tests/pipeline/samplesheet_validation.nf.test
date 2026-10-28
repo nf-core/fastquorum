@@ -20,7 +20,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("if library_id is provided for any row of a sample, it must be provided for all rows") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("if library_id is provided for any row of a sample, it must be provided for all rows") } }
             )
         }
     }
@@ -40,7 +40,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("library_id 'LIB001' is used for multiple samples") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("library_id 'LIB001' is used for multiple samples") } }
             )
         }
     }
@@ -60,7 +60,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("processing unit 'LIB001' (a sample name and/or library_id) maps to multiple samples") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("processing unit 'LIB001' (a sample name and/or library_id) maps to multiple samples") } }
             )
         }
     }
@@ -80,7 +80,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("if lane is provided for any run, it must be provided for all runs") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("if lane is provided for any run, it must be provided for all runs") } }
             )
         }
     }
@@ -100,7 +100,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("if flowcell is provided for any run, it must be provided for all runs") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("if flowcell is provided for any run, it must be provided for all runs") } }
             )
         }
     }
@@ -120,7 +120,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("(flowcell, lane) pairs must be unique within a library") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("(flowcell, lane) pairs must be unique within a library") } }
             )
         }
     }
@@ -140,7 +140,7 @@ nextflow_pipeline {
         then {
             assertAll(
                 { assert workflow.failed },
-                { assert workflow.stdout.any { line -> line.contains("a sample/library with multiple runs must provide lane and/or flowcell") } }
+                { assert (workflow.stdout + workflow.stderr).any { line -> line.contains("a sample/library with multiple runs must provide lane and/or flowcell") } }
             )
         }
     }
