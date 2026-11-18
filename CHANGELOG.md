@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Enhancements & fixes
 
+- [PR #166](https://github.com/nf-core/fastquorum/pull/166) - Update to nf-core/tools template version 4.2.1 (nf-schema 2.7.3; fastqc 0.13.0; actions remain pinned to SHAs; request 80 GB volumes for nf-test runners; unpin Nextflow in linting now that 26.10 fixes `nextflow inspect` output)
+- [PR #167](https://github.com/nf-core/fastquorum/pull/167) - Check stderr for error messages in nf-tests, as Nextflow 26.10 logs to stderr
+
 ## [[2.0.0]](https://github.com/nf-core/fastquorum/releases/tag/2.0.0) -- 2026-06-22
 
 ### Credits
@@ -69,11 +72,12 @@ Special thanks to the following for their contributions to the release:
 - [PR #98](https://github.com/nf-core/fastquorum/pull/98) - Update nf-core modules/subworkflows to most recent versions
 - [PR #93](https://github.com/nf-core/fastquorum/pull/93) - Allow non-gzipped input fastq files
 - [PR #90](https://github.com/nf-core/fastquorum/pull/90) - Update dependency versions in fastquorum environments
+
   | Dependency | Previous Version | New Version |
   | ---------- | ---------------- | ----------- |
-  | bwa | 0.7.17 | 0.7.18 |
-  | fgbio | 2.0.2 | 2.4.0 |
-  | samtools | 1.16.1 | 1.21 |
+  | bwa        | 0.7.17           | 0.7.18      |
+  | fgbio      | 2.0.2            | 2.4.0       |
+  | samtools   | 1.16.1           | 1.21        |
 
   | Module         | Previous SHA | New SHA |
   | -------------- | ------------ | ------- |
