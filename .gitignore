@@ -16,5 +16,3 @@ pixi.lock
 .pixi/
 .worktrees
 .lineage/
-.nf-test/
-.nf-test.log
